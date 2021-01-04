@@ -37,6 +37,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "nDesk.Options.Extensions", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moonrise.Version", "Source\Shared\Moonrise.Version\Moonrise.Version.csproj", "{73CBEAE9-E7F9-47E2-9B29-76B14E02C941}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GeneratedPackages", "GeneratedPackages", "{AEAF58FE-441D-4761-B45D-97F25581F793}"
+	ProjectSection(SolutionItems) = preProject
+		GeneratedPackages\Readme.md = GeneratedPackages\Readme.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		.Net Core - Debug|Any CPU = .Net Core - Debug|Any CPU
@@ -139,6 +144,7 @@ Global
 		{C79B429B-59B9-42ED-BA21-134F0AF2CA2E} = {89BF98AD-56D4-4454-B1FE-1F7906713A59}
 		{4A0A2728-CCAE-4C07-B465-4AA6B60294F6} = {89BF98AD-56D4-4454-B1FE-1F7906713A59}
 		{73CBEAE9-E7F9-47E2-9B29-76B14E02C941} = {EF4398E2-E84A-49A7-A930-39B0E721B3EB}
+		{AEAF58FE-441D-4761-B45D-97F25581F793} = {BBDF5728-8747-43C4-8603-D8807C0C7795}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2F4CEFF2-A9DF-48B9-B972-43DDB9A704BE}
