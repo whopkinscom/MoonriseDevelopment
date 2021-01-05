@@ -8,7 +8,7 @@
 		<copyright>Moonrise Media Ltd.</copyright>
 		<authors>Will Hopkins</authors>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
-		<license type="file">License.txt</license>
+		<license type="expression">MIT</license>
 		<description>
 			Samples for how to use the Moonrise libraries. YOU MUST READ THE README!
 		</description>
@@ -28,7 +28,6 @@
 			<file src="ContentFiles\Moonrise.chm"/>
 			<file src="ContentFiles\EncryptAppSettings.exe"/>
 			<file src="readme.txt"/>
-			<file src="License.txt"/>
 			<file src="*\**" target ="\" exclude="obj\**\*.*"/>
 			<file src="*\**" target ="\" exclude="bin\**\*.*"/>
 		</contentFiles>
@@ -41,7 +40,6 @@
 		<file src="ContentFiles\Moonrise.chm"/>
 		<file src="ContentFiles\EncryptAppSettings.exe"/>
 		<file src="readme.txt"/>
-		<file src="License.txt"/>
 		<file scr="*\**" target="\" exclude="obj\**\*.*"/>
 		<file scr="*\**" target="\" exclude="bin\**\*.*"/>
 		<file src="Properties\Mm Button.png" target="images\Logo.png"/>

@@ -6,6 +6,6 @@
 using System.Reflection;
 
 // The version is Major.Year.MonthDay.HourMinute(Tens of)Seconds
-[assembly: AssemblyVersion("4.2021.104.17052")]
-[assembly: AssemblyFileVersion("4.2021.104.17052")]
+[assembly: AssemblyVersion("4.2021.105.19002")]
+[assembly: AssemblyFileVersion("4.2021.105.19002")]
 

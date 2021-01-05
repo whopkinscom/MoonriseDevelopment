@@ -8,7 +8,7 @@
 		<copyright>Moonrise Media Ltd.</copyright>
 		<authors>Will Hopkins</authors>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
-		<license type="file">License.txt</license>
+		<license type="expression">MIT</license>
 		<description>
 			A Moonrise logging provider that uses the DNC Microsoft Extensions Logging
 		</description>
@@ -26,7 +26,6 @@
 	<files>
 		<file src=".\bin\Release\netstandard2.1\Moonrise.Logging.DncLoggingProvider.dll" target="lib\netstandard2.1\Moonrise.Logging.DncLoggingProvider.dll" />
 		<file src=".\bin\Release\netstandard2.1\Moonrise.Logging.DncLoggingProvider.xml" target="lib\netstandard2.1\Moonrise.Logging.DncLoggingProvider.xml" />
-		<file src="License.txt"/>
 		<file src="Properties\Mm Button.png" target="images\Logo.png"/>
 	</files>
 </package>

@@ -3,11 +3,11 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
 	<metadata>
 		<id>Moonrise.Samples</id>
-		<version>4.2021.104.17165</version>
+		<version>4.2021.105.19002</version>
 		<copyright>Moonrise Media Ltd.</copyright>
 		<authors>Will Hopkins</authors>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
-		<license type="file">License.txt</license>
+		<license type="expression">MIT</license>
 		<description>
 			Samples for how to use the Moonrise libraries. YOU MUST READ THE README!
 		</description>
@@ -15,9 +15,9 @@
 		<language>en-GB</language>
 		<dependencies>
 			<group targetFramework=".NETStandard2.1">
-				<dependency id="Moonrise.LoggingUtils.NetStd" version="4.2021.104.17165"/>
-				<dependency id="Moonrise.StandardUtils.NetStd" version="4.2021.104.17165"/>
-				<dependency id="Moonrise.TestUtils.NetStd" version="4.2021.104.17165"/>
+				<dependency id="Moonrise.LoggingUtils.NetStd" version="4.2021.105.19002"/>
+				<dependency id="Moonrise.StandardUtils.NetStd" version="4.2021.105.19002"/>
+				<dependency id="Moonrise.TestUtils.NetStd" version="4.2021.105.19002"/>
 			</group>
 		</dependencies>
 		<contentFiles>
@@ -27,7 +27,6 @@
 			<file src="ContentFiles\Moonrise.chm"/>
 			<file src="ContentFiles\EncryptAppSettings.exe"/>
 			<file src="readme.txt"/>
-			<file src="License.txt"/>
 			<file src="*\**" target ="\" exclude="obj\**\*.*"/>
 			<file src="*\**" target ="\" exclude="bin\**\*.*"/>
 		</contentFiles>
@@ -40,7 +39,6 @@
 		<file src="ContentFiles\Moonrise.chm"/>
 		<file src="ContentFiles\EncryptAppSettings.exe"/>
 		<file src="readme.txt"/>
-		<file src="License.txt"/>
 		<file scr="*\**" target="\" exclude="obj\**\*.*"/>
 		<file scr="*\**" target="\" exclude="bin\**\*.*"/>
 		<file src="Properties\Mm Button.png" target="images\Logo.png"/>
