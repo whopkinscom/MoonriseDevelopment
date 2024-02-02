@@ -1,21 +1,22 @@
-﻿#region Apache-v2.0
+﻿#region MIT
 
-//    Copyright 2017 Will Hopkins - Moonrise Media Ltd.
+//     Copyright 2015-2021 Will Hopkins - Moonrise Media Ltd.
+//     will@moonrise.media - Happy to have a conversation
 // 
-//    Licensed under the Apache License, Version 2.0 (the "License");
-//    you may not use this file except in compliance with the License.
-//    You may obtain a copy of the License at
+//     Licenced under MIT licencing terms
+//     you may not use this file except in compliance with the License.
+//     You may obtain a copy of the License at
 // 
-//        http://www.apache.org/licenses/LICENSE-2.0
+//         https://licenses.nuget.org/MIT
 // 
-//    Unless required by applicable law or agreed to in writing, software
-//    distributed under the License is distributed on an "AS IS" BASIS,
-//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//    See the License for the specific language governing permissions and
-//    limitations under the License.
+//     Unless required by applicable law or agreed to in writing, software
+//     distributed under the License is distributed on an "AS IS" BASIS,
+//     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//     See the License for the specific language governing permissions and
+//     limitations under the License.
 
 #endregion
-using System;
+
 using System.Security.Cryptography;
 using System.Text;
 
@@ -27,6 +28,23 @@ namespace Moonrise.Utils.Standard.Config
     /// <seealso cref="Moonrise.Utils.Standard.Config.ISettingsEncryptor" />
     public class DpApiSettingsEncryptor : ISettingsEncryptor
     {
+        /// <summary>
+        ///     Indicates what data protection scope to use
+        /// </summary>
+        public enum ProtectionScope
+        {
+            /// <summary>
+            ///     Encrypts using the current user data protection scope. The current user can decrypt on any machine
+            /// </summary>
+            User = DataProtectionScope.CurrentUser,
+
+            /// <summary>
+            ///     Encrypts using the current machine data protection scope. Any user on the machine can decrypt but can only do so on
+            ///     the same machine that encrypted
+            /// </summary>
+            Machine = DataProtectionScope.LocalMachine
+        }
+
         private readonly DataProtectionScope scope;
 
         /// <summary>
@@ -35,23 +53,7 @@ namespace Moonrise.Utils.Standard.Config
         /// <param name="_scope">The level of scope for protection</param>
         public DpApiSettingsEncryptor(ProtectionScope _scope)
         {
-            scope = (DataProtectionScope)_scope;
-        }
-
-        /// <summary>
-        /// Indicates what data protection scope to use
-        /// </summary>
-        public enum ProtectionScope
-        {
-            /// <summary>
-            /// Encrypts using the current user data protection scope. The current user can decrypt on any machine
-            /// </summary>
-            User = DataProtectionScope.CurrentUser,
-
-            /// <summary>
-            /// Encrypts using the current machine data protection scope. Any user on the machine can decrypt but can only do so on the same machine that encrypted
-            /// </summary>
-            Machine = DataProtectionScope.LocalMachine
+            scope = (DataProtectionScope) _scope;
         }
 
         /// <summary>
@@ -64,7 +66,8 @@ namespace Moonrise.Utils.Standard.Config
         /// </returns>
         public string Decrypt(byte[] encryptedSettings, string additionalEntropy = null)
         {
-            byte[] decrypted = ProtectedData.Unprotect(encryptedSettings, additionalEntropy != null ? Encoding.ASCII.GetBytes(additionalEntropy) : null, scope);
+            byte[] decrypted = ProtectedData.Unprotect(encryptedSettings,
+                additionalEntropy != null ? Encoding.ASCII.GetBytes(additionalEntropy) : null, scope);
             string retVal = Encoding.Unicode.GetString(decrypted);
 
             return retVal;
@@ -80,7 +83,8 @@ namespace Moonrise.Utils.Standard.Config
         /// </returns>
         public byte[] Encrypt(string unencryptedSetting, string additionalEntropy = null)
         {
-            byte[] retVal = ProtectedData.Protect(Encoding.Unicode.GetBytes(unencryptedSetting), additionalEntropy != null ?Encoding.ASCII.GetBytes(additionalEntropy):null, scope);
+            byte[] retVal = ProtectedData.Protect(Encoding.Unicode.GetBytes(unencryptedSetting),
+                additionalEntropy != null ? Encoding.ASCII.GetBytes(additionalEntropy) : null, scope);
             return retVal;
         }
     }

@@ -1,20 +1,22 @@
-﻿#region Apache-v2.0
+﻿#region MIT
 
-//    Copyright 2017 Will Hopkins - Moonrise Media Ltd.
+//     Copyright 2015-2021 Will Hopkins - Moonrise Media Ltd.
+//     will@moonrise.media - Happy to have a conversation
 // 
-//    Licensed under the Apache License, Version 2.0 (the "License");
-//    you may not use this file except in compliance with the License.
-//    You may obtain a copy of the License at
+//     Licenced under MIT licencing terms
+//     you may not use this file except in compliance with the License.
+//     You may obtain a copy of the License at
 // 
-//        http://www.apache.org/licenses/LICENSE-2.0
+//         https://licenses.nuget.org/MIT
 // 
-//    Unless required by applicable law or agreed to in writing, software
-//    distributed under the License is distributed on an "AS IS" BASIS,
-//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//    See the License for the specific language governing permissions and
-//    limitations under the License.
+//     Unless required by applicable law or agreed to in writing, software
+//     distributed under the License is distributed on an "AS IS" BASIS,
+//     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//     See the License for the specific language governing permissions and
+//     limitations under the License.
 
 #endregion
+
 using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
@@ -23,7 +25,7 @@ using Moonrise.Utils.Standard.Exceptions;
 namespace Moonrise.Utils.Test.ObjectCreation
 {
     /// <summary>
-    /// Reasons why an <see cref="ObjectCreationException"/> has been thrown
+    ///     Reasons why an <see cref="ObjectCreationException" /> has been thrown
     /// </summary>
     public enum ObjectCreationExceptionReason
     {
@@ -32,26 +34,28 @@ namespace Moonrise.Utils.Test.ObjectCreation
         // IMPORTANT: If you change the description, PLEASE change the summary.
 
         /// <summary>
-        /// There was an error whilst accessing the ItemsSource property {0}.{1}.
+        ///     There was an error whilst accessing the ItemsSource property {0}.{1}.
         /// </summary>
         [Description("There was an error whilst accessing the ItemsSource property {0}.{1}.")]
         IssueWithItemsSourceProperty,
 
         /// <summary>
-        /// There was an error whilst accessing the ItemsSource method {0}.ItemsSource() for the {1} property.
+        ///     There was an error whilst accessing the ItemsSource method {0}.ItemsSource() for the {1} property.
         /// </summary>
-        [Description("There was an error whilst accessing the ItemsSource method {0}.ItemsSource() for the {1} property.")]
+        [Description(
+            "There was an error whilst accessing the ItemsSource method {0}.ItemsSource() for the {1} property.")]
         IssueWithItemsSourceMethod,
 
         /// <summary>
         ///     An unknown exception occurred within one of the ObjectCreation modules inside the method: {0} \nException
         ///     message; \n{1}
         /// </summary>
-        [Description("An unknown exception occurred within one of the ObjectCreation modules inside the method: {0} \nException message; \n{1}")]
+        [Description(
+            "An unknown exception occurred within one of the ObjectCreation modules inside the method: {0} \nException message; \n{1}")]
         UnknownException,
 
         /// <summary>
-        /// Could not call the setter for {0}.{1}
+        ///     Could not call the setter for {0}.{1}
         /// </summary>
         [Description("Could not call the setter for {0}.{1}")]
         CouldNotCallSetter
@@ -74,7 +78,9 @@ namespace Moonrise.Utils.Test.ObjectCreation
         ///     should be passed here.
         /// </param>
         public ObjectCreationException(ObjectCreationExceptionReason reason, params object[] args)
-            : base(reason, args) { }
+            : base(reason, args)
+        {
+        }
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ObjectCreationException" /> class.
@@ -85,7 +91,10 @@ namespace Moonrise.Utils.Test.ObjectCreation
         ///     Each reason has an associated description string. Most of these take one or more arguments which
         ///     should be passed here.
         /// </param>
-        public ObjectCreationException(Exception innerException, ObjectCreationExceptionReason reason, params object[] args)
-            : base(innerException, reason, args) { }
+        public ObjectCreationException(Exception innerException, ObjectCreationExceptionReason reason,
+            params object[] args)
+            : base(innerException, reason, args)
+        {
+        }
     }
 }

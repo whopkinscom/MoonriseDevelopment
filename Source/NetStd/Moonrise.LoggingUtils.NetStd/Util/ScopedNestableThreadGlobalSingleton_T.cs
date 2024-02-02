@@ -1,20 +1,22 @@
-﻿#region Apache-v2.0
+﻿#region MIT
 
-//    Copyright 2017 Will Hopkins - Moonrise Media Ltd.
+//     Copyright 2015-2021 Will Hopkins - Moonrise Media Ltd.
+//     will@moonrise.media - Happy to have a conversation
 // 
-//    Licensed under the Apache License, Version 2.0 (the "License");
-//    you may not use this file except in compliance with the License.
-//    You may obtain a copy of the License at
+//     Licenced under MIT licencing terms
+//     you may not use this file except in compliance with the License.
+//     You may obtain a copy of the License at
 // 
-//        http://www.apache.org/licenses/LICENSE-2.0
+//         https://licenses.nuget.org/MIT
 // 
-//    Unless required by applicable law or agreed to in writing, software
-//    distributed under the License is distributed on an "AS IS" BASIS,
-//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//    See the License for the specific language governing permissions and
-//    limitations under the License.
+//     Unless required by applicable law or agreed to in writing, software
+//     distributed under the License is distributed on an "AS IS" BASIS,
+//     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//     See the License for the specific language governing permissions and
+//     limitations under the License.
 
 #endregion
+
 using System;
 using System.Reflection;
 using System.Threading;
@@ -78,7 +80,9 @@ namespace Moonrise.Logging.Util
         ///     Prevents a default instance of the <see cref="ScopedNestableThreadGlobalSingleton{T}" /> class from being created.
         ///     However we do need to be create one to initially populate the <see cref="ThreadLocal{T}" />
         /// </summary>
-        private ScopedNestableThreadGlobalSingleton() { }
+        private ScopedNestableThreadGlobalSingleton()
+        {
+        }
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ScopedNestableThreadGlobalSingleton{T}" /> class.
@@ -92,30 +96,19 @@ namespace Moonrise.Logging.Util
         }
 
         /// <summary>
-        ///     Gets the current Nestable Thread Global Singleton value. If not already set this will be the default for generic type.
+        ///     Gets the current Nestable Thread Global Singleton value. If not already set this will be the default for generic
+        ///     type.
         /// </summary>
-        public static T CurrentValue
-        {
-            get
-            {
-                return Current != null ? Current.Value : default(T);
-            }
-        }
+        public static T CurrentValue => Current != null ? Current.Value : default;
 
         /// <summary>
         ///     Gets the current <see cref="ScopedNestableThreadGlobalSingleton{T}" />
         /// </summary>
         protected static ScopedNestableThreadGlobalSingleton<T> Current
         {
-            get
-            {
-                return ThreadedCurrentGlobal.Value;
-            }
+            get => ThreadedCurrentGlobal.Value;
 
-            private set
-            {
-                ThreadedCurrentGlobal.Value = value;
-            }
+            private set => ThreadedCurrentGlobal.Value = value;
         }
 
         /// <summary>
@@ -150,7 +143,9 @@ namespace Moonrise.Logging.Util
         ///     to take
         ///     additional actions.
         /// </summary>
-        protected virtual void Disposing() { }
+        protected virtual void Disposing()
+        {
+        }
 
         // <summary>
         //     Here to remind you you need to implement a public new static T Value() method to make it globally available.

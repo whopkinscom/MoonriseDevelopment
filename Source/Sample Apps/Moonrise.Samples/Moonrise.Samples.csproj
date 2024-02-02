@@ -1,26 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-	  <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <TargetFramework>net5.0</TargetFramework>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
-
   <ItemGroup>
     <Compile Remove="ContentFiles\Moonrise.Samples.Program.cs" />
   </ItemGroup>
-
   <ItemGroup>
     <None Remove="ContentFiles\Moonrise.chm" />
     <None Remove="ContentFiles\Moonrise.Samples.appSettings.json" />
   </ItemGroup>
-	<ItemGroup>
-		<Content Include="readme.tt">
-			<PackagePath>\</PackagePath>
-			<Generator>TextTemplatingFileGenerator</Generator>
-			<LastGenOutput>readme.txt</LastGenOutput>
-		</Content>
-	</ItemGroup>
-
+  <ItemGroup>
+    <Content Include="readme.tt">
+      <PackagePath>\</PackagePath>
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>readme.txt</LastGenOutput>
+    </Content>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="ContentFiles\Moonrise.chm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -32,13 +28,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\NetStd\Moonrise.LoggingUtils.NetStd\Moonrise.LoggingUtils.NetStd.csproj" />
     <ProjectReference Include="..\..\NetStd\Moonrise.StandardUtils.NetStd\Moonrise.StandardUtils.NetStd.csproj" />
     <ProjectReference Include="..\..\NetStd\Moonrise.TestUtils.NetStd\Moonrise.TestUtils.NetStd.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <None Update="MakeNuget.cmd">
       <DesignTime>True</DesignTime>
@@ -68,13 +62,10 @@
       <DependentUpon>readme.tt</DependentUpon>
     </None>
   </ItemGroup>
-
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
-
-	<Target Name="PostcompileScript" AfterTargets="Build">
-		<Exec Command="makeNuget.cmd $(Configuration) &quot;$(MSBuildProjectDirectory)&quot; $(AssemblyName)" />
-	</Target>
-
+  <Target Name="PostcompileScript" AfterTargets="Build">
+    <Exec Command="makeNuget.cmd $(Configuration) &quot;$(MSBuildProjectDirectory)&quot; $(AssemblyName)" />
+  </Target>
 </Project>

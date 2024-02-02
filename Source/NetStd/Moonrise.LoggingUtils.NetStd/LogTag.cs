@@ -1,24 +1,26 @@
-﻿#region Apache-v2.0
+﻿#region MIT
 
-//    Copyright 2017 Will Hopkins - Moonrise Media Ltd.
+//     Copyright 2015-2021 Will Hopkins - Moonrise Media Ltd.
+//     will@moonrise.media - Happy to have a conversation
 // 
-//    Licensed under the Apache License, Version 2.0 (the "License");
-//    you may not use this file except in compliance with the License.
-//    You may obtain a copy of the License at
+//     Licenced under MIT licencing terms
+//     you may not use this file except in compliance with the License.
+//     You may obtain a copy of the License at
 // 
-//        http://www.apache.org/licenses/LICENSE-2.0
+//         https://licenses.nuget.org/MIT
 // 
-//    Unless required by applicable law or agreed to in writing, software
-//    distributed under the License is distributed on an "AS IS" BASIS,
-//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//    See the License for the specific language governing permissions and
-//    limitations under the License.
+//     Unless required by applicable law or agreed to in writing, software
+//     distributed under the License is distributed on an "AS IS" BASIS,
+//     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//     See the License for the specific language governing permissions and
+//     limitations under the License.
 
 #endregion
-using System.Collections.Generic;
-using Moonrise.Logging.Util;
+
 using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Moonrise.Logging.Util;
 
 namespace Moonrise.Logging
 {
@@ -40,19 +42,6 @@ namespace Moonrise.Logging
     /// </summary>
     public class LogTag
     {
-        /// <summary>
-        ///     A <see cref="LogTag" /> that is scoped within the thread.
-        /// </summary>
-        /// <seealso cref="LogTag" />
-        public class Scoped : ScopedNestableThreadGlobalSingleton<LogTag>
-        {
-            /// <summary>
-            ///     Initializes a new instance of the <see cref="Scoped" /> class.
-            /// </summary>
-            /// <param name="value">The value which will be the current NestedThreadGlobal value.</param>
-            public Scoped(LogTag value) : base(value) { }
-        }
-
         /// <summary>
         ///     Prevents infinte looping if a tag directly or indirectly is nested beneath itself.
         /// </summary>
@@ -218,12 +207,12 @@ namespace Moonrise.Logging
             beenChecked = true;
             bool retVal = ActiveLogTags.Contains(Name);
 
-            if (!retVal && (Parent != null) && !Parent.beenChecked)
+            if (!retVal && Parent != null && !Parent.beenChecked)
             {
                 retVal = Parent.IsActive();
             }
 
-            if (!retVal && (ScopeParent != null) && !ScopeParent.beenChecked)
+            if (!retVal && ScopeParent != null && !ScopeParent.beenChecked)
             {
                 retVal = ScopeParent.IsActive();
             }
@@ -253,8 +242,10 @@ namespace Moonrise.Logging
         }
 
         /// <summary>
-        ///    Wraps the action in a Logger.Context and logs any exceptions before passing them on.<para>
-        ///    Usage: MyLogTag.Do(()=>{code;});</para>
+        ///     Wraps the action in a Logger.Context and logs any exceptions before passing them on.
+        ///     <para>
+        ///         Usage: MyLogTag.Do(()=>{code;});
+        ///     </para>
         /// </summary>
         /// <param name="action">The action.</param>
         /// <param name="caller">The caller.</param>
@@ -283,6 +274,21 @@ namespace Moonrise.Logging
         public override string ToString()
         {
             return Name;
+        }
+
+        /// <summary>
+        ///     A <see cref="LogTag" /> that is scoped within the thread.
+        /// </summary>
+        /// <seealso cref="LogTag" />
+        public class Scoped : ScopedNestableThreadGlobalSingleton<LogTag>
+        {
+            /// <summary>
+            ///     Initializes a new instance of the <see cref="Scoped" /> class.
+            /// </summary>
+            /// <param name="value">The value which will be the current NestedThreadGlobal value.</param>
+            public Scoped(LogTag value) : base(value)
+            {
+            }
         }
     }
 }

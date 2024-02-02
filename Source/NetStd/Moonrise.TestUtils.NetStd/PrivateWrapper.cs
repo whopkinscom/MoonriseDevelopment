@@ -1,20 +1,22 @@
-﻿#region Apache-v2.0
+﻿#region MIT
 
-//    Copyright 2017 Will Hopkins - Moonrise Media Ltd.
+//     Copyright 2015-2021 Will Hopkins - Moonrise Media Ltd.
+//     will@moonrise.media - Happy to have a conversation
 // 
-//    Licensed under the Apache License, Version 2.0 (the "License");
-//    you may not use this file except in compliance with the License.
-//    You may obtain a copy of the License at
+//     Licenced under MIT licencing terms
+//     you may not use this file except in compliance with the License.
+//     You may obtain a copy of the License at
 // 
-//        http://www.apache.org/licenses/LICENSE-2.0
+//         https://licenses.nuget.org/MIT
 // 
-//    Unless required by applicable law or agreed to in writing, software
-//    distributed under the License is distributed on an "AS IS" BASIS,
-//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//    See the License for the specific language governing permissions and
-//    limitations under the License.
+//     Unless required by applicable law or agreed to in writing, software
+//     distributed under the License is distributed on an "AS IS" BASIS,
+//     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//     See the License for the specific language governing permissions and
+//     limitations under the License.
 
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -40,7 +42,7 @@ namespace Moonrise.Utils.Test
         ///     Specify the flags for accessing members
         /// </summary>
         private static readonly BindingFlags Flags = BindingFlags.NonPublic | BindingFlags.Instance
-                                                     | BindingFlags.Static | BindingFlags.Public;
+                                                                            | BindingFlags.Static | BindingFlags.Public;
 
         /// <summary>
         ///     The object we are going to wrap
@@ -82,7 +84,7 @@ namespace Moonrise.Utils.Test
             Type t = allt.First(item => item.Name == type);
 
             IEnumerable<Type> types = from a in args
-                                      select a.GetType();
+                select a.GetType();
 
             // Get the constructor matching the specified set of args
 //#if DotNetCore
@@ -119,7 +121,8 @@ namespace Moonrise.Utils.Test
         ///     true if the operation is successful; otherwise, false. If this method returns false, the run-time binder of the
         ///     language determines the behaviour. (In most cases, a run-time exception is thrown.)
         /// </returns>
-        [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1503:CurlyBracketsMustNotBeOmitted", Justification = "I excuse throwing exceptions!")]
+        [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1503:CurlyBracketsMustNotBeOmitted",
+            Justification = "I excuse throwing exceptions!")]
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
             bool retVal = false;
@@ -184,13 +187,14 @@ namespace Moonrise.Utils.Test
         ///     true if the operation is successful; otherwise, false. If this method returns false, the run-time binder of the
         ///     language determines the behaviour. (In most cases, a language-specific run-time exception is thrown.)
         /// </returns>
-        [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1503:CurlyBracketsMustNotBeOmitted", Justification = "I excuse throwing exceptions!")]
+        [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1503:CurlyBracketsMustNotBeOmitted",
+            Justification = "I excuse throwing exceptions!")]
         public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)
         {
             bool retVal = false;
 
             IEnumerable<Type> types = from a in args
-                                      select a.GetType();
+                select a.GetType();
 
 //#if DotNetCore
             MethodInfo method = _wrapped.GetType().GetTypeInfo().GetMethod(binder.Name, types.ToArray());
@@ -244,7 +248,8 @@ namespace Moonrise.Utils.Test
         ///     true if the operation is successful; otherwise, false. If this method returns false, the run-time binder of the
         ///     language determines the behaviour. (In most cases, a language-specific run-time exception is thrown.)
         /// </returns>
-        [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1503:CurlyBracketsMustNotBeOmitted", Justification = "I excuse throwing exceptions!")]
+        [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1503:CurlyBracketsMustNotBeOmitted",
+            Justification = "I excuse throwing exceptions!")]
         public override bool TrySetMember(SetMemberBinder binder, object value)
         {
             bool retVal = false;

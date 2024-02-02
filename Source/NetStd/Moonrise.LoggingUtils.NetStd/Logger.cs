@@ -1,21 +1,23 @@
-﻿#region Apache-v2.0
+﻿#region MIT
 
-//    Copyright 2017 Will Hopkins - Moonrise Media Ltd.
+//     Copyright 2015-2021 Will Hopkins - Moonrise Media Ltd.
+//     will@moonrise.media - Happy to have a conversation
 // 
-//    Licensed under the Apache License, Version 2.0 (the "License");
-//    you may not use this file except in compliance with the License.
-//    You may obtain a copy of the License at
+//     Licenced under MIT licencing terms
+//     you may not use this file except in compliance with the License.
+//     You may obtain a copy of the License at
 // 
-//        http://www.apache.org/licenses/LICENSE-2.0
+//         https://licenses.nuget.org/MIT
 // 
-//    Unless required by applicable law or agreed to in writing, software
-//    distributed under the License is distributed on an "AS IS" BASIS,
-//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//    See the License for the specific language governing permissions and
-//    limitations under the License.
+//     Unless required by applicable law or agreed to in writing, software
+//     distributed under the License is distributed on an "AS IS" BASIS,
+//     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//     See the License for the specific language governing permissions and
+//     limitations under the License.
 
 #endregion
 
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -25,7 +27,6 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using Newtonsoft.Json;
 
 #if !DotNetCore
 using System.Diagnostics;
@@ -129,7 +130,7 @@ namespace Moonrise.Logging
         /// <summary>
         ///     Backing field for <see cref="Disabled" />
         /// </summary>
-        private static bool _Disabled = false;
+        private static bool _Disabled;
 
         /// <summary>
         ///     The per thread logger provider
@@ -153,7 +154,7 @@ namespace Moonrise.Logging
 
         /// <summary>
         ///     The root <see cref="IAuditProvider" />. Only the first auditor to be assigned will be accepted. Additional auditors
-        ///     can be managed via the <see cref="NextAuditor" />property of your <see cref="IAuditProvider"/>. If you need to
+        ///     can be managed via the <see cref="NextAuditor" />property of your <see cref="IAuditProvider" />. If you need to
         ///     replace the original auditor you will need to use <see cref="ReplaceAuditProvider" /> as subsequent settings via
         ///     <see cref="AuditProvider" /> will only affect the current thread.
         /// </summary>
@@ -177,9 +178,9 @@ namespace Moonrise.Logging
                     // There is no audit provider set up for THIS thread, so get the original one to clone itself!
                     _Auditor.Value = (IAuditProvider) _OriginalAuditor.Clone();
 
-                    var originalNext = _OriginalAuditor.NextAuditor;
-                    var threadedNext = _Auditor.Value;
-                    var numClones = MaxChainedLoggers;
+                    IAuditProvider originalNext = _OriginalAuditor.NextAuditor;
+                    IAuditProvider threadedNext = _Auditor.Value;
+                    int numClones = MaxChainedLoggers;
 
                     // We also need to clone any NextAuditors!
                     while (originalNext != null && numClones-- > 0)
@@ -249,7 +250,8 @@ namespace Moonrise.Logging
 
         /// <summary>
         ///     The root <see cref="ILoggingProvider" />. Only the first logger to be assigned will be accepted. Additional loggers
-        ///     can be managed via the <see cref="NextLogger" /> property of your <see cref="ILoggingProvider"/>. If you need to replace the original logger you will need to use
+        ///     can be managed via the <see cref="NextLogger" /> property of your <see cref="ILoggingProvider" />. If you need to
+        ///     replace the original logger you will need to use
         ///     <see cref="ReplaceLoggingProvider" /> as subsequent settings via <see cref="LogProvider" /> will only affect the
         ///     current thread.
         /// </summary>
@@ -276,9 +278,9 @@ namespace Moonrise.Logging
                     // There is no log provider set up for THIS thread, so get the original one to clone itself!
                     _Logger.Value = (ILoggingProvider) _OriginalLogger.Clone();
 
-                    var originalNext = _OriginalLogger.NextLogger;
-                    var threadedNext = _Logger.Value;
-                    var numClones = MaxChainedLoggers;
+                    ILoggingProvider originalNext = _OriginalLogger.NextLogger;
+                    ILoggingProvider threadedNext = _Logger.Value;
+                    int numClones = MaxChainedLoggers;
 
                     // We also need to clone any NextLoggers!
                     while (originalNext != null && numClones-- > 0)
@@ -345,7 +347,9 @@ namespace Moonrise.Logging
             set
             {
                 if (value < 1)
+                {
                     throw new ArgumentOutOfRangeException(nameof(MaxChainedLoggers), "MaxChainedLoggers must be > 0");
+                }
 
                 _MaxChainedLoggers = value;
             }
@@ -390,11 +394,14 @@ namespace Moonrise.Logging
         /// </summary>
         /// <param name="msg">The message.</param>
         /// <param name="context">The context - if <see cref="Logger.UseContext" /> is false, this will be empty.</param>
-        /// <param name="threadId">The thread identifier - if <see cref="Logger.UseThreadId"/> is false, this will be empty.</param>
+        /// <param name="threadId">The thread identifier - if <see cref="Logger.UseThreadId" /> is false, this will be empty.</param>
         /// <param name="logTag">The log tag.</param>
         public void AuditThis(string msg, string context, string threadId, LogTag logTag)
         {
-            if (UseConsoleOutput) Console.Out.WriteLine("AUDIT: " + msg);
+            if (UseConsoleOutput)
+            {
+                Console.Out.WriteLine("AUDIT: " + msg);
+            }
         }
 
         /// <summary>
@@ -405,14 +412,14 @@ namespace Moonrise.Logging
         /// <param name="auditObject">The object to audit - it will be JSONd</param>
         /// <param name="auditLevel">The level of audit</param>
         /// <param name="context">The context - if <see cref="Logger.UseContext" /> is false, this will be empty.</param>
-        /// <param name="threadId">The thread identifier - if <see cref="Logger.UseThreadId"/> is false, this will be empty.</param>
+        /// <param name="threadId">The thread identifier - if <see cref="Logger.UseThreadId" /> is false, this will be empty.</param>
         /// <param name="logTag">The log tag.</param>
         /// <exception cref="System.NotImplementedException"></exception>
         public void AuditThisObject(string message, object auditObject, LoggingLevel auditLevel, string context,
             string threadId, LogTag logTag)
         {
             // The basic implementation simply audits the Json version
-            var auditMsg = auditLevel == LoggingLevel.Audit
+            string auditMsg = auditLevel == LoggingLevel.Audit
                 ? message
                 : auditLevel + $" {message}\r\n{JsonIt(auditObject)}";
             AuditThis(auditMsg, context, threadId, logTag);
@@ -438,10 +445,10 @@ namespace Moonrise.Logging
         }
 
         /// <summary>
-        /// Logs an error message to the console.
-        /// <para>
-        /// As a default ILoggingProvider, this is the default console logging if no other logger is provided.
-        /// </para>
+        ///     Logs an error message to the console.
+        ///     <para>
+        ///         As a default ILoggingProvider, this is the default console logging if no other logger is provided.
+        ///     </para>
         /// </summary>
         /// <param name="level">The level for this message</param>
         /// <param name="context">The context.</param>
@@ -451,6 +458,14 @@ namespace Moonrise.Logging
         public void LogThis(LoggingLevel level, string context, string threadId, LogTag logTag, string msg)
         {
             UseConsoleOutput = true;
+        }
+
+        /// <summary>
+        ///     Flush any buffers currently in use.
+        /// </summary>
+        public void FlushBuffers()
+        {
+            // Nothing to do here!
         }
 
         /// <summary>A one-shot initialisation using the specified configuration.</summary>
@@ -496,7 +511,10 @@ namespace Moonrise.Logging
         /// <exception cref="System.ArgumentNullException">tagName</exception>
         public static void ActivateLogTag(LogTag tag)
         {
-            if (tag == null) throw new ArgumentNullException(nameof(tag));
+            if (tag == null)
+            {
+                throw new ArgumentNullException(nameof(tag));
+            }
 
             LogTag.ActivateLogTag(tag);
         }
@@ -518,7 +536,10 @@ namespace Moonrise.Logging
         /// <exception cref="System.ArgumentNullException">tagName</exception>
         public static void DeactivateLogTag(LogTag tag)
         {
-            if (tag == null) throw new ArgumentNullException(nameof(tag));
+            if (tag == null)
+            {
+                throw new ArgumentNullException(nameof(tag));
+            }
 
             LogTag.DeactivateLogTag(tag);
         }
@@ -572,19 +593,20 @@ namespace Moonrise.Logging
         {
             try
             {
-                var auditMsg = auditLevel == LoggingLevel.Audit
+                string auditMsg = auditLevel == LoggingLevel.Audit
                     ? message
                     : auditLevel + $" {message}\r\n{JsonIt(anything)}";
 
                 LogMsgCommon(LoggingLevel.Audit, auditMsg, logTag, caller);
 
-                var nextAuditor = AuditProvider;
+                IAuditProvider nextAuditor = AuditProvider;
 
-                var maxAuditors = MaxChainedLoggers;
+                int maxAuditors = MaxChainedLoggers;
 
                 while (nextAuditor != null && maxAuditors-- > 0)
                 {
-                    nextAuditor.AuditThisObject(message, anything, auditLevel, ScopeContext.CurrentValue, $"{Thread.CurrentThread.ManagedThreadId}", logTag);
+                    nextAuditor.AuditThisObject(message, anything, auditLevel, ScopeContext.CurrentValue,
+                        $"{Thread.CurrentThread.ManagedThreadId}", logTag);
                     nextAuditor = nextAuditor.NextAuditor;
                 }
             }
@@ -618,7 +640,10 @@ namespace Moonrise.Logging
         public static ScopeContext Context(string context = null, LogTag logTagScope = null,
             [CallerMemberName] string callerContext = "")
         {
-            if (context == null) context = callerContext;
+            if (context == null)
+            {
+                context = callerContext;
+            }
 
             return new ScopeContext(context, logTagScope);
         }
@@ -694,7 +719,10 @@ namespace Moonrise.Logging
         public static LogTag.Scoped ScopedLogTag(LogTag logTagScope = null,
             [CallerMemberName] string callerContext = "")
         {
-            if (logTagScope == null) logTagScope = new LogTag(callerContext);
+            if (logTagScope == null)
+            {
+                logTagScope = new LogTag(callerContext);
+            }
 
             return new LogTag.Scoped(logTagScope);
         }
@@ -711,7 +739,10 @@ namespace Moonrise.Logging
             Justification = "I excuse exceptions and returns!")]
         public static void Debug(string msg, LogTag logTag = null, [CallerMemberName] string caller = null)
         {
-            if (Disabled) return;
+            if (Disabled)
+            {
+                return;
+            }
 
             LogMsgCommon(LoggingLevel.Debug, msg, logTag, caller);
         }
@@ -731,7 +762,10 @@ namespace Moonrise.Logging
             Justification = "I excuse exceptions and returns!")]
         public static void Trace(string msg, LogTag logTag = null, [CallerMemberName] string caller = null)
         {
-            if (Disabled) return;
+            if (Disabled)
+            {
+                return;
+            }
 
             LogMsgCommon(LoggingLevel.Trace, msg, logTag, caller);
         }
@@ -751,7 +785,10 @@ namespace Moonrise.Logging
             Justification = "I excuse exceptions and returns!")]
         public static void Debug(object anything, LogTag logTag = null, [CallerMemberName] string caller = null)
         {
-            if (Disabled) return;
+            if (Disabled)
+            {
+                return;
+            }
 
             LogMsgCommon(LoggingLevel.Debug, JsonIt(anything), logTag, caller);
         }
@@ -776,7 +813,10 @@ namespace Moonrise.Logging
             Justification = "I excuse exceptions and returns!")]
         public static void Trace(object anything, LogTag logTag = null, [CallerMemberName] string caller = null)
         {
-            if (Disabled) return;
+            if (Disabled)
+            {
+                return;
+            }
 
             LogMsgCommon(LoggingLevel.Trace, JsonIt(anything), logTag, caller);
         }
@@ -788,7 +828,10 @@ namespace Moonrise.Logging
         /// <param name="caller">The method name of the caller. Will be displayed if <seealso cref="LogMethodName" /> is true.</param>
         public static void Error(string msg, [CallerMemberName] string caller = null)
         {
-            if (Disabled) return;
+            if (Disabled)
+            {
+                return;
+            }
 
             LogMsgCommon(LoggingLevel.Error, msg, null, caller);
         }
@@ -800,7 +843,10 @@ namespace Moonrise.Logging
         /// <param name="caller">The method name of the caller. Will be displayed if <seealso cref="LogMethodName" /> is true.</param>
         public static void Error(object thing, [CallerMemberName] string caller = null)
         {
-            if (Disabled) return;
+            if (Disabled)
+            {
+                return;
+            }
 
             LogMsgCommon(LoggingLevel.Error, JsonIt(thing), null, caller);
         }
@@ -817,7 +863,10 @@ namespace Moonrise.Logging
         /// the stack trace.
         public static void Error(Exception excep, string msg = "", [CallerMemberName] string caller = null)
         {
-            if (Disabled) return;
+            if (Disabled)
+            {
+                return;
+            }
 
             if (string.IsNullOrEmpty(excep.HelpLink))
             {
@@ -846,7 +895,10 @@ namespace Moonrise.Logging
         /// <param name="caller">The method name of the caller. Will be displayed if <seealso cref="LogMethodName" /> is true.</param>
         public static void Fatal(string msg, [CallerMemberName] string caller = null)
         {
-            if (Disabled) return;
+            if (Disabled)
+            {
+                return;
+            }
 
             LogMsgCommon(LoggingLevel.Fatal, msg, null, caller);
         }
@@ -858,7 +910,10 @@ namespace Moonrise.Logging
         /// <param name="caller">The method name of the caller. Will be displayed if <seealso cref="LogMethodName" /> is true.</param>
         public static void Critical(string msg, [CallerMemberName] string caller = null)
         {
-            if (Disabled) return;
+            if (Disabled)
+            {
+                return;
+            }
 
             LogMsgCommon(LoggingLevel.Critical, msg, null, caller);
         }
@@ -870,11 +925,12 @@ namespace Moonrise.Logging
         /// <returns>The string representing the argument values</returns>
         public static string GetArgVals(object[] arguments)
         {
-            var retVal = string.Empty;
+            string retVal = string.Empty;
 
             // Check if any argument values were passed or not.
             if (arguments != null && arguments.Length > 0)
-                for (var i = 0;
+            {
+                for (int i = 0;
                     i <
                     arguments.Length;
                     i++)
@@ -882,14 +938,21 @@ namespace Moonrise.Logging
                     string value;
 
                     if (arguments[i]?.GetType() == typeof(string))
+                    {
                         value = string.Format("\"{0}\"", arguments[i]);
+                    }
                     else if (arguments[i] != null && arguments[i].GetType().GetTypeInfo().IsPrimitive)
+                    {
                         value = arguments[i].ToString();
+                    }
                     else
+                    {
                         value = JsonIt(arguments[i]);
+                    }
 
                     retVal += $"{value}{(i < arguments.Length - 1 ? ", " : string.Empty)}";
                 }
+            }
 
             return retVal;
         }
@@ -901,10 +964,12 @@ namespace Moonrise.Logging
         /// <returns>A full exception message, including inners</returns>
         public static string GetFullExceptionMessage(Exception excep)
         {
-            var retVal = excep.Message;
+            string retVal = excep.Message;
 
             if (excep.InnerException != null)
+            {
                 retVal += "\nInner Exception:\n\t" + GetFullExceptionMessage(excep.InnerException);
+            }
 
             return retVal;
         }
@@ -921,7 +986,10 @@ namespace Moonrise.Logging
             Justification = "I excuse exceptions and returns!")]
         public static void Info(string msg, LogTag logTag = null, [CallerMemberName] string caller = null)
         {
-            if (Disabled) return;
+            if (Disabled)
+            {
+                return;
+            }
 
             LogMsgCommon(LoggingLevel.Information, msg, logTag, caller);
         }
@@ -941,7 +1009,10 @@ namespace Moonrise.Logging
             Justification = "I excuse exceptions and returns!")]
         public static void Info(object anything, LogTag logTag = null, [CallerMemberName] string caller = null)
         {
-            if (Disabled) return;
+            if (Disabled)
+            {
+                return;
+            }
 
             LogMsgCommon(LoggingLevel.Information, JsonIt(anything), logTag, caller);
         }
@@ -957,13 +1028,13 @@ namespace Moonrise.Logging
         /// </returns>
         public static string JsonIt(object anything)
         {
-            var retVal = string.Empty;
+            string retVal = string.Empty;
 
             try
             {
                 if (anything != null)
                 {
-                    var settings = new JsonSerializerSettings
+                    JsonSerializerSettings settings = new JsonSerializerSettings
                     {
                         PreserveReferencesHandling =
                             PreserveReferencesHandling.None,
@@ -1001,7 +1072,10 @@ namespace Moonrise.Logging
         /// </summary>
         public static void LogActiveLogTags()
         {
-            if (Disabled) return;
+            if (Disabled)
+            {
+                return;
+            }
 
             Title("Active Log Tags:");
             LogMsgCommon((LoggingLevel) OutputLevel, string.Join(", ", LogTag.ActiveLogTags));
@@ -1013,10 +1087,13 @@ namespace Moonrise.Logging
         /// </summary>
         public static void LogEncounteredLogTags()
         {
-            if (Disabled) return;
+            if (Disabled)
+            {
+                return;
+            }
 
             Title("Encountered Log Tags:");
-            var encountered = LogTag.EncounteredLogTags.ToList();
+            List<LogTag> encountered = LogTag.EncounteredLogTags.ToList();
             encountered.Sort();
             LogMsgCommon((LoggingLevel) OutputLevel, JsonIt(encountered));
         }
@@ -1038,10 +1115,13 @@ namespace Moonrise.Logging
         public static void MethodInfo(object[] arguments = null, LogTag logTag = null,
             [CallerMemberName] string methodName = "")
         {
-            if (Disabled || OutputLevel > ReportingLevel.Debug) return;
+            if (Disabled || OutputLevel > ReportingLevel.Debug)
+            {
+                return;
+            }
 
-            var argVals = GetArgVals(arguments);
-            var msg = $"{methodName}({argVals})";
+            string argVals = GetArgVals(arguments);
+            string msg = $"{methodName}({argVals})";
 
             Debug(msg, logTag);
         }
@@ -1054,7 +1134,7 @@ namespace Moonrise.Logging
         public static void Print(string msg)
         {
             // We don't want to double up any console output so temporarily switch this off
-            var currentValue = UseConsoleOutput;
+            bool currentValue = UseConsoleOutput;
             UseConsoleOutput = false;
             Console.Out.WriteLine(msg);
             Info($"Console: {msg}");
@@ -1093,9 +1173,12 @@ namespace Moonrise.Logging
             Justification = "I excuse exceptions and returns!")]
         public static void Seperate(char use = '-')
         {
-            if (Disabled) return;
+            if (Disabled)
+            {
+                return;
+            }
 
-            var line = string.Empty;
+            string line = string.Empty;
             line = line.PadLeft(80, use);
 
             // Use whatever output level is in place as we want this going out
@@ -1110,12 +1193,15 @@ namespace Moonrise.Logging
         /// The whole line will be 79/80 chars total with the message centered in the ----- lines ------
         public static void Title(string msg, params object[] args)
         {
-            if (Disabled) return;
+            if (Disabled)
+            {
+                return;
+            }
 
             msg = string.Format(msg, args);
-            var numDashes = (80 - msg.Length - 2) / 2;
-            var title = string.Empty;
-            var dashes = title.PadLeft(numDashes, '-');
+            int numDashes = (80 - msg.Length - 2) / 2;
+            string title = string.Empty;
+            string dashes = title.PadLeft(numDashes, '-');
             title = string.Format("{0}{1} {2} {1}", Environment.NewLine, dashes, msg);
 
             // Use whatever output level is in place as we want this going out
@@ -1131,7 +1217,10 @@ namespace Moonrise.Logging
             Justification = "I excuse exceptions and returns!")]
         public static void TraceStack()
         {
-            if (Disabled) return;
+            if (Disabled)
+            {
+                return;
+            }
 
             if (StackTracingEnabled)
             {
@@ -1142,7 +1231,9 @@ namespace Moonrise.Logging
                 string stackList = "Stack Trace:\n  ";
 
                 foreach (StackFrame stackFrame in stackFrames)
+                {
                     stackList += stackFrame.GetMethod().DeclaringType + "." + stackFrame.GetMethod().Name + "-->";
+                }
 
                 // Stack traces will only ever go out at Debug level
                 LogMsgCommon(LoggingLevel.Debug, stackList);
@@ -1160,7 +1251,10 @@ namespace Moonrise.Logging
             Justification = "I excuse exceptions and returns!")]
         public static void Warning(string msg, [CallerMemberName] string caller = null)
         {
-            if (Disabled) return;
+            if (Disabled)
+            {
+                return;
+            }
 
             LogMsgCommon(LoggingLevel.Warning, msg, null, caller);
         }
@@ -1179,21 +1273,16 @@ namespace Moonrise.Logging
             Justification = "I excuse exceptions and returns!")]
         public static void Warning(object anything, [CallerMemberName] string caller = null)
         {
-            if (Disabled) return;
+            if (Disabled)
+            {
+                return;
+            }
 
             LogMsgCommon(LoggingLevel.Warning, JsonIt(anything), null, caller);
         }
 
         /// <summary>
-        /// Flush any buffers currently in use.
-        /// </summary>
-        public void FlushBuffers()
-        {
-            // Nothing to do here!
-        }
-
-        /// <summary>
-        /// Ensures all loggers get flushed.
+        ///     Ensures all loggers get flushed.
         /// </summary>
         public static void Flush()
         {
@@ -1226,7 +1315,6 @@ namespace Moonrise.Logging
 
                 nextAuditProvider = nextAuditProvider.NextAuditor;
             }
-
         }
 
         /// <summary>
@@ -1240,18 +1328,27 @@ namespace Moonrise.Logging
         {
             if (logTag == null && level <= LoggingLevel.Information)
                 // If there isn't a log tag, check if a scope one has been used.
+            {
                 logTag = LogTag.Scoped.CurrentValue;
+            }
 
             if (level > LoggingLevel.Information)
                 // We ignore log tags on anything above Information!
+            {
                 logTag = null;
+            }
 
             if (OutputLevel <= (ReportingLevel) level && (logTag == null || logTag.IsActive()))
             {
-                if (LogMethodName && !string.IsNullOrEmpty(caller)) msg = $"{caller}(): {msg}";
+                if (LogMethodName && !string.IsNullOrEmpty(caller))
+                {
+                    msg = $"{caller}(): {msg}";
+                }
 
                 if (!UseContext && (_TraceCalls.Value || ScopeContext.CurrentValue != null))
+                {
                     msg = msg.PadLeft(msg.Length + _Indent.Value);
+                }
 
                 ILoggingProvider nextLogger = LogProvider;
 
@@ -1262,13 +1359,17 @@ namespace Moonrise.Logging
                     // Ensure that there is a lock on the log provider!
                     lock (LockObject)
                     {
-                        nextLogger.LogThis(level, UseContext ? ScopeContext.CurrentValue : string.Empty, UseThreadId ? $"{Thread.CurrentThread.ManagedThreadId}" : string.Empty, logTag, msg);
+                        nextLogger.LogThis(level, UseContext ? ScopeContext.CurrentValue : string.Empty,
+                            UseThreadId ? $"{Thread.CurrentThread.ManagedThreadId}" : string.Empty, logTag, msg);
                     }
 
                     nextLogger = nextLogger.NextLogger;
                 }
 
-                if (UseConsoleOutput) Console.Out.WriteLine(msg);
+                if (UseConsoleOutput)
+                {
+                    Console.Out.WriteLine(msg);
+                }
             }
         }
 
@@ -1286,8 +1387,8 @@ namespace Moonrise.Logging
             /// </summary>
             public bool LogMethodName { get; set; }
 
-            /// <summary>The set of log tags to initially activate. See also <seealso cref="Logger.ActivateLogTags"/></summary>
-            public List<String> LogTags { get; set; }
+            /// <summary>The set of log tags to initially activate. See also <seealso cref="Logger.ActivateLogTags" /></summary>
+            public List<string> LogTags { get; set; }
 
             /// <summary>
             ///     Gets or sets the current logging output level

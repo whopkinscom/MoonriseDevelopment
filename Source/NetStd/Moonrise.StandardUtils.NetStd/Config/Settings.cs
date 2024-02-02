@@ -1,18 +1,19 @@
-﻿#region Apache-v2.0
+﻿#region MIT
 
-//    Copyright 2017 Will Hopkins - Moonrise Media Ltd.
+//     Copyright 2015-2021 Will Hopkins - Moonrise Media Ltd.
+//     will@moonrise.media - Happy to have a conversation
 // 
-//    Licensed under the Apache License, Version 2.0 (the "License");
-//    you may not use this file except in compliance with the License.
-//    You may obtain a copy of the License at
+//     Licenced under MIT licencing terms
+//     you may not use this file except in compliance with the License.
+//     You may obtain a copy of the License at
 // 
-//        http://www.apache.org/licenses/LICENSE-2.0
+//         https://licenses.nuget.org/MIT
 // 
-//    Unless required by applicable law or agreed to in writing, software
-//    distributed under the License is distributed on an "AS IS" BASIS,
-//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//    See the License for the specific language governing permissions and
-//    limitations under the License.
+//     Unless required by applicable law or agreed to in writing, software
+//     distributed under the License is distributed on an "AS IS" BASIS,
+//     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//     See the License for the specific language governing permissions and
+//     limitations under the License.
 
 #endregion
 
@@ -301,7 +302,9 @@ namespace Moonrise.Utils.Standard.Config
                 string stackList = string.Empty;
 
                 foreach (StackFrame stackFrame in stackFrames)
+                {
                     stackList += stackFrame.GetMethod().DeclaringType + "." + stackFrame.GetMethod().Name + "-->";
+                }
 
                 stackList += $"{FileUtils.ApplicationName()}";
 
@@ -313,7 +316,9 @@ namespace Moonrise.Utils.Standard.Config
                 string retVal;
 
                 if (SettingsEncryptor == null)
+                {
                     throw new SettingsException(SettingsExceptionReason.NoEncryptionProvider);
+                }
 
                 // We now need to find each occurrence of the Encryption Identifier and replace it's following string with the unencrypted version
                 bool moreEncryptedStrings = true;
@@ -321,6 +326,7 @@ namespace Moonrise.Utils.Standard.Config
                 StringBuilder stringBuilder = new StringBuilder();
 
                 while (moreEncryptedStrings)
+                {
                     try
                     {
                         string preEncrypted = settings.Extract(ref start, EncryptionOpeningIdentifier, false);
@@ -354,6 +360,7 @@ namespace Moonrise.Utils.Standard.Config
                         throw new SettingsException(excep, SettingsExceptionReason.UnknownException, nameof(Decrypt),
                             excep.Message);
                     }
+                }
 
                 retVal = stringBuilder.ToString();
 
@@ -379,7 +386,10 @@ namespace Moonrise.Utils.Standard.Config
         {
             string retVal;
 
-            if (settingsEncryptor == null) throw new SettingsException(SettingsExceptionReason.NoEncryptionProvider);
+            if (settingsEncryptor == null)
+            {
+                throw new SettingsException(SettingsExceptionReason.NoEncryptionProvider);
+            }
 
             // We now need to find each occurrence of the Encryption Identifier and replace it's following string with the unencrypted version
             bool moreEncryptedStrings = true;
@@ -387,6 +397,7 @@ namespace Moonrise.Utils.Standard.Config
             StringBuilder stringBuilder = new StringBuilder();
 
             while (moreEncryptedStrings)
+            {
                 try
                 {
                     string preEncrypted = readVal.Extract(ref start, EncryptionOpeningIdentifier, false);
@@ -418,11 +429,14 @@ namespace Moonrise.Utils.Standard.Config
                 {
                     // The Invalid Data exception is an internal exception so we can't catch that, only look for the message containing "Invalid Data"
                     if (excep.Message.Contains("ata") && excep.Message.Contains("nvalid"))
+                    {
                         throw new SettingsException(excep, SettingsExceptionReason.InvalidAdditionalEntropy);
+                    }
 
                     throw new SettingsException(excep, SettingsExceptionReason.UnknownException, nameof(Decrypt),
                         excep.Message);
                 }
+            }
 
             retVal = stringBuilder.ToString();
 
@@ -430,7 +444,10 @@ namespace Moonrise.Utils.Standard.Config
             // the original encryption encrypts the JSON (and for a string this INCLUDES quotes) but the read
             // IGNORES the quotes, but the encryption CONTAINS the quotes and these must be stripped off.
             // This doesn't happen with other types!
-            if (retVal.StartsWith("\"") && retVal.EndsWith("\"")) retVal = retVal.Substring(1, retVal.Length - 2);
+            if (retVal.StartsWith("\"") && retVal.EndsWith("\""))
+            {
+                retVal = retVal.Substring(1, retVal.Length - 2);
+            }
 
             return retVal;
         }
@@ -514,8 +531,10 @@ namespace Moonrise.Utils.Standard.Config
             U referableValue = property.Compile()();
 
             if (referableValue == null)
+            {
                 throw new ArgumentException("The property is null, please assign it before passing by reference!",
                     nameof(property));
+            }
 
             bool retVal = Read(key, ref referableValue, addIfNotExists, additionalEntropy);
             MemberExpression expr = (MemberExpression) property.Body;
@@ -635,14 +654,18 @@ namespace Moonrise.Utils.Standard.Config
                 else if (typeof(T) == typeof(int))
                 {
                     if (!int.TryParse(setting, out int intVal))
+                    {
                         throw new InvalidDataException($"Invalid {typeof(T).Name} value, [{setting}] for {key}");
+                    }
 
                     value = (T) (object) intVal;
                 }
                 else if (typeof(T) == typeof(double))
                 {
                     if (!double.TryParse(setting, out double doubleVal))
+                    {
                         throw new InvalidDataException($"Invalid {typeof(T).Name} value, [{setting}] for {key}");
+                    }
 
                     value = (T) (object) doubleVal;
                 }
@@ -675,21 +698,27 @@ namespace Moonrise.Utils.Standard.Config
                 else if (typeof(T) == typeof(DateTime))
                 {
                     if (!DateTime.TryParse(setting, out DateTime dateVal))
+                    {
                         throw new InvalidDataException($"Invalid {typeof(T).Name} value, [{setting}] for {key}");
+                    }
 
                     value = (T) (object) dateVal;
                 }
                 else if (typeof(T) == typeof(DateTimeOffset))
                 {
                     if (!DateTimeOffset.TryParse(setting, out DateTimeOffset dateVal))
+                    {
                         throw new InvalidDataException($"Invalid {typeof(T).Name} value, [{setting}] for {key}");
+                    }
 
                     value = (T) (object) dateVal;
                 }
                 else if (typeof(T) == typeof(Guid))
                 {
                     if (!Guid.TryParse(setting, out Guid guidVal))
+                    {
                         throw new InvalidDataException($"Invalid {typeof(T).Name} value, [{setting}] for {key}");
+                    }
 
                     value = (T) (object) guidVal;
                 }
@@ -730,9 +759,11 @@ namespace Moonrise.Utils.Standard.Config
             U referableValue = property.Compile()();
 
             if (referableValue == null)
+            {
                 throw new ArgumentException(
                     $"The {property.Name} property is null, please assign it before passing by reference!",
                     nameof(property));
+            }
 
             bool retVal = ReadEnum(key, ref referableValue, addIfNotExists, what, additionalEntropy);
             MemberExpression expr = (MemberExpression) property.Body;
@@ -771,7 +802,10 @@ namespace Moonrise.Utils.Standard.Config
         {
             bool retVal = false;
 
-            if (!typeof(T).GetTypeInfo().IsEnum) throw new ArgumentException(typeof(T).Name + " is not an enum!");
+            if (!typeof(T).GetTypeInfo().IsEnum)
+            {
+                throw new ArgumentException(typeof(T).Name + " is not an enum!");
+            }
 
             PerformAnyInitialRead();
             string setting = ReadCommon(key, _type, additionalEntropy);
@@ -779,6 +813,7 @@ namespace Moonrise.Utils.Standard.Config
             if (setting == null)
             {
                 if (addIfnotExists)
+                {
                     try
                     {
                         string enumAttributeString = string.Empty;
@@ -806,6 +841,7 @@ namespace Moonrise.Utils.Standard.Config
                         // We'll log and swallow exceptions on updating the config
                         // Logger.Error(excep, "Error whilst trying to update the config file. ");
                     }
+                }
             }
             else
             {
@@ -858,7 +894,9 @@ namespace Moonrise.Utils.Standard.Config
         public void Write<T>(string key, T value, bool encrypt = false, string additionalEntropy = null)
         {
             if (_reEncrypted && additionalEntropy == null)
+            {
                 throw new SettingsException(SettingsExceptionReason.AddtionalEntropyRequired, key);
+            }
 
             bool jsonIt = !typeof(T).GetTypeInfo().IsValueType && !(value is string);
 
@@ -899,7 +937,10 @@ namespace Moonrise.Utils.Standard.Config
         {
             string retVal;
 
-            if (SettingsEncryptor == null) throw new SettingsException(SettingsExceptionReason.NoEncryptionProvider);
+            if (SettingsEncryptor == null)
+            {
+                throw new SettingsException(SettingsExceptionReason.NoEncryptionProvider);
+            }
 
             byte[] encryptedData = SettingsEncryptor.Encrypt(writeThis, additionalEntropy);
             string base64Str = Convert.ToBase64String(encryptedData);
@@ -938,11 +979,14 @@ namespace Moonrise.Utils.Standard.Config
             catch (SettingsException excep)
             {
                 if (excep.ReasonCode != SettingsExceptionReason.InvalidKey)
+                {
                     throw;
+                }
             }
 
             // We need to check if the string is an encrypted string
             if (readVal != null && readVal.Contains(EncryptionOpeningIdentifier))
+            {
                 try
                 {
                     readVal = Decrypt(readVal, SettingsEncryptor, additionalEntropy);
@@ -951,6 +995,7 @@ namespace Moonrise.Utils.Standard.Config
                 {
                     throw new SettingsException(excep, SettingsExceptionReason.InvalidData, key);
                 }
+            }
 
             return readVal;
         }

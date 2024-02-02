@@ -1,18 +1,19 @@
-﻿#region Apache-v2.0
+﻿#region MIT
 
-//    Copyright 2017 Will Hopkins - Moonrise Media Ltd.
+//     Copyright 2015-2021 Will Hopkins - Moonrise Media Ltd.
+//     will@moonrise.media - Happy to have a conversation
 // 
-//    Licensed under the Apache License, Version 2.0 (the "License");
-//    you may not use this file except in compliance with the License.
-//    You may obtain a copy of the License at
+//     Licenced under MIT licencing terms
+//     you may not use this file except in compliance with the License.
+//     You may obtain a copy of the License at
 // 
-//        http://www.apache.org/licenses/LICENSE-2.0
+//         https://licenses.nuget.org/MIT
 // 
-//    Unless required by applicable law or agreed to in writing, software
-//    distributed under the License is distributed on an "AS IS" BASIS,
-//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//    See the License for the specific language governing permissions and
-//    limitations under the License.
+//     Unless required by applicable law or agreed to in writing, software
+//     distributed under the License is distributed on an "AS IS" BASIS,
+//     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//     See the License for the specific language governing permissions and
+//     limitations under the License.
 
 #endregion
 
@@ -85,10 +86,14 @@ namespace Moonrise.Logging.LoggingProviders
         /// </summary>
         private static readonly object lockObject = new object();
 
+        private readonly Stopwatch _bufferWatch = new Stopwatch();
+
         /// <summary>
         ///     Indicates if an instance is a cloned instance or the original
         /// </summary>
         private readonly bool _cloned;
+
+        private readonly StringBuilder _currentBuffer = new StringBuilder();
 
         /// <summary>
         ///     The date time provider, for generating timestamps and filenames.
@@ -100,14 +105,10 @@ namespace Moonrise.Logging.LoggingProviders
         /// </summary>
         private readonly Config config;
 
-        private readonly Stopwatch _bufferWatch = new Stopwatch();
-
         /// <summary>
         ///     The count of the number of messages logged in a given file.
         /// </summary>
         private int _count;
-
-        private readonly StringBuilder _currentBuffer = new StringBuilder();
 
         /// <summary>The current number of messages written into the buffer</summary>
         private int _currentBufferCount;
@@ -168,7 +169,10 @@ namespace Moonrise.Logging.LoggingProviders
             _dateTimeProvider = dateTimeProvider ?? new DateTimeProvider();
             _cloned = false;
 
-            if (string.IsNullOrWhiteSpace(_filename)) _filename = Process.GetCurrentProcess().ProcessName;
+            if (string.IsNullOrWhiteSpace(_filename))
+            {
+                _filename = Process.GetCurrentProcess().ProcessName;
+            }
 
             InitialiseLogFile(_filename, config.DateTimeFormatterPrefix, config.LogCycling);
         }
@@ -185,7 +189,9 @@ namespace Moonrise.Logging.LoggingProviders
         {
             if (_config == null)
                 // Be forgiving
+            {
                 _config = new Config();
+            }
 
             config = _config;
             FilePerThread = config.LogFilePerThread;
@@ -230,7 +236,10 @@ namespace Moonrise.Logging.LoggingProviders
             get => _nextAuditor;
             set
             {
-                if (value != this) _nextAuditor = value;
+                if (value != this)
+                {
+                    _nextAuditor = value;
+                }
             }
         }
 
@@ -288,7 +297,10 @@ namespace Moonrise.Logging.LoggingProviders
             get => _nextLogger;
             set
             {
-                if (value != this) _nextLogger = value;
+                if (value != this)
+                {
+                    _nextLogger = value;
+                }
             }
         }
 
@@ -346,7 +358,9 @@ namespace Moonrise.Logging.LoggingProviders
                     FileInfo logFileInfo = new FileInfo(currentLoggingFilename);
 
                     if (logFileInfo.Exists && logFileInfo.LastWriteTime.DayOfYear != now.DayOfYear)
+                    {
                         logFileInfo.Delete();
+                    }
 
                     File.AppendAllText(currentLoggingFilename,
                         _currentBuffer.ToString());
@@ -354,7 +368,7 @@ namespace Moonrise.Logging.LoggingProviders
                 }
 
                 failCount = 0;
-                _currentBufferCount = 0;    
+                _currentBufferCount = 0;
                 _bufferWatch.Restart();
                 _currentBuffer.Clear();
             }
@@ -363,7 +377,10 @@ namespace Moonrise.Logging.LoggingProviders
                 // We can't log this exception, obviously, so at least stick it in the trace output
                 Console.WriteLine(excep.Message);
 
-                if (++failCount > 5) fileLoggingEnabled = false;
+                if (++failCount > 5)
+                {
+                    fileLoggingEnabled = false;
+                }
             }
         }
 
@@ -400,24 +417,42 @@ namespace Moonrise.Logging.LoggingProviders
         {
             string retVal;
 
-            if (!string.IsNullOrWhiteSpace(context)) msg = $"{context}: {msg}";
+            if (!string.IsNullOrWhiteSpace(context))
+            {
+                msg = $"{context}: {msg}";
+            }
 
-            if (!string.IsNullOrWhiteSpace(threadId)) msg = $"<{threadId}> {msg}";
+            if (!string.IsNullOrWhiteSpace(threadId))
+            {
+                msg = $"<{threadId}> {msg}";
+            }
 
             if (level == LoggingLevel.Fatal)
+            {
                 retVal = "*********************\r\n" +
                          "***** FATAL Error: " + msg +
                          "\r\n*********************";
+            }
             else if (level == LoggingLevel.Critical)
+            {
                 retVal = "CRITICAL: " + msg;
+            }
             else if (level == LoggingLevel.Error)
+            {
                 retVal = "Error: " + msg;
+            }
             else if (level == LoggingLevel.Warning)
+            {
                 retVal = "Warning: " + msg;
+            }
             else if (level == LoggingLevel.Audit)
+            {
                 retVal = "Audit: " + msg;
+            }
             else
+            {
                 retVal = msg;
+            }
 
             return string.Format(TimestampPrefix, DateTimeOffset.Now) + retVal;
         }
@@ -436,7 +471,10 @@ namespace Moonrise.Logging.LoggingProviders
             string threadId = string.Empty;
             _filenameChanged = false;
 
-            if (FilePerThread && _cloned) threadId = "-" + Thread.CurrentThread.ManagedThreadId;
+            if (FilePerThread && _cloned)
+            {
+                threadId = "-" + Thread.CurrentThread.ManagedThreadId;
+            }
 
             switch (Recycle)
             {
@@ -506,7 +544,10 @@ namespace Moonrise.Logging.LoggingProviders
                 string path = Path.GetDirectoryName(_filename);
 
                 // If the directory doesn't exist, try to create it
-                if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
 
                 filename = path + "/" + Path.GetFileNameWithoutExtension(_filename);
                 extension = Path.GetExtension(_filename);
@@ -518,6 +559,7 @@ namespace Moonrise.Logging.LoggingProviders
                 _bufferWatch.Start();
 
                 if (Recycle == Cycle.Always)
+                {
                     try
                     {
                         string currentLoggingFilename = ConstructFilename(filename, _dateTimeProvider.Now, extension);
@@ -531,6 +573,7 @@ namespace Moonrise.Logging.LoggingProviders
                         // Then turn off file logging
                         fileLoggingEnabled = false;
                     }
+                }
             }
         }
 
@@ -555,7 +598,10 @@ namespace Moonrise.Logging.LoggingProviders
                 // Trying to reduce the number of times the filename gets constructed
                 string currentLoggingFilename = ConstructFilename(filename, now, extension);
 
-                if (_filenameChanged) Flush(currentLoggingFilename, now);
+                if (_filenameChanged)
+                {
+                    Flush(currentLoggingFilename, now);
+                }
             }
         }
 
@@ -600,7 +646,7 @@ namespace Moonrise.Logging.LoggingProviders
             ///     What level of messages will cause a flush of the file logging buffer?
             /// </summary>
             /// <remarks>
-            ///     Defaults to <see cref="LoggingLevel.Error"/>
+            ///     Defaults to <see cref="LoggingLevel.Error" />
             /// </remarks>
             public LoggingLevel FlushOn { get; set; } = LoggingLevel.Error;
 

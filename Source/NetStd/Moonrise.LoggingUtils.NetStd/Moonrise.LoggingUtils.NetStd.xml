@@ -17,38 +17,38 @@
         </member>
         <member name="M:Moonrise.Logging.IAuditProvider.AuditThis(System.String,System.String,System.String,Moonrise.Logging.LogTag)">
             <summary>
-            Audits the message.
+                Audits the message.
             </summary>
             <param name="msg">The message.</param>
             <param name="context">The context - if <see cref="P:Moonrise.Logging.Logger.UseContext" /> is false, this will be empty.</param>
-            <param name="threadId">The thread identifier - if <see cref="P:Moonrise.Logging.Logger.UseThreadId"/> is false, this will be empty.</param>
+            <param name="threadId">The thread identifier - if <see cref="P:Moonrise.Logging.Logger.UseThreadId" /> is false, this will be empty.</param>
             <param name="logTag">The log tag.</param>
         </member>
         <member name="M:Moonrise.Logging.IAuditProvider.AuditThisObject(System.String,System.Object,Moonrise.Logging.LoggingLevel,System.String,System.String,Moonrise.Logging.LogTag)">
             <summary>
-            Audits an object. Can be used IF a specific object is to be audited by an implementation rather than simply a
-            string.
+                Audits an object. Can be used IF a specific object is to be audited by an implementation rather than simply a
+                string.
             </summary>
             <param name="message">The message.</param>
             <param name="auditObject">The audit object.</param>
             <param name="auditLevel">The audit level.</param>
             <param name="context">The context - if <see cref="P:Moonrise.Logging.Logger.UseContext" /> is false, this will be empty.</param>
-            <param name="threadId">The thread identifier - if <see cref="P:Moonrise.Logging.Logger.UseThreadId"/> is false, this will be empty.</param>
+            <param name="threadId">The thread identifier - if <see cref="P:Moonrise.Logging.Logger.UseThreadId" /> is false, this will be empty.</param>
             <param name="logTag">The log tag.</param>
         </member>
         <member name="M:Moonrise.Logging.IAuditProvider.FlushBuffers">
             <summary>
-            Flush any buffers currently in use.
+                Flush any buffers currently in use.
             </summary>
         </member>
         <member name="T:Moonrise.Logging.ICloneable">
             <summary>
-            DNC (.Net Core) doesn't have an ICloneable interface!
+                DNC (.Net Core) doesn't have an ICloneable interface!
             </summary>
         </member>
         <member name="M:Moonrise.Logging.ICloneable.Clone">
             <summary>
-            Clones this instance.
+                Clones this instance.
             </summary>
             <returns>A new instance with the same contents values as itself</returns>
         </member>
@@ -59,10 +59,12 @@
         </member>
         <member name="F:Moonrise.Logging.LoggingLevel.Trace">
             <summary>
-                Use trace messages for intricate detail that you only really need when digging REALLY deep into a problem.<para>
-                But try NOT to use this too much.</para>
-            <remarks>
-            </remarks>
+                Use trace messages for intricate detail that you only really need when digging REALLY deep into a problem.
+                <para>
+                    But try NOT to use this too much.
+                </para>
+                <remarks>
+                </remarks>
             </summary>
         </member>
         <member name="F:Moonrise.Logging.LoggingLevel.Debug">
@@ -115,13 +117,13 @@
             <summary>Logs the appropriate level of message.</summary>
             <param name="level">The level.</param>
             <param name="context">The context - if <see cref="P:Moonrise.Logging.Logger.UseContext" /> is false, this will be empty.</param>
-            <param name="threadId">The thread identifier - if <see cref="P:Moonrise.Logging.Logger.UseThreadId"/> is false, this will be empty.</param>
+            <param name="threadId">The thread identifier - if <see cref="P:Moonrise.Logging.Logger.UseThreadId" /> is false, this will be empty.</param>
             <param name="logTag">The log tag.</param>
             <param name="msg">The message.</param>
         </member>
         <member name="M:Moonrise.Logging.ILoggingProvider.FlushBuffers">
             <summary>
-            Flush any buffers currently in use.
+                Flush any buffers currently in use.
             </summary>
         </member>
         <member name="T:Moonrise.Logging.Logger">
@@ -243,7 +245,7 @@
         <member name="P:Moonrise.Logging.Logger.AuditProvider">
             <summary>
                 The root <see cref="T:Moonrise.Logging.IAuditProvider" />. Only the first auditor to be assigned will be accepted. Additional auditors
-                can be managed via the <see cref="P:Moonrise.Logging.Logger.NextAuditor" />property of your <see cref="T:Moonrise.Logging.IAuditProvider"/>. If you need to
+                can be managed via the <see cref="P:Moonrise.Logging.Logger.NextAuditor" />property of your <see cref="T:Moonrise.Logging.IAuditProvider" />. If you need to
                 replace the original auditor you will need to use <see cref="M:Moonrise.Logging.Logger.ReplaceAuditProvider(Moonrise.Logging.IAuditProvider)" /> as subsequent settings via
                 <see cref="P:Moonrise.Logging.Logger.AuditProvider" /> will only affect the current thread.
             </summary>
@@ -277,7 +279,8 @@
         <member name="P:Moonrise.Logging.Logger.LogProvider">
             <summary>
                 The root <see cref="T:Moonrise.Logging.ILoggingProvider" />. Only the first logger to be assigned will be accepted. Additional loggers
-                can be managed via the <see cref="P:Moonrise.Logging.Logger.NextLogger" /> property of your <see cref="T:Moonrise.Logging.ILoggingProvider"/>. If you need to replace the original logger you will need to use
+                can be managed via the <see cref="P:Moonrise.Logging.Logger.NextLogger" /> property of your <see cref="T:Moonrise.Logging.ILoggingProvider" />. If you need to
+                replace the original logger you will need to use
                 <see cref="M:Moonrise.Logging.Logger.ReplaceLoggingProvider(Moonrise.Logging.ILoggingProvider)" /> as subsequent settings via <see cref="P:Moonrise.Logging.Logger.LogProvider" /> will only affect the
                 current thread.
             </summary>
@@ -338,7 +341,7 @@
             </summary>
             <param name="msg">The message.</param>
             <param name="context">The context - if <see cref="P:Moonrise.Logging.Logger.UseContext" /> is false, this will be empty.</param>
-            <param name="threadId">The thread identifier - if <see cref="P:Moonrise.Logging.Logger.UseThreadId"/> is false, this will be empty.</param>
+            <param name="threadId">The thread identifier - if <see cref="P:Moonrise.Logging.Logger.UseThreadId" /> is false, this will be empty.</param>
             <param name="logTag">The log tag.</param>
         </member>
         <member name="M:Moonrise.Logging.Logger.AuditThisObject(System.String,System.Object,Moonrise.Logging.LoggingLevel,System.String,System.String,Moonrise.Logging.LogTag)">
@@ -350,7 +353,7 @@
             <param name="auditObject">The object to audit - it will be JSONd</param>
             <param name="auditLevel">The level of audit</param>
             <param name="context">The context - if <see cref="P:Moonrise.Logging.Logger.UseContext" /> is false, this will be empty.</param>
-            <param name="threadId">The thread identifier - if <see cref="P:Moonrise.Logging.Logger.UseThreadId"/> is false, this will be empty.</param>
+            <param name="threadId">The thread identifier - if <see cref="P:Moonrise.Logging.Logger.UseThreadId" /> is false, this will be empty.</param>
             <param name="logTag">The log tag.</param>
             <exception cref="T:System.NotImplementedException"></exception>
         </member>
@@ -371,16 +374,21 @@
         </member>
         <member name="M:Moonrise.Logging.Logger.LogThis(Moonrise.Logging.LoggingLevel,System.String,System.String,Moonrise.Logging.LogTag,System.String)">
             <summary>
-            Logs an error message to the console.
-            <para>
-            As a default ILoggingProvider, this is the default console logging if no other logger is provided.
-            </para>
+                Logs an error message to the console.
+                <para>
+                    As a default ILoggingProvider, this is the default console logging if no other logger is provided.
+                </para>
             </summary>
             <param name="level">The level for this message</param>
             <param name="context">The context.</param>
             <param name="threadId">The thread identifier - if <see cref="P:Moonrise.Logging.Logger.UseThreadId" /> is false, this will be empty.</param>
             <param name="logTag">The log tag.</param>
             <param name="msg">The message to log</param>
+        </member>
+        <member name="M:Moonrise.Logging.Logger.FlushBuffers">
+            <summary>
+                Flush any buffers currently in use.
+            </summary>
         </member>
         <member name="M:Moonrise.Logging.Logger.Initialise(Moonrise.Logging.Logger.Config,Moonrise.Logging.ILoggingProvider,Moonrise.Logging.IAuditProvider)">
             <summary>A one-shot initialisation using the specified configuration.</summary>
@@ -750,14 +758,9 @@
             <param name="anything">The object to be logged using JSON</param>
             <param name="caller">The method name of the caller. Will be displayed if <seealso cref="P:Moonrise.Logging.Logger.LogMethodName" /> is true.</param>
         </member>
-        <member name="M:Moonrise.Logging.Logger.FlushBuffers">
-            <summary>
-            Flush any buffers currently in use.
-            </summary>
-        </member>
         <member name="M:Moonrise.Logging.Logger.Flush">
             <summary>
-            Ensures all loggers get flushed.
+                Ensures all loggers get flushed.
             </summary>
         </member>
         <member name="M:Moonrise.Logging.Logger.LogMsgCommon(Moonrise.Logging.LoggingLevel,System.String,Moonrise.Logging.LogTag,System.String)">
@@ -784,7 +787,7 @@
             </summary>
         </member>
         <member name="P:Moonrise.Logging.Logger.Config.LogTags">
-            <summary>The set of log tags to initially activate. See also <seealso cref="M:Moonrise.Logging.Logger.ActivateLogTags(System.Collections.Generic.IEnumerable{System.String})"/></summary>
+            <summary>The set of log tags to initially activate. See also <seealso cref="M:Moonrise.Logging.Logger.ActivateLogTags(System.Collections.Generic.IEnumerable{System.String})" /></summary>
         </member>
         <member name="P:Moonrise.Logging.Logger.Config.OutputLevel">
             <summary>
@@ -1133,7 +1136,7 @@
                 What level of messages will cause a flush of the file logging buffer?
             </summary>
             <remarks>
-                Defaults to <see cref="F:Moonrise.Logging.LoggingLevel.Error"/>
+                Defaults to <see cref="F:Moonrise.Logging.LoggingLevel.Error" />
             </remarks>
         </member>
         <member name="P:Moonrise.Logging.LoggingProviders.BasicFileLogProvider.Config.LogCycling">
@@ -1211,18 +1214,6 @@
                 We use tag instances rather than simply strings, as they're easier to make consistent and not have misspled tag
                 names!
             </summary>
-        </member>
-        <member name="T:Moonrise.Logging.LogTag.Scoped">
-            <summary>
-                A <see cref="T:Moonrise.Logging.LogTag" /> that is scoped within the thread.
-            </summary>
-            <seealso cref="T:Moonrise.Logging.LogTag" />
-        </member>
-        <member name="M:Moonrise.Logging.LogTag.Scoped.#ctor(Moonrise.Logging.LogTag)">
-            <summary>
-                Initializes a new instance of the <see cref="T:Moonrise.Logging.LogTag.Scoped" /> class.
-            </summary>
-            <param name="value">The value which will be the current NestedThreadGlobal value.</param>
         </member>
         <member name="F:Moonrise.Logging.LogTag.beenChecked">
             <summary>
@@ -1348,8 +1339,10 @@
         </member>
         <member name="M:Moonrise.Logging.LogTag.Do(System.Action,System.String)">
             <summary>
-               Wraps the action in a Logger.Context and logs any exceptions before passing them on.<para>
-               Usage: MyLogTag.Do(()=>{code;});</para>
+                Wraps the action in a Logger.Context and logs any exceptions before passing them on.
+                <para>
+                    Usage: MyLogTag.Do(()=>{code;});
+                </para>
             </summary>
             <param name="action">The action.</param>
             <param name="caller">The caller.</param>
@@ -1361,6 +1354,18 @@
             <returns>
                 A <see cref="T:System.String" /> that represents this instance.
             </returns>
+        </member>
+        <member name="T:Moonrise.Logging.LogTag.Scoped">
+            <summary>
+                A <see cref="T:Moonrise.Logging.LogTag" /> that is scoped within the thread.
+            </summary>
+            <seealso cref="T:Moonrise.Logging.LogTag" />
+        </member>
+        <member name="M:Moonrise.Logging.LogTag.Scoped.#ctor(Moonrise.Logging.LogTag)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Moonrise.Logging.LogTag.Scoped" /> class.
+            </summary>
+            <param name="value">The value which will be the current NestedThreadGlobal value.</param>
         </member>
         <member name="T:Moonrise.Logging.ScopeContext">
             <summary>
@@ -1380,22 +1385,30 @@
         </member>
         <member name="M:Moonrise.Logging.ScopeContext.#ctor(System.String,Moonrise.Logging.LogTag)">
             <summary>
-             Constructs a <see cref="T:Moonrise.Logging.ScopeContext"/> for logging. Messages logged within this scope will either be indented or have the scope name prefixed. See also <seealso cref="P:Moonrise.Logging.Logger.UseContext"/>
+                Constructs a <see cref="T:Moonrise.Logging.ScopeContext" /> for logging. Messages logged within this scope will either be indented or
+                have the scope name prefixed. See also <seealso cref="P:Moonrise.Logging.Logger.UseContext" />
             </summary>
-            <param name="_scopeName">A name for the scope we are entering. It might be a method name, it might be something else to identify the scope your logging</param>
+            <param name="_scopeName">
+                A name for the scope we are entering. It might be a method name, it might be something else to
+                identify the scope your logging
+            </param>
             <param name="logTag">The log tag to apply to this scope. Defaults to null, i.e. no log tag applied</param>
         </member>
         <member name="M:Moonrise.Logging.ScopeContext.#ctor(System.String,System.Object[],Moonrise.Logging.LogTag)">
             <summary>
-             Constructs a <see cref="T:Moonrise.Logging.ScopeContext"/> for logging. Messages logged within this scope will either be indented or have the scope name prefixed. See also <seealso cref="P:Moonrise.Logging.Logger.UseContext"/>
+                Constructs a <see cref="T:Moonrise.Logging.ScopeContext" /> for logging. Messages logged within this scope will either be indented or
+                have the scope name prefixed. See also <seealso cref="P:Moonrise.Logging.Logger.UseContext" />
             </summary>
-            <param name="_scopeName">A name for the scope we are entering. It might be a method name, it might be something else to identify the scope your logging</param>
+            <param name="_scopeName">
+                A name for the scope we are entering. It might be a method name, it might be something else to
+                identify the scope your logging
+            </param>
             <param name="arguments">A list of values you want to be logged as the arguments - typically to your method</param>
             <param name="logTag">The log tag to apply to this scope. Defaults to null, i.e. no log tag applied</param>
         </member>
         <member name="M:Moonrise.Logging.ScopeContext.Disposing">
             <summary>
-            Called when exiting a using scope. In this case, unwinds the scope context and the logging indent.
+                Called when exiting a using scope. In this case, unwinds the scope context and the logging indent.
             </summary>
         </member>
         <member name="T:Moonrise.Logging.Util.ScopedNestableThreadGlobalSingleton`1">
@@ -1464,7 +1477,8 @@
         </member>
         <member name="P:Moonrise.Logging.Util.ScopedNestableThreadGlobalSingleton`1.CurrentValue">
             <summary>
-                Gets the current Nestable Thread Global Singleton value. If not already set this will be the default for generic type.
+                Gets the current Nestable Thread Global Singleton value. If not already set this will be the default for generic
+                type.
             </summary>
         </member>
         <member name="P:Moonrise.Logging.Util.ScopedNestableThreadGlobalSingleton`1.Current">
@@ -1500,6 +1514,79 @@
             </summary>
             <seealso cref="T:Moonrise.Logging.ILoggingProvider" />
         </member>
+        <member name="M:Moonrise.Utils.Test.Logging.TestLogAuditProvider.#ctor(System.Int32)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Moonrise.Utils.Test.Logging.TestLogAuditProvider" /> class using a specified initial size
+                <see cref="P:Moonrise.Utils.Test.Logging.TestLogAuditProvider.LogBuffer" />.
+            </summary>
+            <param name="bufferSize">Size of the buffer.</param>
+        </member>
+        <member name="M:Moonrise.Utils.Test.Logging.TestLogAuditProvider.#ctor">
+            <summary>
+                Initializes a new instance of the <see cref="T:Moonrise.Utils.Test.Logging.TestLogAuditProvider" /> class and uses a default sizing
+                <see cref="P:Moonrise.Utils.Test.Logging.TestLogAuditProvider.LogBuffer" />.
+            </summary>
+        </member>
+        <member name="P:Moonrise.Utils.Test.Logging.TestLogAuditProvider.LogBuffer">
+            <summary>
+                A log buffer that you can query later if you need to check things were logged.
+            </summary>
+        </member>
+        <member name="P:Moonrise.Utils.Test.Logging.TestLogAuditProvider.NextAuditor">
+            <summary>
+                The next auditor to pass the audit message on to. Allows additional auditors to be used. Don't create circular
+                links though eh!
+            </summary>
+        </member>
+        <member name="M:Moonrise.Utils.Test.Logging.TestLogAuditProvider.AuditThis(System.String,System.String,System.String,Moonrise.Logging.LogTag)">
+            <summary>
+                Audits the message.
+            </summary>
+            <param name="msg">The message.</param>
+            <param name="context">The context - if <see cref="P:Moonrise.Logging.Logger.UseContext" /> is false, this will be empty.</param>
+            <param name="threadId">The thread identifier - if <see cref="P:Moonrise.Logging.Logger.UseThreadId" /> is false, this will be empty.</param>
+            <param name="logTag">The log tag.</param>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="M:Moonrise.Utils.Test.Logging.TestLogAuditProvider.AuditThisObject(System.String,System.Object,Moonrise.Logging.LoggingLevel,System.String,System.String,Moonrise.Logging.LogTag)">
+            <summary>
+                Audits an object. Can be used IF a specific object is to be audited by an implementation rather than simply a
+                string.
+            </summary>
+            <param name="message">The message.</param>
+            <param name="auditObject">The audit object.</param>
+            <param name="auditLevel">The audit level.</param>
+            <param name="context">The context - if <see cref="P:Moonrise.Logging.Logger.UseContext" /> is false, this will be empty.</param>
+            <param name="threadId">The thread identifier - if <see cref="P:Moonrise.Logging.Logger.UseThreadId" /> is false, this will be empty.</param>
+            <param name="logTag">The log tag.</param>
+        </member>
+        <member name="P:Moonrise.Utils.Test.Logging.TestLogAuditProvider.NextLogger">
+            <summary>
+                The next logger to pass the log message on to. Allows additional loggers to be used. Don't create circular links
+                though eh!
+            </summary>
+        </member>
+        <member name="M:Moonrise.Utils.Test.Logging.TestLogAuditProvider.Clone">
+            <summary>
+                Creates a new object that is a copy of the current instance.
+            </summary>
+            <returns>A new object that is a copy of this instance.</returns>
+        </member>
+        <member name="M:Moonrise.Utils.Test.Logging.TestLogAuditProvider.LogThis(Moonrise.Logging.LoggingLevel,System.String,System.String,Moonrise.Logging.LogTag,System.String)">
+            <summary>
+                Logs the appropriate level of message.
+            </summary>
+            <param name="level">The level.</param>
+            <param name="context">The context - if <see cref="P:Moonrise.Logging.Logger.UseContext" /> is false, this will be empty.</param>
+            <param name="threadId">The thread identifier - if <see cref="P:Moonrise.Logging.Logger.UseThreadId" /> is false, this will be empty.</param>
+            <param name="logTag">The log tag.</param>
+            <param name="msg">The message.</param>
+        </member>
+        <member name="M:Moonrise.Utils.Test.Logging.TestLogAuditProvider.FlushBuffers">
+            <summary>
+                Flush any buffers currently in use.
+            </summary>
+        </member>
         <member name="T:Moonrise.Utils.Test.Logging.TestLogAuditProvider.LogEntry">
             <summary>
                 A log entry captures what was logged
@@ -1528,79 +1615,6 @@
         <member name="P:Moonrise.Utils.Test.Logging.TestLogAuditProvider.LogEntry.ThreadId">
             <summary>
                 The current thread id
-            </summary>
-        </member>
-        <member name="M:Moonrise.Utils.Test.Logging.TestLogAuditProvider.#ctor(System.Int32)">
-            <summary>
-                Initializes a new instance of the <see cref="T:Moonrise.Utils.Test.Logging.TestLogAuditProvider" /> class using a specified initial size
-                <see cref="P:Moonrise.Utils.Test.Logging.TestLogAuditProvider.LogBuffer" />.
-            </summary>
-            <param name="bufferSize">Size of the buffer.</param>
-        </member>
-        <member name="M:Moonrise.Utils.Test.Logging.TestLogAuditProvider.#ctor">
-            <summary>
-                Initializes a new instance of the <see cref="T:Moonrise.Utils.Test.Logging.TestLogAuditProvider" /> class and uses a default sizing
-                <see cref="P:Moonrise.Utils.Test.Logging.TestLogAuditProvider.LogBuffer" />.
-            </summary>
-        </member>
-        <member name="P:Moonrise.Utils.Test.Logging.TestLogAuditProvider.LogBuffer">
-            <summary>
-                A log buffer that you can query later if you need to check things were logged.
-            </summary>
-        </member>
-        <member name="P:Moonrise.Utils.Test.Logging.TestLogAuditProvider.NextAuditor">
-            <summary>
-                The next auditor to pass the audit message on to. Allows additional auditors to be used. Don't create circular
-                links though eh!
-            </summary>
-        </member>
-        <member name="P:Moonrise.Utils.Test.Logging.TestLogAuditProvider.NextLogger">
-            <summary>
-                The next logger to pass the log message on to. Allows additional loggers to be used. Don't create circular links
-                though eh!
-            </summary>
-        </member>
-        <member name="M:Moonrise.Utils.Test.Logging.TestLogAuditProvider.AuditThis(System.String,System.String,System.String,Moonrise.Logging.LogTag)">
-            <summary>
-            Audits the message.
-            </summary>
-            <param name="msg">The message.</param>
-            <param name="context">The context - if <see cref="P:Moonrise.Logging.Logger.UseContext" /> is false, this will be empty.</param>
-            <param name="threadId">The thread identifier - if <see cref="P:Moonrise.Logging.Logger.UseThreadId"/> is false, this will be empty.</param>
-            <param name="logTag">The log tag.</param>
-            <exception cref="T:System.NotImplementedException"></exception>
-        </member>
-        <member name="M:Moonrise.Utils.Test.Logging.TestLogAuditProvider.AuditThisObject(System.String,System.Object,Moonrise.Logging.LoggingLevel,System.String,System.String,Moonrise.Logging.LogTag)">
-            <summary>
-            Audits an object. Can be used IF a specific object is to be audited by an implementation rather than simply a
-            string.
-            </summary>
-            <param name="message">The message.</param>
-            <param name="auditObject">The audit object.</param>
-            <param name="auditLevel">The audit level.</param>
-            <param name="context">The context - if <see cref="P:Moonrise.Logging.Logger.UseContext" /> is false, this will be empty.</param>
-            <param name="threadId">The thread identifier - if <see cref="P:Moonrise.Logging.Logger.UseThreadId"/> is false, this will be empty.</param>
-            <param name="logTag">The log tag.</param>
-        </member>
-        <member name="M:Moonrise.Utils.Test.Logging.TestLogAuditProvider.Clone">
-            <summary>
-                Creates a new object that is a copy of the current instance.
-            </summary>
-            <returns>A new object that is a copy of this instance.</returns>
-        </member>
-        <member name="M:Moonrise.Utils.Test.Logging.TestLogAuditProvider.LogThis(Moonrise.Logging.LoggingLevel,System.String,System.String,Moonrise.Logging.LogTag,System.String)">
-            <summary>
-                Logs the appropriate level of message.
-            </summary>
-            <param name="level">The level.</param>
-            <param name="context">The context - if <see cref="P:Moonrise.Logging.Logger.UseContext" /> is false, this will be empty.</param>
-            <param name="threadId">The thread identifier - if <see cref="P:Moonrise.Logging.Logger.UseThreadId"/> is false, this will be empty.</param>
-            <param name="logTag">The log tag.</param>
-            <param name="msg">The message.</param>
-        </member>
-        <member name="M:Moonrise.Utils.Test.Logging.TestLogAuditProvider.FlushBuffers">
-            <summary>
-            Flush any buffers currently in use.
             </summary>
         </member>
     </members>

@@ -1,24 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
     <Compile Remove="Extensions\MoqExtensions.cs" />
   </ItemGroup>
-
   <ItemGroup>
     <Compile Include="..\..\Shared\Moonrise.Version\Properties\AutoVersion.cs" Link="Properties\AutoVersion.cs" />
   </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
-    <PackageReference Include="System.Dynamic.Runtime" Version="4.3.0" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-  </ItemGroup>
-
   <ItemGroup>
     <None Update="makeNuget.cmd">
       <DependentUpon>MakeNuget.tt</DependentUpon>
@@ -29,43 +18,37 @@
       <LastGenOutput>MakeNuget.cmd</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
-	  <None Update="Moonrise.TestUtils.NetStd.nuspec">
-		  <DesignTime>True</DesignTime>
-		  <AutoGen>True</AutoGen>
-		  <DependentUpon>Moonrise.TestUtils.NetStd.tt</DependentUpon>
-	  </None>
-	  <None Update="Moonrise.TestUtils.NetStd.tt">
-		  <LastGenOutput>Moonrise.TestUtils.NetStd.nuspec</LastGenOutput>
-		  <Generator>TextTemplatingFileGenerator</Generator>
-	  </None>
+    <None Update="Moonrise.TestUtils.NetStd.nuspec">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Moonrise.TestUtils.NetStd.tt</DependentUpon>
+    </None>
+    <None Update="Moonrise.TestUtils.NetStd.tt">
+      <LastGenOutput>Moonrise.TestUtils.NetStd.nuspec</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
   </ItemGroup>
-
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
-
   <ItemGroup>
     <Folder Include="Extensions\" />
     <Folder Include="Logging\" />
     <Folder Include="Properties\" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Moonrise.StandardUtils.NetStd\Moonrise.StandardUtils.NetStd.csproj" />
   </ItemGroup>
-
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Authors>Will Hopkins</Authors>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-	  <DefineConstants>TRACE;DotNetCore;RELEASE;NETSTANDARD2_1</DefineConstants>
-	  <DocumentationFile>Moonrise.TestUtils.NetStd.xml</DocumentationFile>
+    <DefineConstants>TRACE;DotNetCore;RELEASE;NETSTANDARD2_1</DefineConstants>
+    <DocumentationFile>Moonrise.TestUtils.NetStd.xml</DocumentationFile>
   </PropertyGroup>
-
   <Target Name="PostcompileScript" AfterTargets="Build">
     <Exec Command="makeNuget.cmd $(Configuration) &quot;$(MSBuildProjectDirectory)&quot; $(AssemblyName)" />
   </Target>
-
 </Project>

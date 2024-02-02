@@ -1,20 +1,22 @@
-﻿#region Apache-v2.0
+﻿#region MIT
 
-//    Copyright 2017 Will Hopkins - Moonrise Media Ltd.
+//     Copyright 2015-2021 Will Hopkins - Moonrise Media Ltd.
+//     will@moonrise.media - Happy to have a conversation
 // 
-//    Licensed under the Apache License, Version 2.0 (the "License");
-//    you may not use this file except in compliance with the License.
-//    You may obtain a copy of the License at
+//     Licenced under MIT licencing terms
+//     you may not use this file except in compliance with the License.
+//     You may obtain a copy of the License at
 // 
-//        http://www.apache.org/licenses/LICENSE-2.0
+//         https://licenses.nuget.org/MIT
 // 
-//    Unless required by applicable law or agreed to in writing, software
-//    distributed under the License is distributed on an "AS IS" BASIS,
-//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//    See the License for the specific language governing permissions and
-//    limitations under the License.
+//     Unless required by applicable law or agreed to in writing, software
+//     distributed under the License is distributed on an "AS IS" BASIS,
+//     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//     See the License for the specific language governing permissions and
+//     limitations under the License.
 
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -79,7 +81,8 @@ namespace Moonrise.Utils.Standard.Extensions
         /// </returns>
         /// <exception cref="ArgumentException">Enumerable{T} must only be used on Enums</exception>
         [CLSCompliant(false)] // This is because IConvertible is non-CLSCompliant
-        [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1503:CurlyBracketsMustNotBeOmitted", Justification = "I excuse exceptions and returns!")]
+        [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1503:CurlyBracketsMustNotBeOmitted",
+            Justification = "I excuse exceptions and returns!")]
         public static IEnumerable<Enum> Enumerable<T>()
             where T : IConvertible
         {
@@ -111,7 +114,7 @@ namespace Moonrise.Utils.Standard.Extensions
         public static T FromString<T>(string candidateValue)
             where T : IConvertible
         {
-            return FromString(candidateValue, (T)(object)0, false);
+            return FromString(candidateValue, (T) (object) 0, false);
         }
 
         /// <summary>
@@ -131,7 +134,7 @@ namespace Moonrise.Utils.Standard.Extensions
         /// <returns>The resultant enum</returns>
         [CLSCompliant(false)] // This is because IConvertible is non-CLSCompliant
         public static T FromString<T>(string candidateValue,
-                                      T unfoundValue)
+            T unfoundValue)
             where T : IConvertible
         {
             return FromString(candidateValue, unfoundValue, true);
@@ -148,7 +151,7 @@ namespace Moonrise.Utils.Standard.Extensions
         /// </param>
         /// <returns>true if in the list, or false if not!</returns>
         public static bool In<T>(this T val,
-                                 params T[] values)
+            params T[] values)
             where T : struct
         {
             return values.Contains(val);
@@ -160,7 +163,7 @@ namespace Moonrise.Utils.Standard.Extensions
         /// <param name="enumValue">Value who's description is to be changed</param>
         /// <param name="newDescription">New description</param>
         public static void ModifyDescription(this Enum enumValue,
-                                             string newDescription)
+            string newDescription)
         {
             Type enumType = enumValue.GetType();
             Dictionary<Enum, string> desc;
@@ -177,7 +180,7 @@ namespace Moonrise.Utils.Standard.Extensions
         /// <summary>
         ///     Enum extension method to get the original, attributed, description of an enum.
         ///     <para>
-        ///         The description is as specified - in this order - by the DescriptionAttribute, or the DisplayAttribute.Name, 
+        ///         The description is as specified - in this order - by the DescriptionAttribute, or the DisplayAttribute.Name,
         ///         or the DisplayAttribute.Description, or the string value if no description.
         ///     </para>
         /// </summary>
@@ -192,17 +195,19 @@ namespace Moonrise.Utils.Standard.Extensions
 
             if (fi != null)
             {
-                DescriptionAttribute[] descriptionAttributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
+                DescriptionAttribute[] descriptionAttributes =
+                    (DescriptionAttribute[]) fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
 
-                if ((descriptionAttributes != null) && (descriptionAttributes.Length > 0))
+                if (descriptionAttributes != null && descriptionAttributes.Length > 0)
                 {
                     retVal = descriptionAttributes[0].Description;
                 }
                 else
                 {
-                    DisplayAttribute[] displayAttributes = (DisplayAttribute[])fi.GetCustomAttributes(typeof(DisplayAttribute), false);
+                    DisplayAttribute[] displayAttributes =
+                        (DisplayAttribute[]) fi.GetCustomAttributes(typeof(DisplayAttribute), false);
 
-                    if ((displayAttributes != null) && (displayAttributes.Length > 0))
+                    if (displayAttributes != null && displayAttributes.Length > 0)
                     {
                         retVal = displayAttributes[0].Description;
 
@@ -245,17 +250,18 @@ namespace Moonrise.Utils.Standard.Extensions
         /// <param name="useUnfound">if set to <c>true</c> [use unfound].</param>
         /// <returns>The enum converted from the string</returns>
         /// <exception cref="ArgumentException">FromString{T} must only be used on Enums</exception>
-        [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1503:CurlyBracketsMustNotBeOmitted", Justification = "I excuse exceptions and returns!")]
+        [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1503:CurlyBracketsMustNotBeOmitted",
+            Justification = "I excuse exceptions and returns!")]
         private static T FromString<T>(string candidateValue,
-                                       T unfoundValue,
-                                       bool useUnfound)
+            T unfoundValue,
+            bool useUnfound)
             where T : IConvertible
         {
             Type typeT = typeof(T);
 
-            Enum result = FromString(candidateValue, (Enum)(object)unfoundValue, typeT, useUnfound);
+            Enum result = FromString(candidateValue, (Enum) (object) unfoundValue, typeT, useUnfound);
 
-            return (T)(object)result;
+            return (T) (object) result;
         }
 
         /// <summary>
@@ -275,10 +281,10 @@ namespace Moonrise.Utils.Standard.Extensions
         /// <param name="useUnfound">if set to <c>true</c> [use unfound].</param>
         /// <returns></returns>
         public static Enum FromString(string candidateValue,
-                                        Enum unfoundValue,
-                                        Type typeT,
-                                        bool useUnfound)
-        { 
+            Enum unfoundValue,
+            Type typeT,
+            bool useUnfound)
+        {
             bool found = false;
             object result = default(Enum);
 
@@ -300,11 +306,11 @@ namespace Moonrise.Utils.Standard.Extensions
 
                 foreach (FieldInfo fi in fis)
                 {
-                    DescriptionAttribute[] attributes = (DescriptionAttribute[])fi.GetCustomAttributes(
+                    DescriptionAttribute[] attributes = (DescriptionAttribute[]) fi.GetCustomAttributes(
                         typeof(DescriptionAttribute),
                         false);
 
-                    if ((attributes != null) && (attributes.Length > 0) &&
+                    if (attributes != null && attributes.Length > 0 &&
                         attributes[0].Description.Equals(candidateValue, StringComparison.OrdinalIgnoreCase))
                     {
                         result = fi.GetValue(null);
@@ -319,11 +325,11 @@ namespace Moonrise.Utils.Standard.Extensions
                 {
                     foreach (FieldInfo fi in fis)
                     {
-                        DisplayAttribute[] attributes = (DisplayAttribute[])fi.GetCustomAttributes(
+                        DisplayAttribute[] attributes = (DisplayAttribute[]) fi.GetCustomAttributes(
                             typeof(DisplayAttribute),
                             false);
 
-                        if ((attributes != null) && (attributes.Length > 0))
+                        if (attributes != null && attributes.Length > 0)
                         {
                             if (attributes[0].Name.Equals(candidateValue, StringComparison.OrdinalIgnoreCase) ||
                                 attributes[0].Description.Equals(candidateValue, StringComparison.OrdinalIgnoreCase))
@@ -372,7 +378,6 @@ namespace Moonrise.Utils.Standard.Extensions
                 // OK, everything is exhausted, so do we rethrow the argument exception or return the unfound value?
                 if (!found)
                 {
-
                     if (useUnfound)
                     {
                         result = unfoundValue;
@@ -384,7 +389,7 @@ namespace Moonrise.Utils.Standard.Extensions
                 }
             }
 
-            return (Enum)result;
+            return (Enum) result;
         }
     }
 }

@@ -1,20 +1,22 @@
-﻿#region Apache-v2.0
+﻿#region MIT
 
-//    Copyright 2017 Will Hopkins - Moonrise Media Ltd.
+//     Copyright 2015-2021 Will Hopkins - Moonrise Media Ltd.
+//     will@moonrise.media - Happy to have a conversation
 // 
-//    Licensed under the Apache License, Version 2.0 (the "License");
-//    you may not use this file except in compliance with the License.
-//    You may obtain a copy of the License at
+//     Licenced under MIT licencing terms
+//     you may not use this file except in compliance with the License.
+//     You may obtain a copy of the License at
 // 
-//        http://www.apache.org/licenses/LICENSE-2.0
+//         https://licenses.nuget.org/MIT
 // 
-//    Unless required by applicable law or agreed to in writing, software
-//    distributed under the License is distributed on an "AS IS" BASIS,
-//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//    See the License for the specific language governing permissions and
-//    limitations under the License.
+//     Unless required by applicable law or agreed to in writing, software
+//     distributed under the License is distributed on an "AS IS" BASIS,
+//     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//     See the License for the specific language governing permissions and
+//     limitations under the License.
 
 #endregion
+
 using System;
 using Moonrise.Logging.Util;
 
@@ -41,14 +43,19 @@ namespace Moonrise.Logging
         private readonly string scopeName;
 
         /// <summary>
-        ///  Constructs a <see cref="ScopeContext"/> for logging. Messages logged within this scope will either be indented or have the scope name prefixed. See also <seealso cref="Logger.UseContext"/>
+        ///     Constructs a <see cref="ScopeContext" /> for logging. Messages logged within this scope will either be indented or
+        ///     have the scope name prefixed. See also <seealso cref="Logger.UseContext" />
         /// </summary>
-        /// <param name="_scopeName">A name for the scope we are entering. It might be a method name, it might be something else to identify the scope your logging</param>
+        /// <param name="_scopeName">
+        ///     A name for the scope we are entering. It might be a method name, it might be something else to
+        ///     identify the scope your logging
+        /// </param>
         /// <param name="logTag">The log tag to apply to this scope. Defaults to null, i.e. no log tag applied</param>
         public ScopeContext(string _scopeName, LogTag logTag = null) : base(
             $"{(string.IsNullOrEmpty(CurrentValue) ? string.Empty : CurrentValue)}{_scopeName}{spacer}")
         {
-            scopeName = _scopeName ?? throw new ArgumentNullException(nameof(_scopeName), "There must be a value for context!");
+            scopeName = _scopeName ??
+                        throw new ArgumentNullException(nameof(_scopeName), "There must be a value for context!");
 
             if (logTag != null)
             {
@@ -64,15 +71,20 @@ namespace Moonrise.Logging
         }
 
         /// <summary>
-        ///  Constructs a <see cref="ScopeContext"/> for logging. Messages logged within this scope will either be indented or have the scope name prefixed. See also <seealso cref="Logger.UseContext"/>
+        ///     Constructs a <see cref="ScopeContext" /> for logging. Messages logged within this scope will either be indented or
+        ///     have the scope name prefixed. See also <seealso cref="Logger.UseContext" />
         /// </summary>
-        /// <param name="_scopeName">A name for the scope we are entering. It might be a method name, it might be something else to identify the scope your logging</param>
+        /// <param name="_scopeName">
+        ///     A name for the scope we are entering. It might be a method name, it might be something else to
+        ///     identify the scope your logging
+        /// </param>
         /// <param name="arguments">A list of values you want to be logged as the arguments - typically to your method</param>
         /// <param name="logTag">The log tag to apply to this scope. Defaults to null, i.e. no log tag applied</param>
         public ScopeContext(string _scopeName, object[] arguments, LogTag logTag = null) : base(
             $"{(string.IsNullOrEmpty(CurrentValue) ? string.Empty : CurrentValue)}{_scopeName}{spacer}")
         {
-            scopeName = _scopeName ?? throw new ArgumentNullException(nameof(_scopeName), "There must be a value for context!");
+            scopeName = _scopeName ??
+                        throw new ArgumentNullException(nameof(_scopeName), "There must be a value for context!");
 
             if (logTag != null)
             {
@@ -89,7 +101,7 @@ namespace Moonrise.Logging
         }
 
         /// <summary>
-        /// Called when exiting a using scope. In this case, unwinds the scope context and the logging indent.
+        ///     Called when exiting a using scope. In this case, unwinds the scope context and the logging indent.
         /// </summary>
         protected override void Disposing()
         {

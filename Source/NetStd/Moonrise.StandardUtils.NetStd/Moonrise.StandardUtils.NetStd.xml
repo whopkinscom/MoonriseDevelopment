@@ -10,26 +10,27 @@
             </summary>
             <seealso cref="T:Moonrise.Utils.Standard.Config.ISettingsEncryptor" />
         </member>
+        <member name="T:Moonrise.Utils.Standard.Config.DpApiSettingsEncryptor.ProtectionScope">
+            <summary>
+                Indicates what data protection scope to use
+            </summary>
+        </member>
+        <member name="F:Moonrise.Utils.Standard.Config.DpApiSettingsEncryptor.ProtectionScope.User">
+            <summary>
+                Encrypts using the current user data protection scope. The current user can decrypt on any machine
+            </summary>
+        </member>
+        <member name="F:Moonrise.Utils.Standard.Config.DpApiSettingsEncryptor.ProtectionScope.Machine">
+            <summary>
+                Encrypts using the current machine data protection scope. Any user on the machine can decrypt but can only do so on
+                the same machine that encrypted
+            </summary>
+        </member>
         <member name="M:Moonrise.Utils.Standard.Config.DpApiSettingsEncryptor.#ctor(Moonrise.Utils.Standard.Config.DpApiSettingsEncryptor.ProtectionScope)">
             <summary>
                 Creates an instance of the <see cref="T:Moonrise.Utils.Standard.Config.DpApiSettingsEncryptor" /> with either machine or user level scope.
             </summary>
             <param name="_scope">The level of scope for protection</param>
-        </member>
-        <member name="T:Moonrise.Utils.Standard.Config.DpApiSettingsEncryptor.ProtectionScope">
-            <summary>
-            Indicates what data protection scope to use
-            </summary>
-        </member>
-        <member name="F:Moonrise.Utils.Standard.Config.DpApiSettingsEncryptor.ProtectionScope.User">
-            <summary>
-            Encrypts using the current user data protection scope. The current user can decrypt on any machine
-            </summary>
-        </member>
-        <member name="F:Moonrise.Utils.Standard.Config.DpApiSettingsEncryptor.ProtectionScope.Machine">
-            <summary>
-            Encrypts using the current machine data protection scope. Any user on the machine can decrypt but can only do so on the same machine that encrypted
-            </summary>
         </member>
         <member name="M:Moonrise.Utils.Standard.Config.DpApiSettingsEncryptor.Decrypt(System.Byte[],System.String)">
             <summary>
@@ -100,7 +101,7 @@
         </member>
         <member name="M:Moonrise.Utils.Standard.Config.ISettingsProvider.Flush(Moonrise.Utils.Standard.Config.SettingType)">
             <summary>
-            Flushes the setting file, writing it out
+                Flushes the setting file, writing it out
             </summary>
             <param name="type">The type of the setting file to flush</param>
         </member>
@@ -131,14 +132,14 @@
         </member>
         <member name="M:Moonrise.Utils.Standard.Config.ISettingsProvider.ReadCompleteFile(Moonrise.Utils.Standard.Config.SettingType)">
             <summary>
-            Reads the complete settings file as a single string
+                Reads the complete settings file as a single string
             </summary>
             <param name="type">The type of setting.</param>
             <returns>Wot I said</returns>
         </member>
         <member name="M:Moonrise.Utils.Standard.Config.ISettingsProvider.WriteCompleteFile(System.String,Moonrise.Utils.Standard.Config.SettingType)">
             <summary>
-            Writes the complete settings file as a single string
+                Writes the complete settings file as a single string
             </summary>
             <param name="settings">The complete settings</param>
             <param name="type">The type of setting.</param>
@@ -163,6 +164,11 @@
         <member name="F:Moonrise.Utils.Standard.Config.JsonConfigSettingsProvider.ConfigurationOverrideEnvVar">
             <summary>
                 The configuration override environment variable - Kept purely for the Clone.
+            </summary>
+        </member>
+        <member name="F:Moonrise.Utils.Standard.Config.JsonConfigSettingsProvider.__userSettingsFilename">
+            <summary>
+                Backing store for the user settings filename.
             </summary>
         </member>
         <member name="F:Moonrise.Utils.Standard.Config.JsonConfigSettingsProvider._applicationSettings">
@@ -215,11 +221,6 @@
         <member name="P:Moonrise.Utils.Standard.Config.JsonConfigSettingsProvider.SettingsEncryptor">
             <summary>
                 Set this if you need to encrypt/decrypt settings.
-            </summary>
-        </member>
-        <member name="F:Moonrise.Utils.Standard.Config.JsonConfigSettingsProvider.__userSettingsFilename">
-            <summary>
-                Backing store for the user settings filename.
             </summary>
         </member>
         <member name="P:Moonrise.Utils.Standard.Config.JsonConfigSettingsProvider.UserSettingsFilename">
@@ -435,6 +436,16 @@
                 The modified description, i.e. the Description that has been modified at run-time, say for translations.
             </summary>
         </member>
+        <member name="F:Moonrise.Utils.Standard.Config.Settings.ReEncryptedMarker">
+            <summary>
+                The marker used to indicate when a settings file has been re-encrypted
+            </summary>
+        </member>
+        <member name="F:Moonrise.Utils.Standard.Config.Settings.LockObject">
+            <summary>
+                The lock object to prevent cross-thread access
+            </summary>
+        </member>
         <member name="F:Moonrise.Utils.Standard.Config.Settings._type">
             <summary>
                 The settings instance type
@@ -445,22 +456,17 @@
                 The original provider - This is the one used to clone providers for other threads
             </summary>
         </member>
+        <member name="F:Moonrise.Utils.Standard.Config.Settings._reEncrypted">
+            <summary>
+                Determines if a settings file has been re-encrypted or not
+            </summary>
+            <remarks>
+                If it has, any encrypted write MUST pass the additional entropy
+            </remarks>
+        </member>
         <member name="F:Moonrise.Utils.Standard.Config.Settings._settingsProvider">
             <summary>
                 The settings provider is stored as a per-thread singleton
-            </summary>
-        </member>
-        <member name="F:Moonrise.Utils.Standard.Config.Settings._reEncrypted">
-            <summary>
-            Determines if a settings file has been re-encrypted or not
-            </summary>
-            <remarks>
-            If it has, any encrypted write MUST pass the additional entropy
-            </remarks>
-        </member>
-        <member name="F:Moonrise.Utils.Standard.Config.Settings.ReEncryptedMarker">
-            <summary>
-            The marker used to indicate when a settings file has been re-encrypted
             </summary>
         </member>
         <member name="M:Moonrise.Utils.Standard.Config.Settings.#ctor(Moonrise.Utils.Standard.Config.SettingType)">
@@ -517,16 +523,6 @@
                 A string key.
             </returns>
         </member>
-        <member name="M:Moonrise.Utils.Standard.Config.Settings.ReEncrypt(System.String)">
-            <summary>
-            Re-encrypts the settings file using a generated entropy that must then be passed to any read of a possibly encrypted setting.
-            </summary>
-            <remarks>
-            This prevents any code that has not explicitly been passed the entropy from being able to read encrypted settings.
-            </remarks>
-            <param name="additionalEntropy">Optional entropy that can be supplied. If null (default) then entropy will be created from a hashed stack trace.</param>
-            <returns>The generated entropy that has re-encrypted the encrypted settings</returns>
-        </member>
         <member name="P:Moonrise.Utils.Standard.Config.Settings.SettingsEncryptor">
             <summary>
                 Set this if you need to encrypt/decrypt settings. By default is set to <see cref="T:Moonrise.Utils.Standard.Config.DpApiSettingsEncryptor" />
@@ -543,6 +539,20 @@
                 happen, but MIGHT in a testing environment where you're using mocked providers!
                 <seealso cref="M:Moonrise.Utils.Standard.Config.Settings.ReplaceSettingsProvider(Moonrise.Utils.Standard.Config.ISettingsProvider)" />
             </remarks>
+        </member>
+        <member name="M:Moonrise.Utils.Standard.Config.Settings.ReEncrypt(System.String)">
+            <summary>
+                Re-encrypts the settings file using a generated entropy that must then be passed to any read of a possibly
+                encrypted setting.
+            </summary>
+            <remarks>
+                This prevents any code that has not explicitly been passed the entropy from being able to read encrypted settings.
+            </remarks>
+            <param name="additionalEntropy">
+                Optional entropy that can be supplied. If null (default) then entropy will be created
+                from a hashed stack trace.
+            </param>
+            <returns>The generated entropy that has re-encrypted the encrypted settings</returns>
         </member>
         <member name="M:Moonrise.Utils.Standard.Config.Settings.Decrypt(System.String,Moonrise.Utils.Standard.Config.ISettingsEncryptor,System.String)">
             <summary>
@@ -784,12 +794,13 @@
         </member>
         <member name="F:Moonrise.Utils.Standard.Config.SettingsExceptionReason.AddtionalEntropyRequired">
             <summary>
-            When writing an encrypted value for key [{0}] to a re-encrypted settings file, you MUST pass the additional entropy.
+                When writing an encrypted value for key [{0}] to a re-encrypted settings file, you MUST pass the additional
+                entropy.
             </summary>
         </member>
         <member name="F:Moonrise.Utils.Standard.Config.SettingsExceptionReason.InvalidAdditionalEntropy">
             <summary>
-            The additional entropy data for reading a re-encrypted setting was invalid.
+                The additional entropy data for reading a re-encrypted setting was invalid.
             </summary>
         </member>
         <member name="T:Moonrise.Utils.Standard.Config.SettingsException">
@@ -947,7 +958,7 @@
         </member>
         <member name="M:Moonrise.Utils.Standard.CSV.CsvParser`2.ParseDictionaries(System.Collections.Generic.IEnumerable{System.Collections.Generic.Dictionary{System.String,System.Object}})">
             <summary>
-            Parses a collection of string object dictionaries.
+                Parses a collection of string object dictionaries.
             </summary>
             <param name="dictionaries">The dictionaries.</param>
             <returns>A collection of parsed target instances</returns>
@@ -1337,7 +1348,7 @@
             <summary>
                 Enum extension method to get the original, attributed, description of an enum.
                 <para>
-                    The description is as specified - in this order - by the DescriptionAttribute, or the DisplayAttribute.Name, 
+                    The description is as specified - in this order - by the DescriptionAttribute, or the DisplayAttribute.Name,
                     or the DisplayAttribute.Description, or the string value if no description.
                 </para>
             </summary>
@@ -1724,7 +1735,8 @@
         </member>
         <member name="M:Moonrise.Utils.Standard.Files.FileUtils.GetParentDirectory(System.String)">
             <summary>
-            Gets the parent directory of a specified filepath. To get the parent of a FOLDER path, the path needs to end with a separator!
+                Gets the parent directory of a specified filepath. To get the parent of a FOLDER path, the path needs to end with a
+                separator!
             </summary>
             <param name="filepath">The filepath.</param>
             <returns>The parent folder, or null if already at the root of a drive!</returns>
@@ -1790,12 +1802,12 @@
         </member>
         <member name="T:Moonrise.Utils.Standard.ICloneable">
             <summary>
-            DNC (.Net Core) doesn't have an ICloneable interface!
+                DNC (.Net Core) doesn't have an ICloneable interface!
             </summary>
         </member>
         <member name="M:Moonrise.Utils.Standard.ICloneable.Clone">
             <summary>
-            Clones this instance.
+                Clones this instance.
             </summary>
             <returns>A new instance with the same contents values as itself</returns>
         </member>
@@ -1834,46 +1846,56 @@
         </member>
         <member name="T:Moonrise.Utils.Standard.Misc.Recursion">
             <summary>
-            Allows for guarded recursion
+                Allows for guarded recursion
             </summary>
         </member>
         <member name="F:Moonrise.Utils.Standard.Misc.Recursion.currentDepth">
             <summary>
-            A one-per-thread recursion count
+                A one-per-thread recursion count
             </summary>
         </member>
         <member name="M:Moonrise.Utils.Standard.Misc.Recursion.#ctor">
             <summary>
-            Creating a <see cref="T:Moonrise.Utils.Standard.Misc.Recursion"/> increases the recursion count by one
+                Creating a <see cref="T:Moonrise.Utils.Standard.Misc.Recursion" /> increases the recursion count by one
             </summary>
         </member>
         <member name="M:Moonrise.Utils.Standard.Misc.Recursion.Dispose">
             <summary>
-            Disposing a <see cref="T:Moonrise.Utils.Standard.Misc.Recursion"/> decreases the recursion count by one
+                Disposing a <see cref="T:Moonrise.Utils.Standard.Misc.Recursion" /> decreases the recursion count by one
             </summary>
             <remarks>
-            As long as the using pattern is deployed the count will always get reset to zero, either by an exception or returns falling down the stack.
+                As long as the using pattern is deployed the count will always get reset to zero, either by an exception or returns
+                falling down the stack.
             </remarks>
         </member>
         <member name="M:Moonrise.Utils.Standard.Misc.Recursion.Guard(System.Int32,System.String)">
             <summary>
-            Guards against a recursive call eating up the stack.
+                Guards against a recursive call eating up the stack.
             </summary>
             <remarks>
-            Use the using pattern just prior to making a recursive call. Don't even use the brackets.
-            <example>
-            <code>
+                Use the using pattern just prior to making a recursive call. Don't even use the brackets.
+                <example>
+                    <code>
             void Doit() {<para>
-            ...</para><para>
-            using (Recursion.Guard())</para><para>
-            Doit();</para><para>
-            ...</para><para>
-            }</para>
-            </code></example>
+                            ...
+                        </para><para>
+                            using (Recursion.Guard())
+                        </para><para>
+                            Doit();
+                        </para><para>
+                            ...
+                        </para><para>
+                            }
+                        </para>
+            </code>
+                </example>
             </remarks>
-            <param name="maximumLevel">The maximum depth you do not expect to exceed - defaults to 50. It's pretty rare to go much deeper than this but you know your algorithm!</param>
+            <param name="maximumLevel">
+                The maximum depth you do not expect to exceed - defaults to 50. It's pretty rare to go much
+                deeper than this but you know your algorithm!
+            </param>
             <param name="caller">The name of the method making the guarded call.</param>
-            <returns>An <see cref="T:System.IDisposable"/> <see cref="T:Moonrise.Utils.Standard.Misc.Recursion"/> reference that will manage the recursion counter</returns>
+            <returns>An <see cref="T:System.IDisposable" /> <see cref="T:Moonrise.Utils.Standard.Misc.Recursion" /> reference that will manage the recursion counter</returns>
         </member>
         <member name="T:Moonrise.Utils.Standard.Networking.NetworkUtils">
             <summary>
@@ -1960,7 +1982,8 @@
         </member>
         <member name="P:Moonrise.Utils.Standard.Threading.ScopedNestableThreadGlobalSingleton`1.CurrentValue">
             <summary>
-                Gets the current Nestable Thread Global Singleton value. If not already set this will be the default for generic type.
+                Gets the current Nestable Thread Global Singleton value. If not already set this will be the default for generic
+                type.
             </summary>
         </member>
         <member name="P:Moonrise.Utils.Standard.Threading.ScopedNestableThreadGlobalSingleton`1.Current">
@@ -1999,141 +2022,6 @@
                 </remarks>
             </summary>
             <seealso cref="T:System.ComponentModel.DataAnnotations.ValidationAttribute" />
-        </member>
-        <member name="T:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.DynamicValidationValues">
-            <summary>
-                Default implementation of <see cref="T:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.IDynamicValidationValues" />. You will need to create a sub-class that simply
-                defines a static property, by default call it Instance, that is initialised in your constructor to itself. Then
-                set the appropriate properties to the dynamic values you require.
-                <para>
-                    Ideally use a ThreadLocal implementation of the static property - see the tests on this class for an example.
-                </para>
-            </summary>
-        </member>
-        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.DynamicValidationValues.MaxByte">
-            <summary>
-            The maximum byte value
-            </summary>
-        </member>
-        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.DynamicValidationValues.MaxDateTime">
-            <summary>
-            The maximum DateTime value
-            </summary>
-        </member>
-        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.DynamicValidationValues.MaxDateTimeOffset">
-            <summary>
-            The maximum DateTimeOffset value
-            </summary>
-        </member>
-        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.DynamicValidationValues.MaxDouble">
-            <summary>
-            The maximum double value
-            </summary>
-        </member>
-        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.DynamicValidationValues.MaxInt">
-            <summary>
-            The maximum int value
-            </summary>
-        </member>
-        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.DynamicValidationValues.MaxString">
-            <summary>
-            The maximum string value
-            </summary>
-        </member>
-        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.DynamicValidationValues.MinByte">
-            <summary>
-            The minimum byte value
-            </summary>
-        </member>
-        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.DynamicValidationValues.MinDateTime">
-            <summary>
-            The minimum DateTime value
-            </summary>
-        </member>
-        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.DynamicValidationValues.MinDateTimeOffset">
-            <summary>
-            The minimum DateTimeOffset value
-            </summary>
-        </member>
-        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.DynamicValidationValues.MinDouble">
-            <summary>
-            The minimum double value
-            </summary>
-        </member>
-        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.DynamicValidationValues.MinInt">
-            <summary>
-            The minimum int value
-            </summary>
-        </member>
-        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.DynamicValidationValues.MinString">
-            <summary>
-            The minimum string value
-            </summary>
-        </member>
-        <member name="T:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.IDynamicValidationValues">
-            <summary>
-                Represents the different Min/Max values that can be set to validate against.
-            </summary>
-        </member>
-        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.IDynamicValidationValues.MaxByte">
-            <summary>
-            The maximum byte value
-            </summary>
-        </member>
-        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.IDynamicValidationValues.MaxDateTime">
-            <summary>
-            The maximum DateTime value
-            </summary>
-        </member>
-        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.IDynamicValidationValues.MaxDateTimeOffset">
-            <summary>
-            The maximum DateTimeOffset value
-            </summary>
-        </member>
-        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.IDynamicValidationValues.MaxDouble">
-            <summary>
-            The maximum double value
-            </summary>
-        </member>
-        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.IDynamicValidationValues.MaxInt">
-            <summary>
-            The maximum int value
-            </summary>
-        </member>
-        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.IDynamicValidationValues.MaxString">
-            <summary>
-            The maximum string value
-            </summary>
-        </member>
-        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.IDynamicValidationValues.MinByte">
-            <summary>
-            The minimum byte value
-            </summary>
-        </member>
-        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.IDynamicValidationValues.MinDateTime">
-            <summary>
-            The minimum DateTime value
-            </summary>
-        </member>
-        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.IDynamicValidationValues.MinDateTimeOffset">
-            <summary>
-            The minimum DateTimeOffset value
-            </summary>
-        </member>
-        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.IDynamicValidationValues.MinDouble">
-            <summary>
-            The minimum double value
-            </summary>
-        </member>
-        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.IDynamicValidationValues.MinInt">
-            <summary>
-            The minimum int value
-            </summary>
-        </member>
-        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.IDynamicValidationValues.MinString">
-            <summary>
-            The minimum string value
-            </summary>
         </member>
         <member name="M:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.#ctor(System.Type)">
             <summary>
@@ -2181,6 +2069,156 @@
             </summary>
             <returns>The instance returned by the static method named as the InstanceName</returns>
             <exception cref="T:System.ComponentModel.DataAnnotations.ValidationException">An exception will be thrown if the type does not contain such a static method</exception>
+        </member>
+        <member name="T:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.DynamicValidationValues">
+            <summary>
+                Default implementation of <see cref="T:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.IDynamicValidationValues" />. You will need to create a sub-class that simply
+                defines a static property, by default call it Instance, that is initialised in your constructor to itself. Then
+                set the appropriate properties to the dynamic values you require.
+                <para>
+                    Ideally use a ThreadLocal implementation of the static property - see the tests on this class for an example.
+                </para>
+            </summary>
+        </member>
+        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.DynamicValidationValues.MaxByte">
+            <summary>
+                The maximum byte value
+            </summary>
+        </member>
+        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.DynamicValidationValues.MaxDateTime">
+            <summary>
+                The maximum DateTime value
+            </summary>
+        </member>
+        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.DynamicValidationValues.MaxDateTimeOffset">
+            <summary>
+                The maximum DateTimeOffset value
+            </summary>
+        </member>
+        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.DynamicValidationValues.MaxDouble">
+            <summary>
+                The maximum double value
+            </summary>
+        </member>
+        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.DynamicValidationValues.MaxInt">
+            <summary>
+                The maximum int value
+            </summary>
+        </member>
+        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.DynamicValidationValues.MaxString">
+            <summary>
+                The maximum string value
+            </summary>
+        </member>
+        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.DynamicValidationValues.MinByte">
+            <summary>
+                The minimum byte value
+            </summary>
+        </member>
+        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.DynamicValidationValues.MinDateTime">
+            <summary>
+                The minimum DateTime value
+            </summary>
+        </member>
+        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.DynamicValidationValues.MinDateTimeOffset">
+            <summary>
+                The minimum DateTimeOffset value
+            </summary>
+        </member>
+        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.DynamicValidationValues.MinDouble">
+            <summary>
+                The minimum double value
+            </summary>
+        </member>
+        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.DynamicValidationValues.MinInt">
+            <summary>
+                The minimum int value
+            </summary>
+        </member>
+        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.DynamicValidationValues.MinString">
+            <summary>
+                The minimum string value
+            </summary>
+        </member>
+        <member name="T:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.IDynamicValidationValues">
+            <summary>
+                Represents the different Min/Max values that can be set to validate against.
+            </summary>
+        </member>
+        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.IDynamicValidationValues.MaxByte">
+            <summary>
+                The maximum byte value
+            </summary>
+        </member>
+        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.IDynamicValidationValues.MaxDateTime">
+            <summary>
+                The maximum DateTime value
+            </summary>
+        </member>
+        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.IDynamicValidationValues.MaxDateTimeOffset">
+            <summary>
+                The maximum DateTimeOffset value
+            </summary>
+        </member>
+        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.IDynamicValidationValues.MaxDouble">
+            <summary>
+                The maximum double value
+            </summary>
+        </member>
+        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.IDynamicValidationValues.MaxInt">
+            <summary>
+                The maximum int value
+            </summary>
+        </member>
+        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.IDynamicValidationValues.MaxString">
+            <summary>
+                The maximum string value
+            </summary>
+        </member>
+        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.IDynamicValidationValues.MinByte">
+            <summary>
+                The minimum byte value
+            </summary>
+        </member>
+        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.IDynamicValidationValues.MinDateTime">
+            <summary>
+                The minimum DateTime value
+            </summary>
+        </member>
+        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.IDynamicValidationValues.MinDateTimeOffset">
+            <summary>
+                The minimum DateTimeOffset value
+            </summary>
+        </member>
+        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.IDynamicValidationValues.MinDouble">
+            <summary>
+                The minimum double value
+            </summary>
+        </member>
+        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.IDynamicValidationValues.MinInt">
+            <summary>
+                The minimum int value
+            </summary>
+        </member>
+        <member name="P:Moonrise.Utils.Standard.Validation.DynamicRangeAttribute.IDynamicValidationValues.MinString">
+            <summary>
+                The minimum string value
+            </summary>
+        </member>
+        <member name="T:Moonrise.Utils.Standard.Validation.EmailValidationAttribute">
+            <summary>
+                Validates an email address
+            </summary>
+            <remarks>There is NO CHECK on the existence of the domain, just the format is a basic alphaNumeric@alphaNumeric.alphaNumeric!</remarks>
+            <seealso cref="T:System.ComponentModel.DataAnnotations.ValidationAttribute" />
+        </member>
+        <member name="M:Moonrise.Utils.Standard.Validation.EmailValidationAttribute.IsValid(System.Object,System.ComponentModel.DataAnnotations.ValidationContext)">
+            <summary>
+                Validates the specified value with respect to the current validation attribute.
+            </summary>
+            <returns>An instance of the <see cref="T:System.ComponentModel.DataAnnotations.ValidationResult" /> class. </returns>
+            <param name="value">The value to validate.</param>
+            <param name="validationContext">The context information about the validation operation.</param>
         </member>
         <member name="T:Moonrise.Utils.Standard.Validation.FileValidationAttribute">
             <summary>

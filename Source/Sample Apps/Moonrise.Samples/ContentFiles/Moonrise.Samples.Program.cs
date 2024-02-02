@@ -1,4 +1,23 @@
-﻿using System;
+﻿#region MIT
+
+//     Copyright 2015-2021 Will Hopkins - Moonrise Media Ltd.
+//     will@moonrise.media - Happy to have a conversation
+// 
+//     Licenced under MIT licencing terms
+//     you may not use this file except in compliance with the License.
+//     You may obtain a copy of the License at
+// 
+//         https://licenses.nuget.org/MIT
+// 
+//     Unless required by applicable law or agreed to in writing, software
+//     distributed under the License is distributed on an "AS IS" BASIS,
+//     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//     See the License for the specific language governing permissions and
+//     limitations under the License.
+
+#endregion
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,8 +29,8 @@ using Moonrise.Logging.LoggingProviders;
 using Moonrise.Utils.Standard.Config;
 using Moonrise.Utils.Standard.DatesTimes;
 using Moonrise.Utils.Standard.Exceptions;
-using Moonrise.Utils.Test.ObjectCreation;
 using Moonrise.Utils.Standard.Extensions;
+using Moonrise.Utils.Test.ObjectCreation;
 
 namespace Moonrise
 {
@@ -24,7 +43,35 @@ namespace Moonrise
     /// </remarks>
     public class Samples
     {
-        public static bool initialised = false;
+        /// <summary>
+        ///     A bunch of other reasons for an exception being thrown.
+        /// </summary>
+        /// <remarks>
+        ///     Note how easy it is to see all of the possible reasons the exception might be thrown. What tends to happen when I
+        ///     use
+        ///     this pattern is I just add another reason as I find I need to throw another exception and the list just grows.
+        /// </remarks>
+        public enum OtherReason
+        {
+            /// <summary>
+            ///     It wasn't possible to complete the reverse flush at {0} as valve {1} appears to be stuck!
+            /// </summary>
+            [Description("It wasn't possible to complete the reverse flush at {0} as valve {1} appears to be stuck!")]
+            ValveIsStuck,
+
+            /// <summary>
+            ///     Unable to open reserve tank number {0} as the {1} door has been left open.
+            /// </summary>
+            [Description("Unable to open reserve tank number {0} as the {1} door has been left open.")]
+            DoorShouldNotBeOpenWhenOpeningReserveTank,
+
+            /// <summary>
+            ///     Bored now
+            /// </summary>
+            [Description("Bored now")] OrWhatever
+        }
+
+        public static bool initialised;
 
         public static void Run()
         {
@@ -48,11 +95,15 @@ namespace Moonrise
         }
 
         /// <summary>
-        /// I REALLY like these. A <see cref="ReasonedException{TReason}"/> is an exception that is only ever created with an enum "Reason".
-        /// The enum is given a [Description] which becomes the text message for the exception and will often include {0} {1} placeholders
-        /// so that when it comes to throw that exception, you pass the variables appropriately and you've got a well though out reason
-        /// for throwing your exception. You also get a list of all the reasons this exception may be thrown, by virtue of the enums.
-        /// Take a looksie.
+        ///     I REALLY like these. A <see cref="ReasonedException{TReason}" /> is an exception that is only ever created with an
+        ///     enum "Reason".
+        ///     The enum is given a [Description] which becomes the text message for the exception and will often include {0} {1}
+        ///     placeholders
+        ///     so that when it comes to throw that exception, you pass the variables appropriately and you've got a well though
+        ///     out reason
+        ///     for throwing your exception. You also get a list of all the reasons this exception may be thrown, by virtue of the
+        ///     enums.
+        ///     Take a looksie.
         /// </summary>
         private static void ReasonedExceptions()
         {
@@ -86,7 +137,9 @@ namespace Moonrise
                     int second = 28;
 
                     if (second == 28)
+                    {
                         throw new SampleException(SampleException.SampleReason.SeeWhatIMean, first, second);
+                    }
                 }
                 catch (SampleException e)
                 {
@@ -128,101 +181,14 @@ namespace Moonrise
                 DateTime pointInTime = new DateTime(2018, 11, 1);
 
                 if (!pointInTime.Within(5, LastFew.Years))
+                {
                     throw new ApplicationException("Go on, I dare you!");
-            }
-
-        }
-
-        /// <summary>
-        /// An example of a <see cref="ReasonedException{TReason}"/> where the reason is encapsulated within the exception.
-        /// </summary>
-        /// <remarks>
-        /// This style makes for slightly more convoluted naming of the reason when reading/throwing the exception but
-        /// is perhaps better contained.
-        /// </remarks>
-        /// <seealso cref="Moonrise.Utils.Standard.Exceptions.ReasonedException{Moonrise.Samples.SampleException.SampleReason}" />
-        public class SampleException : ReasonedException<SampleException.SampleReason>
-        {
-            public enum SampleReason
-            {
-                /// <summary>
-                /// Thinking of examples is sometimes tough, but I need to start somewhere!
-                /// </summary>
-                [Description("Thinking of examples is sometimes tough, but I need to start somewhere!")]
-                BecauseINeedToStartSomewhere,
-
-                /// <summary>
-                /// For this exception we'll take a string that might help to diagnose:{0}
-                /// </summary>
-                [Description("For this exception we'll take a string that might help to diagnose:{0}")]
-                OKNextPlease,
-
-                /// <summary>
-                /// You tried to divide {0} by {1} but I don't what to have to do that!
-                /// </summary>
-                [Description("You tried to divide {0} by {1} but I don't what to have to do that!")]
-                SeeWhatIMean
-            }
-
-            public SampleException(SampleReason reason, params object[] args) : base(reason, args)
-            {
-            }
-
-            public SampleException(Exception innerException, SampleReason reason, params object[] args) : base(innerException, reason, args)
-            {
+                }
             }
         }
 
         /// <summary>
-        /// A bunch of other reasons for an exception being thrown.
-        /// </summary>
-        /// <remarks>
-        /// Note how easy it is to see all of the possible reasons the exception might be thrown. What tends to happen when I use
-        /// this pattern is I just add another reason as I find I need to throw another exception and the list just grows.
-        /// </remarks>
-        public enum OtherReason
-        {
-            /// <summary>
-            /// It wasn't possible to complete the reverse flush at {0} as valve {1} appears to be stuck!
-            /// </summary>
-            [Description("It wasn't possible to complete the reverse flush at {0} as valve {1} appears to be stuck!")]
-            ValveIsStuck,
-
-            /// <summary>
-            /// Unable to open reserve tank number {0} as the {1} door has been left open.
-            /// </summary>
-            [Description("Unable to open reserve tank number {0} as the {1} door has been left open.")]
-            DoorShouldNotBeOpenWhenOpeningReserveTank,
-
-            /// <summary>
-            /// Bored now
-            /// </summary>
-            [Description("Bored now")]
-            OrWhatever
-        }
-
-        /// <summary>
-        /// An example of a <see cref="ReasonedException{TReason}"/> where the reason is declared alongside the exception.
-        /// </summary>
-        /// <remarks>
-        /// This style makes for slightly more readable exception throwing.<para>
-        /// Remember that as for all of these examples you would ordinarily have these classes in their own files, except that in
-        /// this case of the <see cref="OtherReason"/> enum I would keep it in the same file as the exception using it.
-        /// </para>
-        /// </remarks>
-        public class AnotherSampleException : ReasonedException<OtherReason>
-        {
-            public AnotherSampleException(OtherReason reason, params object[] args) : base(reason, args)
-            {
-            }
-
-            public AnotherSampleException(Exception innerException, OtherReason reason, params object[] args) : base(innerException, reason, args)
-            {
-            }
-        }
-
-        /// <summary>
-        /// There are some neat string extension methods that really help out when you're doing some casual string parsing.
+        ///     There are some neat string extension methods that really help out when you're doing some casual string parsing.
         /// </summary>
         private static void TrySomeParsing()
         {
@@ -248,7 +214,7 @@ namespace Moonrise
         private static void SampleTestObjectCreation()
         {
             // Let's start off with a basic creator that creates random data (well as random as the standard RNG can manage).
-            var creator = new Creator();
+            Creator creator = new Creator();
             Logger.Title("Data creation samples");
             Logger.Debug("First non-repeating random data");
             Logger.Debug(creator.GetRandomString());
@@ -259,7 +225,7 @@ namespace Moonrise
 
             // Note that every time you run the above you'll get different values. But sometimes you might want repeatedly reliable random data,
             // in which case simply seed your creator with the same seed each time
-            var reliableCreator = new Creator(42);
+            Creator reliableCreator = new Creator(42);
             Logger.Debug("Now repeatable random data");
             Logger.Debug(reliableCreator.GetRandomString());
             Logger.Debug(reliableCreator.GetRandomString());
@@ -324,7 +290,7 @@ namespace Moonrise
                     Logger.Warning("So, inside second context from inside a method");
                     Logger.LogMethodName = true;
                     Logger.Debug("We're now logging the method name");
-                    var areUsingContext = Logger.UseContext;
+                    bool areUsingContext = Logger.UseContext;
                     Logger.UseContext = false;
                     Logger.Debug("We're now logging the method name, but without the context");
                     Logger.LogMethodName = false;
@@ -358,7 +324,7 @@ namespace Moonrise
                     ButWhatAboutLoggingFromSubroutines();
                 }
 
-                var madeUpOnTheFly = new LogTag("MadeUpOnTheFly");
+                LogTag madeUpOnTheFly = new LogTag("MadeUpOnTheFly");
                 Logger.ActivateLogTag(madeUpOnTheFly);
                 Logger.Info("Adding a new log tag", madeUpOnTheFly);
                 Logger.DeactivateLogTag(madeUpOnTheFly);
@@ -381,7 +347,8 @@ namespace Moonrise
                     {
                         Logger.Info("You'll get a JSON representation of the Logging Configuration");
                         Logger.Info(Initialise.LoggingConfiguration);
-                        Logger.Info($"Here's the Logging Configuration - {Logger.JsonIt(Initialise.LoggingConfiguration)}");
+                        Logger.Info(
+                            $"Here's the Logging Configuration - {Logger.JsonIt(Initialise.LoggingConfiguration)}");
 
                         throw new AmbiguousImplementationException("Now let's log an exception!");
                     }
@@ -420,14 +387,81 @@ namespace Moonrise
             Initialise.Logging();
         }
 
+        /// <summary>
+        ///     An example of a <see cref="ReasonedException{TReason}" /> where the reason is encapsulated within the exception.
+        /// </summary>
+        /// <remarks>
+        ///     This style makes for slightly more convoluted naming of the reason when reading/throwing the exception but
+        ///     is perhaps better contained.
+        /// </remarks>
+        /// <seealso cref="Moonrise.Utils.Standard.Exceptions.ReasonedException{Moonrise.Samples.SampleException.SampleReason}" />
+        public class SampleException : ReasonedException<SampleException.SampleReason>
+        {
+            public enum SampleReason
+            {
+                /// <summary>
+                ///     Thinking of examples is sometimes tough, but I need to start somewhere!
+                /// </summary>
+                [Description("Thinking of examples is sometimes tough, but I need to start somewhere!")]
+                BecauseINeedToStartSomewhere,
+
+                /// <summary>
+                ///     For this exception we'll take a string that might help to diagnose:{0}
+                /// </summary>
+                [Description("For this exception we'll take a string that might help to diagnose:{0}")]
+                OKNextPlease,
+
+                /// <summary>
+                ///     You tried to divide {0} by {1} but I don't what to have to do that!
+                /// </summary>
+                [Description("You tried to divide {0} by {1} but I don't what to have to do that!")]
+                SeeWhatIMean
+            }
+
+            public SampleException(SampleReason reason, params object[] args) : base(reason, args)
+            {
+            }
+
+            public SampleException(Exception innerException, SampleReason reason, params object[] args) : base(
+                innerException, reason, args)
+            {
+            }
+        }
 
         /// <summary>
-        /// This interface is used purely as a vehicle to pass <see cref="ObjectCreationAttribute"/>s when creating random data
-        /// in a <seealso cref="BasicFileLogProvider.Config"/> object. Nothing implements this interface but it has members whose
-        /// name & type match the members in that class and the attributes against this interface then govern how the test data
-        /// gets created. And in case it hasn't dawned on you yet, YES you could use lots of different interfaces with different
-        /// criteria against the same class you're creating and run different sorts of tests - if you wanted to!
-        /// <seealso cref="Creator.MapInterfaceAttributes{T,I}"/>.
+        ///     An example of a <see cref="ReasonedException{TReason}" /> where the reason is declared alongside the exception.
+        /// </summary>
+        /// <remarks>
+        ///     This style makes for slightly more readable exception throwing.
+        ///     <para>
+        ///         Remember that as for all of these examples you would ordinarily have these classes in their own files, except
+        ///         that in
+        ///         this case of the <see cref="OtherReason" /> enum I would keep it in the same file as the exception using it.
+        ///     </para>
+        /// </remarks>
+        public class AnotherSampleException : ReasonedException<OtherReason>
+        {
+            public AnotherSampleException(OtherReason reason, params object[] args) : base(reason, args)
+            {
+            }
+
+            public AnotherSampleException(Exception innerException, OtherReason reason, params object[] args) : base(
+                innerException, reason, args)
+            {
+            }
+        }
+
+
+        /// <summary>
+        ///     This interface is used purely as a vehicle to pass <see cref="ObjectCreationAttribute" />s when creating random
+        ///     data
+        ///     in a <seealso cref="BasicFileLogProvider.Config" /> object. Nothing implements this interface but it has members
+        ///     whose
+        ///     name & type match the members in that class and the attributes against this interface then govern how the test data
+        ///     gets created. And in case it hasn't dawned on you yet, YES you could use lots of different interfaces with
+        ///     different
+        ///     criteria against the same class you're creating and run different sorts of tests - if you wanted to!
+        ///     <seealso cref="Creator.MapInterfaceAttributes{T,I}" />.
         /// </summary>
         public interface IFileLoggerTestData
         {
@@ -454,7 +488,8 @@ namespace Moonrise
             [ObjectCreation(MinInt = 28, MaxInt = 98)]
             public int MaxEntries { get; set; }
 
-            [ObjectCreation(ItemsSource = typeof(StringItemsSourceExample))] public string ByCountFilenameDateTimeFormat { get; set; }
+            [ObjectCreation(ItemsSource = typeof(StringItemsSourceExample))]
+            public string ByCountFilenameDateTimeFormat { get; set; }
         }
 
         /// <summary>
@@ -504,10 +539,14 @@ namespace Moonrise
             ///     to
             /// </returns>
             /// <exception cref="System.NotImplementedException"></exception>
-            public static IList ItemSource(string elementName, PropertyInfo propInfo, FieldInfo fieldInfo, Creator creator)
+            public static IList ItemSource(string elementName, PropertyInfo propInfo, FieldInfo fieldInfo,
+                Creator creator)
             {
                 if (elementName.Equals("ByCountFilenameDateTimeFormat"))
-                    throw new NotImplementedException("This shouldn't happen as we've said to use the static property in preference to this method that COULD be used to process a whole set of different elements.");
+                {
+                    throw new NotImplementedException(
+                        "This shouldn't happen as we've said to use the static property in preference to this method that COULD be used to process a whole set of different elements.");
+                }
 
                 return null;
             }
@@ -546,6 +585,13 @@ namespace Moonrise
         /// <seealso cref="string" />
         public static class StringListItemsSourceExample // : ObjectCreationAttribute.SIItemSource<string>
         {
+            public static List<object> LogTags =>
+                new List<object>
+                {
+                    new List<string> {"Tag One", "Tag Too", "Another Tag"},
+                    new List<string> {"TagHuer", "ShoppingTag", "Run out of Tag Puns", "Stringer"}
+                };
+
             /// <summary>
             ///     Returns the list of objects to be used as the item source for elementName
             /// </summary>
@@ -559,14 +605,15 @@ namespace Moonrise
             ///     to
             /// </returns>
             /// <exception cref="System.NotImplementedException"></exception>
-            public static IList ItemSource(string elementName, PropertyInfo propInfo, FieldInfo fieldInfo, Creator creator)
+            public static IList ItemSource(string elementName, PropertyInfo propInfo, FieldInfo fieldInfo,
+                Creator creator)
             {
                 if (elementName.Equals("LogTags"))
                 {
                     List<object> retVal = new List<object>
                     {
-                        new List<string>{"Tag One", "Tag Too", "Another Tag"},
-                        new List<string>{"TagHuer", "ShoppingTag", "Run out of Tag Puns", "Stringer"}
+                        new List<string> {"Tag One", "Tag Too", "Another Tag"},
+                        new List<string> {"TagHuer", "ShoppingTag", "Run out of Tag Puns", "Stringer"}
                     };
 
                     retVal.Add(creator.CreateFilled<List<string>>());
@@ -577,19 +624,10 @@ namespace Moonrise
                 return null;
             }
 
-            public static List<object> LogTags
+            public static bool PreferPropertyToItemSourceCall(string elementName)
             {
-                get
-                {
-                    return new List<object>
-                    {
-                        new List<string> {"Tag One", "Tag Too", "Another Tag"},
-                        new List<string> {"TagHuer", "ShoppingTag", "Run out of Tag Puns", "Stringer"}
-                    };
-                }
+                return true;
             }
-
-            public static bool PreferPropertyToItemSourceCall(string elementName) => true;
         }
 
         public interface ILoggingConfigTestData
@@ -705,7 +743,7 @@ namespace Moonrise
         public static void Logging()
         {
             Settings.Application.Read("Logging", ref LoggingConfiguration, true);
-            
+
             {
                 // You could also read this into a LoggingConfig property - yes it's perhaps a bit of a pain to repeat the property twice in this call but that's just how you need to do it!
                 // POINT IS, if you want to use it as a property, then go ahead, you can!
@@ -714,7 +752,9 @@ namespace Moonrise
                     true);
 
                 if (LoggingConfigurationAsProperty.Logger.OutputLevel != LoggingConfiguration.Logger.OutputLevel)
+                {
                     throw new ApplicationException("Go on, I dare you!");
+                }
             }
 
             Logger.Initialise(LoggingConfiguration.Logger, new BasicFileLogProvider(LoggingConfiguration.LogFile));

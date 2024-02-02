@@ -1,22 +1,21 @@
-﻿#region Apache-v2.0
+﻿#region MIT
 
-//    Copyright 2017 Will Hopkins - Moonrise Media Ltd.
+//     Copyright 2015-2021 Will Hopkins - Moonrise Media Ltd.
+//     will@moonrise.media - Happy to have a conversation
 // 
-//    Licensed under the Apache License, Version 2.0 (the "License");
-//    you may not use this file except in compliance with the License.
-//    You may obtain a copy of the License at
+//     Licenced under MIT licencing terms
+//     you may not use this file except in compliance with the License.
+//     You may obtain a copy of the License at
 // 
-//        http://www.apache.org/licenses/LICENSE-2.0
+//         https://licenses.nuget.org/MIT
 // 
-//    Unless required by applicable law or agreed to in writing, software
-//    distributed under the License is distributed on an "AS IS" BASIS,
-//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//    See the License for the specific language governing permissions and
-//    limitations under the License.
+//     Unless required by applicable law or agreed to in writing, software
+//     distributed under the License is distributed on an "AS IS" BASIS,
+//     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//     See the License for the specific language governing permissions and
+//     limitations under the License.
 
 #endregion
-
-using System;
 
 namespace Moonrise.Utils.Standard.Config
 {
@@ -47,7 +46,7 @@ namespace Moonrise.Utils.Standard.Config
         bool CacheRead { get; set; }
 
         /// <summary>
-        /// Flushes the setting file, writing it out
+        ///     Flushes the setting file, writing it out
         /// </summary>
         /// <param name="type">The type of the setting file to flush</param>
         void Flush(SettingType type);
@@ -78,14 +77,14 @@ namespace Moonrise.Utils.Standard.Config
         void WriteSetting(string key, string value, object objval, SettingType type);
 
         /// <summary>
-        /// Reads the complete settings file as a single string
+        ///     Reads the complete settings file as a single string
         /// </summary>
         /// <param name="type">The type of setting.</param>
         /// <returns>Wot I said</returns>
         string ReadCompleteFile(SettingType settingType);
 
         /// <summary>
-        /// Writes the complete settings file as a single string
+        ///     Writes the complete settings file as a single string
         /// </summary>
         /// <param name="settings">The complete settings</param>
         /// <param name="type">The type of setting.</param>

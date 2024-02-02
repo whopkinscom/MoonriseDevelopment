@@ -1,3 +1,22 @@
+#region MIT
+
+//     Copyright 2015-2021 Will Hopkins - Moonrise Media Ltd.
+//     will@moonrise.media - Happy to have a conversation
+// 
+//     Licenced under MIT licencing terms
+//     you may not use this file except in compliance with the License.
+//     You may obtain a copy of the License at
+// 
+//         https://licenses.nuget.org/MIT
+// 
+//     Unless required by applicable law or agreed to in writing, software
+//     distributed under the License is distributed on an "AS IS" BASIS,
+//     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//     See the License for the specific language governing permissions and
+//     limitations under the License.
+
+#endregion
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,13 +25,21 @@ using System.Data;
 namespace NDesk.Options.Extensions
 {
     /// <summary>
-    /// VariableMatrix OptionItemBase class.
+    ///     VariableMatrix OptionItemBase class.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class VariableMatrix<T> : OptionItemBase<T>, IDictionary<string, T>
     {
+        /* TODO: .NET 4.5 introduces the notion of ReadOnlyDictionary.
+         * In prior framework versions we would need to roll our own. */
+        //TODO: Might could enrich the model by implementing our own custom Dictionary.
         /// <summary>
-        /// Constructor.
+        ///     Matrix backing field.
+        /// </summary>
+        private readonly IDictionary<string, T> _matrix = new Dictionary<string, T>();
+
+        /// <summary>
+        ///     Constructor.
         /// </summary>
         /// <param name="prototype"></param>
         public VariableMatrix(string prototype)
@@ -20,36 +47,22 @@ namespace NDesk.Options.Extensions
         {
         }
 
-        /* TODO: .NET 4.5 introduces the notion of ReadOnlyDictionary.
-         * In prior framework versions we would need to roll our own. */
-        //TODO: Might could enrich the model by implementing our own custom Dictionary.
         /// <summary>
-        /// Matrix backing field.
+        ///     Gets the Matrix.
         /// </summary>
-        private readonly IDictionary<string, T> _matrix = new Dictionary<string, T>();
-
-        /// <summary>
-        /// Gets the Matrix.
-        /// </summary>
-        internal IDictionary<string, T> InternalMatrix
-        {
-            get { return _matrix; }
-        }
+        internal IDictionary<string, T> InternalMatrix => _matrix;
 
         /* TODO: Approaching .NET 4.5, use the IReadOnlyDictionary, or
          * potentially roll our own for prior .NET framework versions. */
         /// <summary>
-        /// Gets the Matrix.
+        ///     Gets the Matrix.
         /// </summary>
-        public IDictionary<string, T> Matrix
-        {
-            get { return _matrix; }
-        }
+        public IDictionary<string, T> Matrix => _matrix;
 
         #region Dictionary Members
 
         /// <summary>
-        /// Throws that the VariableMatrix IsReadOnly.
+        ///     Throws that the VariableMatrix IsReadOnly.
         /// </summary>
         /// <exception cref="ReadOnlyException"></exception>
         private static void ThrowReadOnly()
@@ -58,7 +71,7 @@ namespace NDesk.Options.Extensions
         }
 
         /// <summary>
-        /// Throws that the VariableMatrix IsReadOnly.
+        ///     Throws that the VariableMatrix IsReadOnly.
         /// </summary>
         /// <typeparam name="TResult"></typeparam>
         /// <returns>Returns a value to keep the compiler happy.</returns>
@@ -68,11 +81,11 @@ namespace NDesk.Options.Extensions
             ThrowReadOnly();
 
             //To keep the compiler happy.
-            return default(TResult);
+            return default;
         }
 
         /// <summary>
-        /// Runs the Dictionary Action on the Matrix.
+        ///     Runs the Dictionary Action on the Matrix.
         /// </summary>
         /// <param name="action"></param>
         private void DictionaryAction(Action<IDictionary<string, T>> action)
@@ -81,7 +94,7 @@ namespace NDesk.Options.Extensions
         }
 
         /// <summary>
-        /// Runs the Dictionary Func on the Matrix.
+        ///     Runs the Dictionary Func on the Matrix.
         /// </summary>
         /// <typeparam name="TResult"></typeparam>
         /// <param name="func"></param>
@@ -132,10 +145,7 @@ namespace NDesk.Options.Extensions
             get { return DictionaryFunc(x => x.Count); }
         }
 
-        public bool IsReadOnly
-        {
-            get { return true; }
-        }
+        public bool IsReadOnly => true;
 
         public bool ContainsKey(string key)
         {
@@ -154,8 +164,8 @@ namespace NDesk.Options.Extensions
 
         public bool TryGetValue(string key, out T value)
         {
-            var local = default(T);
-            var result = DictionaryFunc(x => x.TryGetValue(key, out local));
+            T local = default(T);
+            bool result = DictionaryFunc(x => x.TryGetValue(key, out local));
             value = local;
             return result;
         }
@@ -165,7 +175,7 @@ namespace NDesk.Options.Extensions
             get { return DictionaryFunc(x => x[key]); }
             set
             {
-                var local = value;
+                T local = value;
                 ThrowReadOnly();
             }
         }

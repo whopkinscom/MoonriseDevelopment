@@ -1,20 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
     <Compile Include="..\..\Shared\Moonrise.Version\Properties\AutoVersion.cs" Link="Properties\AutoVersion.cs" />
   </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="System.Diagnostics.StackTrace" Version="4.3.0" />
-    <PackageReference Include="System.Threading.Thread" Version="4.3.0" />
-    <PackageReference Include="System.Console" Version="4.3.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-  </ItemGroup>
-
   <ItemGroup>
     <None Update="MakeNuget.cmd">
       <DesignTime>True</DesignTime>
@@ -25,47 +15,41 @@
       <LastGenOutput>MakeNuget.cmd</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
-	  <None Update="Moonrise.LoggingUtils.NetStd.nuspec">
-		  <DesignTime>True</DesignTime>
-		  <AutoGen>True</AutoGen>
-		  <DependentUpon>Moonrise.LoggingUtils.NetStd.tt</DependentUpon>
-	  </None>
-	  <None Update="Moonrise.LoggingUtils.NetStd.tt">
-		  <LastGenOutput>Moonrise.LoggingUtils.NetStd.nuspec</LastGenOutput>
-		  <Generator>TextTemplatingFileGenerator</Generator>
-	  </None>
+    <None Update="Moonrise.LoggingUtils.NetStd.nuspec">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Moonrise.LoggingUtils.NetStd.tt</DependentUpon>
+    </None>
+    <None Update="Moonrise.LoggingUtils.NetStd.tt">
+      <LastGenOutput>Moonrise.LoggingUtils.NetStd.nuspec</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
-
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
-
-
-
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.1' ">
     <DefineConstants>$(DefineConstants);DotNetCore</DefineConstants>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
-
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <RootNamespace>Moonrise.Logging</RootNamespace>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DefineConstants>TRACE;RELEASE;NETSTANDARD2_1;DotNetCore</DefineConstants>
     <DocumentationFile>Moonrise.LoggingUtils.NetStd.xml</DocumentationFile>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>TRACE;DEBUG;NETSTANDARD2_1;DotNetCore</DefineConstants>
   </PropertyGroup>
-  
   <Target Name="PostcompileScript" AfterTargets="Build">
     <Exec Command="makeNuget.cmd $(Configuration) &quot;$(MSBuildProjectDirectory)&quot; $(AssemblyName)" />
   </Target>
-
 </Project>

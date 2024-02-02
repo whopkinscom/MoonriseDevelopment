@@ -1,20 +1,22 @@
-﻿#region Apache-v2.0
+﻿#region MIT
 
-//    Copyright 2017 Will Hopkins - Moonrise Media Ltd.
+//     Copyright 2015-2021 Will Hopkins - Moonrise Media Ltd.
+//     will@moonrise.media - Happy to have a conversation
 // 
-//    Licensed under the Apache License, Version 2.0 (the "License");
-//    you may not use this file except in compliance with the License.
-//    You may obtain a copy of the License at
+//     Licenced under MIT licencing terms
+//     you may not use this file except in compliance with the License.
+//     You may obtain a copy of the License at
 // 
-//        http://www.apache.org/licenses/LICENSE-2.0
+//         https://licenses.nuget.org/MIT
 // 
-//    Unless required by applicable law or agreed to in writing, software
-//    distributed under the License is distributed on an "AS IS" BASIS,
-//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//    See the License for the specific language governing permissions and
-//    limitations under the License.
+//     Unless required by applicable law or agreed to in writing, software
+//     distributed under the License is distributed on an "AS IS" BASIS,
+//     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//     See the License for the specific language governing permissions and
+//     limitations under the License.
 
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -75,7 +77,8 @@ namespace Moonrise.Utils.Standard.Extensions
         /// <param name="surroundLeft">The string to surround the individual element in on the left</param>
         /// <param name="surroundRight">The string to surround the individual element in on the right</param>
         /// <returns>A string with each element separated by, well whatever you pass.</returns>
-        public static string CSL<T>(this IEnumerable<T> list, string separator, string surroundLeft, string surroundRight)
+        public static string CSL<T>(this IEnumerable<T> list, string separator, string surroundLeft,
+            string surroundRight)
         {
             StringBuilder joined = new StringBuilder();
 
@@ -123,9 +126,10 @@ namespace Moonrise.Utils.Standard.Extensions
             }
 
             DescriptionAttribute[] attributes =
-                (DescriptionAttribute[])objectType.GetTypeInfo().GetCustomAttributes(typeof(DescriptionAttribute), false);
+                (DescriptionAttribute[]) objectType.GetTypeInfo()
+                    .GetCustomAttributes(typeof(DescriptionAttribute), false);
 
-            if ((attributes != null) && (attributes.Length > 0))
+            if (attributes != null && attributes.Length > 0)
             {
                 retVal = attributes[0].Description;
             }
@@ -148,7 +152,8 @@ namespace Moonrise.Utils.Standard.Extensions
         ///     The extracted, trimmed string.
         /// </returns>
         /// <exception cref="DataMisalignedException">Marker was not found</exception>
-        public static string Extract(this string fromWhat, string startMarker, string endMarker = null, bool trim = true)
+        public static string Extract(this string fromWhat, string startMarker, string endMarker = null,
+            bool trim = true)
         {
             int start = 0;
             return fromWhat.Extract(ref start, startMarker, 1, endMarker, trim);
@@ -166,7 +171,8 @@ namespace Moonrise.Utils.Standard.Extensions
         ///     The extracted, trimmed string.
         /// </returns>
         /// <exception cref="DataMisalignedException">Marker was not found</exception>
-        public static string Extract(this string fromWhat, ref int start, string startMarker, string endMarker, bool trim = true)
+        public static string Extract(this string fromWhat, ref int start, string startMarker, string endMarker,
+            bool trim = true)
         {
             return fromWhat.Extract(ref start, startMarker, 1, endMarker, trim);
         }
@@ -183,11 +189,11 @@ namespace Moonrise.Utils.Standard.Extensions
         /// <returns>The extracted, trimmed string.</returns>
         /// <exception cref="DataMisalignedException">Marker was not found</exception>
         public static string Extract(this string fromWhat,
-                                     ref int start,
-                                     string startMarker,
-                                     int howMany,
-                                     string endMarker,
-                                     bool trim = true)
+            ref int start,
+            string startMarker,
+            int howMany,
+            string endMarker,
+            bool trim = true)
         {
             fromWhat.FindStart(ref start, startMarker, howMany);
             return fromWhat.Extract(ref start, endMarker);
@@ -334,7 +340,7 @@ namespace Moonrise.Utils.Standard.Extensions
                     {
                         string got = inWhat.Substring(previousPos + 1, currentPos - previousPos).Trim();
 
-                        if ((got.Length == 0) && char.IsWhiteSpace(findChar))
+                        if (got.Length == 0 && char.IsWhiteSpace(findChar))
                         {
                             // Whitespace within the findThis is a special case!
                             got = new string(findChar, 1);
@@ -381,7 +387,7 @@ namespace Moonrise.Utils.Standard.Extensions
         public static bool IsValidPhone(this string phone)
         {
             Regex reg = new Regex(@"[0-9 \(\)\+\-extdirectal]+", RegexOptions.IgnoreCase);
-            return reg.IsMatch(phone) && (phone.Length > 10);
+            return reg.IsMatch(phone) && phone.Length > 10;
         }
 
         /// <summary>
@@ -441,7 +447,7 @@ namespace Moonrise.Utils.Standard.Extensions
                     {
                         string got = inWhat.Substring(currentPos, previousPos - currentPos).Trim();
 
-                        if ((got.Length == 0) && char.IsWhiteSpace(findChar))
+                        if (got.Length == 0 && char.IsWhiteSpace(findChar))
                         {
                             // Whitespace within the findThis is a special case!
                             got = new string(findChar, 1);
@@ -488,7 +494,9 @@ namespace Moonrise.Utils.Standard.Extensions
         /// <returns>Middle part of the string</returns>
         public static string Mid(this string source, int start, int count)
         {
-            return count + start > source.Length ? source.Substring(start, source.Length - start) : source.Substring(start, count);
+            return count + start > source.Length
+                ? source.Substring(start, source.Length - start)
+                : source.Substring(start, count);
         }
 
         /// <summary>
@@ -557,7 +565,8 @@ namespace Moonrise.Utils.Standard.Extensions
         /// <param name="endWith">The string that marks the end of the replacement boundary.</param>
         /// <param name="putThisInstead">The string to place BETWEEN the two boundaries.</param>
         /// <returns>The replaced string</returns>
-        public static string ReplaceBetween(this string source, ref int startPos, string startFrom, string endWith, string putThisInstead)
+        public static string ReplaceBetween(this string source, ref int startPos, string startFrom, string endWith,
+            string putThisInstead)
         {
             string retVal;
 
@@ -604,7 +613,8 @@ namespace Moonrise.Utils.Standard.Extensions
         /// </param>
         /// <param name="trimData">Should the qualifiers be trimmed?</param>
         /// <returns>The array of split strings</returns>
-        public static string[] SplitRow(this string record, string delimiter = ",", string qualifier = "\"", bool trimData = false)
+        public static string[] SplitRow(this string record, string delimiter = ",", string qualifier = "\"",
+            bool trimData = false)
         {
             // In-Line for example, but I implemented as string extender in production code
             Func<string, int, int> IndexOfNextNonWhiteSpaceChar =
@@ -663,7 +673,7 @@ namespace Moonrise.Utils.Standard.Extensions
                         if (row[idx] == qualifier[0])
                         {
                             // Qualifier is closing qualifier...
-                            if (inQualifier && (row[IndexOfNextNonWhiteSpaceChar(row, idx + 1)] == delimiter[0]))
+                            if (inQualifier && row[IndexOfNextNonWhiteSpaceChar(row, idx + 1)] == delimiter[0])
                             {
                                 inQualifier = false;
                             }
@@ -743,7 +753,8 @@ namespace Moonrise.Utils.Standard.Extensions
         /// <returns></returns>
         public static string ToSentence(this string instance)
         {
-            return new string(instance.SelectMany((c, i) => (i > 0) && char.IsUpper(c) ? new[] {' ', c} : new[] {c}).ToArray());
+            return new string(instance.SelectMany((c, i) => i > 0 && char.IsUpper(c) ? new[] {' ', c} : new[] {c})
+                .ToArray());
         }
 
         /// <summary>
@@ -830,7 +841,8 @@ namespace Moonrise.Utils.Standard.Extensions
         /// <param name="indexOfResult">If text wasn't found (-1), throws an exception.</param>
         /// <returns>Otherwise returns the result.</returns>
         /// <exception cref="DataMisalignedException">Marker was not found</exception>
-        [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1503:CurlyBracketsMustNotBeOmitted", Justification = "I excuse exceptions and returns!")]
+        [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1503:CurlyBracketsMustNotBeOmitted",
+            Justification = "I excuse exceptions and returns!")]
         private static int AssertFound(int indexOfResult)
         {
             if (indexOfResult == -1)

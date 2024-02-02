@@ -1,4 +1,23 @@
-﻿using System;
+﻿#region MIT
+
+//     Copyright 2015-2021 Will Hopkins - Moonrise Media Ltd.
+//     will@moonrise.media - Happy to have a conversation
+// 
+//     Licenced under MIT licencing terms
+//     you may not use this file except in compliance with the License.
+//     You may obtain a copy of the License at
+// 
+//         https://licenses.nuget.org/MIT
+// 
+//     Unless required by applicable law or agreed to in writing, software
+//     distributed under the License is distributed on an "AS IS" BASIS,
+//     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//     See the License for the specific language governing permissions and
+//     limitations under the License.
+
+#endregion
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -16,7 +35,9 @@ namespace Moonrise.Utils.Standard.CSV
     /// <typeparam name="TTarget">The type of the target.</typeparam>
     /// <seealso cref="Moonrise.Utils.Standard.CSV.CsvParser{TTarget, TTarget}" />
     public class CsvParser<TTarget> : CsvParser<TTarget, TTarget>
-        where TTarget : class, new() { }
+        where TTarget : class, new()
+    {
+    }
 
     /// <summary>
     ///     Parses text in CSV format that includes a header that is mapped via a <see cref="CsvColumnAttribute" />
@@ -29,21 +50,6 @@ namespace Moonrise.Utils.Standard.CSV
         where TTarget : class, new()
         where TOverlay : class
     {
-        private class ColumnDefinition
-        {
-            public ICsvConverter ConvertWith { get; set; }
-
-            public int Index { get; set; }
-
-            public string Name { get; set; }
-
-            public PropertyInfo PropertyInfo { get; set; }
-
-            public Type Type { get; set; }
-
-            public TypeConverter TypeConverter { get; set; }
-        }
-
         private readonly Dictionary<string, ColumnDefinition> _columns = new Dictionary<string, ColumnDefinition>();
 
         /// <summary>
@@ -73,7 +79,8 @@ namespace Moonrise.Utils.Standard.CSV
         /// </param>
         /// <param name="trimData">Should the qualifiers be trimmed?</param>
         /// <returns>An enumerable of imported rows of the Type</returns>
-        public IEnumerable<TTarget> Parse(string filepath, string delimiter = ",", string qualifier = "\"", bool trimData = true)
+        public IEnumerable<TTarget> Parse(string filepath, string delimiter = ",", string qualifier = "\"",
+            bool trimData = true)
         {
             string[] lines = File.ReadAllLines(filepath);
 
@@ -91,7 +98,8 @@ namespace Moonrise.Utils.Standard.CSV
         /// </param>
         /// <param name="trimData">Should the qualifiers be trimmed?</param>
         /// <returns>An enumerable of imported rows of the Type</returns>
-        public IEnumerable<TTarget> Parse(IList<string> lines, string delimiter = ",", string qualifier = "\"", bool trimData = true)
+        public IEnumerable<TTarget> Parse(IList<string> lines, string delimiter = ",", string qualifier = "\"",
+            bool trimData = true)
         {
             TTarget[] targets = new TTarget[lines.Count - 1];
 
@@ -109,7 +117,8 @@ namespace Moonrise.Utils.Standard.CSV
                 }
             }
 
-            Parallel.For(1, lines.Count, i => { ProcessRow(lines[i], targets, i - 1, delimiter, qualifier, trimData); });
+            Parallel.For(1, lines.Count,
+                i => { ProcessRow(lines[i], targets, i - 1, delimiter, qualifier, trimData); });
 
             if (CollatedExceptions != null)
             {
@@ -120,7 +129,7 @@ namespace Moonrise.Utils.Standard.CSV
         }
 
         /// <summary>
-        /// Parses a collection of string object dictionaries.
+        ///     Parses a collection of string object dictionaries.
         /// </summary>
         /// <param name="dictionaries">The dictionaries.</param>
         /// <returns>A collection of parsed target instances</returns>
@@ -155,10 +164,11 @@ namespace Moonrise.Utils.Standard.CSV
 
             foreach (PropertyInfo overlayProperty in overlayProperties)
             {
-                IEnumerable<Attribute> memberAttributes = overlayProperty.GetCustomAttributes(typeof(CsvColumnAttribute));
+                IEnumerable<Attribute> memberAttributes =
+                    overlayProperty.GetCustomAttributes(typeof(CsvColumnAttribute));
 
                 // Only interested in this property IF it has a CsvColumnAttribute
-                CsvColumnAttribute csvAttribute = (CsvColumnAttribute)memberAttributes.FirstOrDefault();
+                CsvColumnAttribute csvAttribute = (CsvColumnAttribute) memberAttributes.FirstOrDefault();
 
                 if (csvAttribute != null)
                 {
@@ -170,24 +180,25 @@ namespace Moonrise.Utils.Standard.CSV
                     {
                         try
                         {
-                            converter = (ICsvConverter)Activator.CreateInstance(csvAttribute.Converter);
+                            converter = (ICsvConverter) Activator.CreateInstance(csvAttribute.Converter);
                         }
                         catch (Exception)
                         {
-                            throw new ArgumentException($"Converter must implement {nameof(ICsvConverter)}", overlayProperty.Name);
+                            throw new ArgumentException($"Converter must implement {nameof(ICsvConverter)}",
+                                overlayProperty.Name);
                         }
                     }
 
-                    if ((targetProperty != null) && (targetProperty.PropertyType == overlayProperty.PropertyType))
+                    if (targetProperty != null && targetProperty.PropertyType == overlayProperty.PropertyType)
                     {
                         // And its consequent TypeConverter
                         ColumnDefinition colDef = new ColumnDefinition
-                                                  {
-                                                      PropertyInfo = targetProperty,
-                                                      TypeConverter = TypeDescriptor.GetConverter(targetProperty.PropertyType),
-                                                      ConvertWith = converter,
-                                                      Name = csvAttribute.ColumnName
-                                                  };
+                        {
+                            PropertyInfo = targetProperty,
+                            TypeConverter = TypeDescriptor.GetConverter(targetProperty.PropertyType),
+                            ConvertWith = converter,
+                            Name = csvAttribute.ColumnName
+                        };
                         _columns.Add(csvAttribute.ColumnName, colDef);
                     }
                 }
@@ -251,6 +262,21 @@ namespace Moonrise.Utils.Standard.CSV
                     }
                 }
             }
+        }
+
+        private class ColumnDefinition
+        {
+            public ICsvConverter ConvertWith { get; set; }
+
+            public int Index { get; set; }
+
+            public string Name { get; set; }
+
+            public PropertyInfo PropertyInfo { get; set; }
+
+            public Type Type { get; set; }
+
+            public TypeConverter TypeConverter { get; set; }
         }
     }
 }

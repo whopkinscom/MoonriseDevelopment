@@ -1,20 +1,22 @@
-﻿#region Apache-v2.0
+﻿#region MIT
 
-//    Copyright 2017 Will Hopkins - Moonrise Media Ltd.
+//     Copyright 2015-2021 Will Hopkins - Moonrise Media Ltd.
+//     will@moonrise.media - Happy to have a conversation
 // 
-//    Licensed under the Apache License, Version 2.0 (the "License");
-//    you may not use this file except in compliance with the License.
-//    You may obtain a copy of the License at
+//     Licenced under MIT licencing terms
+//     you may not use this file except in compliance with the License.
+//     You may obtain a copy of the License at
 // 
-//        http://www.apache.org/licenses/LICENSE-2.0
+//         https://licenses.nuget.org/MIT
 // 
-//    Unless required by applicable law or agreed to in writing, software
-//    distributed under the License is distributed on an "AS IS" BASIS,
-//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//    See the License for the specific language governing permissions and
-//    limitations under the License.
+//     Unless required by applicable law or agreed to in writing, software
+//     distributed under the License is distributed on an "AS IS" BASIS,
+//     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//     See the License for the specific language governing permissions and
+//     limitations under the License.
 
 #endregion
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -94,7 +96,8 @@ namespace Moonrise.Utils.Standard.Validation
         /// <param name="results">The results.</param>
         /// <param name="locationContext">The location context.</param>
         /// <returns>Whether the porperty is valid or not</returns>
-        public static bool ValidateProperty(object instance, string propertyName, ICollection<ValidationResult> results, string locationContext = "")
+        public static bool ValidateProperty(object instance, string propertyName, ICollection<ValidationResult> results,
+            string locationContext = "")
         {
             Type instanceType = instance != null ? instance.GetType() : null;
 
@@ -131,10 +134,11 @@ namespace Moonrise.Utils.Standard.Validation
         /// <param name="results">The validation results.</param>
         /// <returns>True if valid</returns>
         /// <exception cref="System.ArgumentException">The instance MUST implement the interfaceType</exception>
-        [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1503:CurlyBracketsMustNotBeOmitted", Justification = "I excuse throwing exceptions!")]
+        [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1503:CurlyBracketsMustNotBeOmitted",
+            Justification = "I excuse throwing exceptions!")]
         private static bool Validate(object instance,
-                                     string locationContext,
-                                     ICollection<ValidationResult> results)
+            string locationContext,
+            ICollection<ValidationResult> results)
         {
             Type instanceType = instance != null ? instance.GetType() : null;
 
@@ -164,20 +168,23 @@ namespace Moonrise.Utils.Standard.Validation
         /// <param name="results">The validation results.</param>
         /// <returns>True if valid</returns>
         /// <exception cref="System.ArgumentException">The instance MUST implement the interfaceType</exception>
-        [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1503:CurlyBracketsMustNotBeOmitted", Justification = "I excuse throwing exceptions!")]
+        [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1503:CurlyBracketsMustNotBeOmitted",
+            Justification = "I excuse throwing exceptions!")]
         private static bool ValidateAgainstInterface(object instance,
-                                                     Type interfaceType,
-                                                     string locationContext,
-                                                     ICollection<ValidationResult> results)
+            Type interfaceType,
+            string locationContext,
+            ICollection<ValidationResult> results)
         {
             Type instanceType = instance != null ? instance.GetType() : null;
 
             bool retVal = true;
 
             // First check that the instance actually implements the interface
-            if ((instanceType != null) && !interfaceType.IsAssignableFrom(instanceType.GetTypeInfo().UnderlyingSystemType))
+            if (instanceType != null &&
+                !interfaceType.IsAssignableFrom(instanceType.GetTypeInfo().UnderlyingSystemType))
             {
-                throw new ArgumentException(string.Format("{0} does not implement {1}!", instanceType.Name, interfaceType.Name));
+                throw new ArgumentException(string.Format("{0} does not implement {1}!", instanceType.Name,
+                    interfaceType.Name));
             }
 
             if (instanceType != null)
@@ -209,12 +216,13 @@ namespace Moonrise.Utils.Standard.Validation
         ///     True if valid
         /// </returns>
         /// <exception cref="System.ArgumentException">IEnumerable has to be generic</exception>
-        [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1503:CurlyBracketsMustNotBeOmitted", Justification = "I excuse throwing exceptions!")]
+        [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1503:CurlyBracketsMustNotBeOmitted",
+            Justification = "I excuse throwing exceptions!")]
         private static bool ValidatePropertyAgainstInterface(PropertyInfo prop,
-                                                             object instance,
-                                                             string locationContext,
-                                                             bool checkAllInterfaces,
-                                                             ICollection<ValidationResult> results)
+            object instance,
+            string locationContext,
+            bool checkAllInterfaces,
+            ICollection<ValidationResult> results)
         {
             bool retVal = true;
 
@@ -229,7 +237,8 @@ namespace Moonrise.Utils.Standard.Validation
             }
 
             // Get the validation attribute(s) for this property
-            List<ValidationAttribute> attributes = ((ValidationAttribute[])prop.GetCustomAttributes(typeof(ValidationAttribute), true)).ToList();
+            List<ValidationAttribute> attributes =
+                ((ValidationAttribute[]) prop.GetCustomAttributes(typeof(ValidationAttribute), true)).ToList();
 
             // And if we need to check all interfaces on the instance
             if (checkAllInterfaces)
@@ -241,16 +250,17 @@ namespace Moonrise.Utils.Standard.Validation
                     if (potentialProperty != null)
                     {
                         List<ValidationAttribute> interfaceAttributes =
-                            ((ValidationAttribute[])potentialProperty.GetCustomAttributes(typeof(ValidationAttribute), true)).ToList();
+                            ((ValidationAttribute[]) potentialProperty.GetCustomAttributes(typeof(ValidationAttribute),
+                                true)).ToList();
                         attributes.AddRange(interfaceAttributes);
                     }
                 }
             }
 
             ValidationContext vc = new ValidationContext(prop)
-                                   {
-                                       DisplayName = string.IsNullOrWhiteSpace(locationContext) ? prop.Name : locationContext + "." + prop.Name
-                                   };
+            {
+                DisplayName = string.IsNullOrWhiteSpace(locationContext) ? prop.Name : locationContext + "." + prop.Name
+            };
 
             foreach (ValidationAttribute attribute in attributes)
             {
@@ -267,30 +277,35 @@ namespace Moonrise.Utils.Standard.Validation
                 }
             }
 
-            if ((instanceValue != null) && (prop.PropertyType.GetTypeInfo().IsInterface ||
-                                            (prop.PropertyType.GetTypeInfo().IsClass && !typeof(string).IsAssignableFrom(prop.PropertyType))))
+            if (instanceValue != null && (prop.PropertyType.GetTypeInfo().IsInterface ||
+                                          prop.PropertyType.GetTypeInfo().IsClass &&
+                                          !typeof(string).IsAssignableFrom(prop.PropertyType)))
             {
                 if (typeof(IEnumerable).IsAssignableFrom(prop.PropertyType))
                 {
                     // Enumerables need each of the elements validating
                     int index = 0;
 
-                    foreach (object element in (IEnumerable)instanceValue)
+                    foreach (object element in (IEnumerable) instanceValue)
                     {
                         // Here we just check that we have a single generic IEnumerable<T>
                         if (prop.PropertyType.GenericTypeArguments.Length == 0)
                         {
-                            throw new ArgumentException(string.Format("{0} must be generic with this version, sorry!", prop.Name));
+                            throw new ArgumentException(string.Format("{0} must be generic with this version, sorry!",
+                                prop.Name));
                         }
 
                         if (prop.PropertyType.GenericTypeArguments.Length > 1)
                         {
-                            throw new ArgumentException(string.Format("{0} can only have a single generic with this version, sorry!", prop.Name));
+                            throw new ArgumentException(
+                                string.Format("{0} can only have a single generic with this version, sorry!",
+                                    prop.Name));
                         }
 
                         Type enumerableContentType = prop.PropertyType.GenericTypeArguments[0];
 
-                        retVal &= ValidateAgainstInterface(element, enumerableContentType, string.Format("{0}[{1}]", vc.DisplayName, index), results);
+                        retVal &= ValidateAgainstInterface(element, enumerableContentType,
+                            string.Format("{0}[{1}]", vc.DisplayName, index), results);
                         index++;
                     }
                 }
