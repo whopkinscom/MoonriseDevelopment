@@ -24,7 +24,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using Moonrise.Utils.Standard.Validation;
 
 namespace Moonrise.Utils.Test.ObjectCreation
@@ -148,7 +147,7 @@ namespace Moonrise.Utils.Test.ObjectCreation
 
         /// <summary>
         ///     Ignores exceptions that occur when a value is assigned to a property or field, leaving it as null - defaults to
-        ///     true.
+        ///     false.
         /// </summary>
         public bool IgnoreSetterExceptions { get; set; }
 
@@ -338,6 +337,11 @@ namespace Moonrise.Utils.Test.ObjectCreation
         ///     The minimum ulong value to use in following creation/random calls
         /// </summary>
         public ulong MinULong { get; set; }
+
+        /// <summary>
+        ///     The email domain to use in creating random emails.
+        /// </summary>
+        public string EmailDomain { get; set; }
 
         /// <summary>
         ///     The minimum ushort value to use in following creation/random calls
@@ -575,6 +579,12 @@ namespace Moonrise.Utils.Test.ObjectCreation
         ///     <see cref="ObjectCreationAttribute" />.
         /// </summary>
         private DateTimeOffset MinDateTimeOffsetOneShot { get; set; }
+
+        /// <summary>
+        ///     The email domain to use in following creation/random calls - One shot usage as determined by
+        ///     <see cref="ObjectCreationAttribute" />.
+        /// </summary>
+        private string EmailDomainOneShot { get; set; }
 
         /// <summary>
         ///     The minimum date time to use in following creation/random calls - One shot usage as determined by
@@ -1928,6 +1938,8 @@ namespace Moonrise.Utils.Test.ObjectCreation
                 encounteredObjects.RemoveAt(encounteredObjects.Count - 1);
             }
 
+            ItemsSourceOneShotName = string.Empty;
+
             return retVal;
         }
 
@@ -2135,7 +2147,7 @@ namespace Moonrise.Utils.Test.ObjectCreation
                 MethodInfo preferPropertyMethod =
                     ItemsSourceOneShot.GetTypeInfo().GetDeclaredMethod("PreferPropertyToItemSourceCall");
 
-                bool preferProperty = false;
+                bool preferProperty = true;
 
                 // If we have a property we COULD call AND we have an alternative items source method AND we have a method to determine if the property SHOULD still be used
                 if (sourceProperty != null && itemsSourceMethod != null && preferPropertyMethod != null)
@@ -2348,14 +2360,30 @@ namespace Moonrise.Utils.Test.ObjectCreation
         }
 
         /// <summary>
-        /// Gets a random email address.
+        ///     Gets a random email address.
         /// </summary>
-        /// <remarks>By default the strings used will be <see cref="Creator.StringSources.LowercaseAlphaCharactersWithDots"/>@<see cref="Creator.StringSources.LowercaseAlphaCharacters"/>.<see cref="Creator.StringSources.LowercaseAlphaCharacters"/> with the lengths restricted to a min/max length of 2/20 each.</remarks>
+        /// <remarks>
+        ///     By default the strings used will be <see cref="Creator.StringSources.LowercaseAlphaCharactersWithDots" />@
+        ///     <see cref="Creator.StringSources.LowercaseAlphaCharacters" />.
+        ///     <see cref="Creator.StringSources.LowercaseAlphaCharacters" /> with the lengths restricted to a min/max length of
+        ///     2/20 each.
+        /// </remarks>
+        /// <param name="domain">If passed this is used as the domain, otherwise a random domain is used</param>
         /// <returns>A random email address</returns>
         /// <exception cref="NotImplementedException"></exception>
-        public string GetRandomEmail()
+        public string GetRandomEmail(string domain = null)
         {
-            string retVal = $"{GetRandomString(StringSources.LowercaseAlphaCharactersWithDots, 2, 20, true)}@{GetRandomString(StringSources.LowercaseAlphaCharacters, 2, 20, true)}.{GetRandomString(StringSources.LowercaseAlphaCharacters, 2, 20, true)}";
+            string retVal = null;
+
+            if (!GetOneShotItemsSource(ref retVal))
+            {
+                domain = EmailDomainOneShot ?? domain;
+
+                retVal =
+                    $"{GetRandomString(StringSources.LowercaseAlphaCharactersWithDots, 2, 20, true)}@" +
+                    $"{domain ?? $"{GetRandomString(StringSources.LowercaseAlphaCharacters, 2, 20, true)}.{GetRandomString(StringSources.LowercaseAlphaCharacters, 2, 20, true)}"}";
+            }
+
             return retVal;
         }
 
@@ -2366,9 +2394,10 @@ namespace Moonrise.Utils.Test.ObjectCreation
         {
             IgnoreRecursion = true;
             IgnoreNonDefaultConstructors = true;
-            IgnoreSetterExceptions = true;
+            IgnoreSetterExceptions = false;
             IgnoreUnimplementedInterfaces = true;
 
+            EmailDomain = null;
             MinByte = 0;
             MaxByte = 255;
             MinSByte = sbyte.MinValue;
@@ -2430,6 +2459,7 @@ namespace Moonrise.Utils.Test.ObjectCreation
             AllowNullsOneShot = AllowNulls;
             AllowNullElementsInEnumerableOneShot = AllowNullElementsInEnumerable;
             IgnoreOneShot = false;
+            EmailDomainOneShot = EmailDomain;
             MinDateTimeOneShot = MinDateTime;
             MaxDateTimeOneShot = MaxDateTime;
             MinDateTimeOffsetOneShot = MinDateTimeOffset;

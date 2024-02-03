@@ -33,6 +33,89 @@ namespace Moonrise.Utils.Test.ObjectCreation
     public class ObjectCreationAttribute : Attribute
     {
         /// <summary>
+        ///     This "static" interface (which you can't have) is to illustrate the expected static method your ItemSource static
+        ///     class should expose in order to act as in ItemSource OR it must expose the element name as a property !
+        /// </summary>
+        /// <typeparam name="T">
+        ///     Just to illustrate that each of the <see cref="ElementName" /> properties need to return the
+        ///     appropriate type for that element.
+        /// </typeparam>
+        [SuppressMessage("StyleCop.CSharp.NamingRules",
+                         "SA1302:InterfaceNamesMustBeginWithI",
+                         Justification = "This is to illustrate a STATIC interface (which can't exist)!")]
+#pragma warning disable IDE1006 // Naming Styles
+        public /*static*/ interface SIItemSource<T>
+#pragma warning restore IDE1006 // Naming Styles
+        {
+            /// <summary>
+            ///     Gets the list of objects to be used as the item source for <see cref="ElementName" />. IF the ItemsSource attribute
+            ///     DOES supply a static <see cref="ItemSource" /> method then
+            ///     it will be called in preference to the property, unless your <see cref="SIItemSource{T}" /> implements the static
+            ///     property <see cref="PreferPropertyToItemSourceCall" />, in which case
+            ///     it will use that to decide whether to use the property OR the static <see cref="ItemSource" /> method to supply
+            ///     the source list.
+            /// </summary>
+            /*static*/
+            IList<T> ElementName { get; }
+
+            /// <summary>
+            ///     Returns the list of objects to be used as the item source for elementName
+            /// </summary>
+            /// <param name="elementName">Name of the element.</param>
+            /// <param name="propInfo">The property information - Only if it's a property, null otherwise.</param>
+            /// <param name="fieldInfo">The field information - Only if it's a field, null otherwise.</param>
+            /// <param name="creator">The instance to use to help you create a random instance, if you need to.</param>
+            /// <returns>
+            ///     List of objects, to be used to randomly choose from to fill the property or field that the attribute has been
+            ///     applied
+            ///     to
+            /// </returns>
+            /*static*/
+            IList ItemSource(string       elementName,
+                             PropertyInfo propInfo,
+                             FieldInfo    fieldInfo,
+                             Creator      creator);
+
+            /// <summary>
+            ///     Determines if the <see cref="ElementName" /> or the <see cref="ItemSource" /> is to be used as the source for
+            ///     elements for the elementName />.
+            /// </summary>
+            /// <remarks>
+            ///     The default is true so if you want to use properties in preference (I find it slightly easier) then you do not
+            ///     need to implement this static interface method!
+            /// </remarks>
+            /// <param name="elementName">Name of the element.</param>
+            /// <returns>
+            ///     True means use the static <see cref="ElementName" /> property where it exists, False means use the static
+            ///     <see cref="ItemSource" /> method.
+            /// </returns>
+            /*static*/ bool PreferPropertyToItemSourceCall(string elementName);
+        }
+
+        /// <summary>
+        ///     This "static" interface (which you can't have) is to illustrate the expected static method your TypeCreation static
+        ///     class should expose in order to act as a TypeCreation OR it must expose the element name as a property !
+        /// </summary>
+        /// <typeparam name="T">
+        ///     The type of the random instance this class will create.
+        /// </typeparam>
+        [SuppressMessage("StyleCop.CSharp.NamingRules",
+                         "SA1302:InterfaceNamesMustBeginWithI",
+                         Justification = "This is to illustrate a STATIC interface (which can't exist)!")]
+#pragma warning disable IDE1006 // Naming Styles
+        public /*static*/ interface SITypeCreation<T>
+#pragma warning restore IDE1006 // Naming Styles
+        {
+            /// <summary>
+            ///     Creates an instance of the generic type using the supplied <see cref="Random" />.
+            /// </summary>
+            /// <param name="creator">The instance to use to help you create a random instance.</param>
+            /// <returns>A "random" instance</returns>
+            /*static*/
+            T CreateInstance(Creator creator);
+        }
+
+        /// <summary>
         ///     Determines if nulls are allowed to be inserted into enumerable types
         /// </summary>
         public bool AllowNullElementsInEnumerable { get; set; }
@@ -231,81 +314,5 @@ namespace Moonrise.Utils.Test.ObjectCreation
         ///     i.e. respect, <see cref="SITypeCreation{T}" />
         /// </summary>
         public Type TypeCreation { get; set; }
-
-        /// <summary>
-        ///     This "static" interface (which you can't have) is to illustrate the expected static method your ItemSource static
-        ///     class should expose in order to act as in ItemSource OR it must expose the element name as a property !
-        /// </summary>
-        /// <typeparam name="T">
-        ///     Just to illustrate that each of the <see cref="ElementName" /> properties need to return the
-        ///     appropriate type for that element.
-        /// </typeparam>
-        [SuppressMessage("StyleCop.CSharp.NamingRules",
-            "SA1302:InterfaceNamesMustBeginWithI",
-            Justification = "This is to illustrate a STATIC interface (which can't exist)!")]
-#pragma warning disable IDE1006 // Naming Styles
-        public /*static*/ interface SIItemSource<T>
-#pragma warning restore IDE1006 // Naming Styles
-        {
-            /// <summary>
-            ///     Gets the list of objects to be used as the item source for <see cref="ElementName" />. IF the ItemsSource attribute
-            ///     DOES supply a static <see cref="ItemSource" /> method then
-            ///     it will be called in preference to the property, unless your <see cref="SIItemSource{T}" /> implements the static
-            ///     property <see cref="PreferPropertyToItemSourceCall" />, in which case
-            ///     it will use that to decide whether to use the property OR the static <see cref="ItemSource" /> method to supply
-            ///     the source list.
-            /// </summary>
-            /*static*/
-            IList<T> ElementName { get; }
-
-            /// <summary>
-            ///     Returns the list of objects to be used as the item source for elementName
-            /// </summary>
-            /// <param name="elementName">Name of the element.</param>
-            /// <param name="propInfo">The property information - Only if it's a property, null otherwise.</param>
-            /// <param name="fieldInfo">The field information - Only if it's a field, null otherwise.</param>
-            /// <param name="creator">The instance to use to help you create a random instance, if you need to.</param>
-            /// <returns>
-            ///     List of objects, to be used to randomly choose from to fill the property or field that the attribute has been
-            ///     applied
-            ///     to
-            /// </returns>
-            /*static*/
-            IList ItemSource(string elementName, PropertyInfo propInfo, FieldInfo fieldInfo, Creator creator);
-
-            /// <summary>
-            ///     Determines if the <see cref="ElementName" /> or the <see cref="ItemSource" /> is to be used as the source for
-            ///     elements for the elementName />.
-            /// </summary>
-            /// <param name="elementName">Name of the element.</param>
-            /// <returns>
-            ///     True means use the static <see cref="ElementName" /> property where it exists, False means use the static
-            ///     <see cref="ItemSource" /> method.
-            /// </returns>
-            /*static*/ bool PreferPropertyToItemSourceCall(string elementName);
-        }
-
-        /// <summary>
-        ///     This "static" interface (which you can't have) is to illustrate the expected static method your TypeCreation static
-        ///     class should expose in order to act as a TypeCreation OR it must expose the element name as a property !
-        /// </summary>
-        /// <typeparam name="T">
-        ///     The type of the random instance this class will create.
-        /// </typeparam>
-        [SuppressMessage("StyleCop.CSharp.NamingRules",
-            "SA1302:InterfaceNamesMustBeginWithI",
-            Justification = "This is to illustrate a STATIC interface (which can't exist)!")]
-#pragma warning disable IDE1006 // Naming Styles
-        public /*static*/ interface SITypeCreation<T>
-#pragma warning restore IDE1006 // Naming Styles
-        {
-            /// <summary>
-            ///     Creates an instance of the generic type using the supplied <see cref="Random" />.
-            /// </summary>
-            /// <param name="creator">The instance to use to help you create a random instance.</param>
-            /// <returns>A "random" instance</returns>
-            /*static*/
-            T CreateInstance(Creator creator);
-        }
     }
 }

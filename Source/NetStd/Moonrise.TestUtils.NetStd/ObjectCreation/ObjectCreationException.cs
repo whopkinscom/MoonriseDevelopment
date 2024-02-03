@@ -42,22 +42,20 @@ namespace Moonrise.Utils.Test.ObjectCreation
         /// <summary>
         ///     There was an error whilst accessing the ItemsSource method {0}.ItemsSource() for the {1} property.
         /// </summary>
-        [Description(
-            "There was an error whilst accessing the ItemsSource method {0}.ItemsSource() for the {1} property.")]
+        [Description("There was an error whilst accessing the ItemsSource method {0}.ItemsSource() for the {1} property.")]
         IssueWithItemsSourceMethod,
 
         /// <summary>
         ///     An unknown exception occurred within one of the ObjectCreation modules inside the method: {0} \nException
         ///     message; \n{1}
         /// </summary>
-        [Description(
-            "An unknown exception occurred within one of the ObjectCreation modules inside the method: {0} \nException message; \n{1}")]
+        [Description("An unknown exception occurred within one of the ObjectCreation modules inside the method: {0} \nException message; \n{1}")]
         UnknownException,
 
         /// <summary>
         ///     Could not call the setter for {0}.{1}
         /// </summary>
-        [Description("Could not call the setter for {0}.{1}")]
+        [Description("Could not call the setter for {0}.{1}\r\nNote that you can ignore setter exceptions by using the Creator's IgnoreSetterExceptions property!")]
         CouldNotCallSetter
     }
 
@@ -65,8 +63,8 @@ namespace Moonrise.Utils.Test.ObjectCreation
     ///     Represents exceptional problems that arise whilst processing ObjectCreation functions
     /// </summary>
     [SuppressMessage("Microsoft.Design",
-        "CA1032:ImplementStandardExceptionConstructors",
-        Justification = "The constructors have been designed for effective use of this exception pattern.")]
+                     "CA1032:ImplementStandardExceptionConstructors",
+                     Justification = "The constructors have been designed for effective use of this exception pattern.")]
     public class ObjectCreationException : ReasonedException<ObjectCreationExceptionReason>
     {
         /// <summary>
@@ -91,8 +89,9 @@ namespace Moonrise.Utils.Test.ObjectCreation
         ///     Each reason has an associated description string. Most of these take one or more arguments which
         ///     should be passed here.
         /// </param>
-        public ObjectCreationException(Exception innerException, ObjectCreationExceptionReason reason,
-            params object[] args)
+        public ObjectCreationException(Exception                     innerException,
+                                       ObjectCreationExceptionReason reason,
+                                       params object[]               args)
             : base(innerException, reason, args)
         {
         }
