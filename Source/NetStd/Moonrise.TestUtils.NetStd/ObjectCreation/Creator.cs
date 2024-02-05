@@ -41,6 +41,128 @@ namespace Moonrise.Utils.Test.ObjectCreation
     public class Creator
     {
         /// <summary>
+        ///     "Namespace" (actually a class) for the available string sources
+        /// </summary>
+        [SuppressMessage("StyleCop.CSharp.DocumentationRules",
+                         "SA1650:ElementDocumentationMustBeSpelledCorrectly",
+                         Justification = "The intellisense will be more effective if the summaries show the string source!")]
+        [SuppressMessage("StyleCop.CSharp.OrderingRules",
+                         "SA1201:ElementsMustAppearInTheCorrectOrder",
+                         Justification = "I like nested types to be first!")]
+        [SuppressMessage("StyleCop.CSharp.DocumentationRules",
+                         "SA1630:DocumentationTextMustContainWhitespace",
+                         Justification = "The intellisense will be more effective if the summaries show the string source!")]
+        [SuppressMessage("StyleCop.CSharp.DocumentationRules",
+                         "SA1631:DocumentationMustMeetCharacterPercentage",
+                         Justification = "The intellisense will be more effective if the summaries show the string source!")]
+        [SuppressMessage("StyleCop.CSharp.DocumentationRules",
+                         "SA1603:DocumentationMustContainValidXml",
+                         Justification = "The intellisense will be more effective if the summaries show the string source!")]
+#pragma warning disable CS1570
+        public class StringSources
+        {
+            /// <summary>
+            ///     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
+            /// </summary>
+            public const string AlphaCharactersWithSpaces =
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ";
+
+            /// <summary>
+            ///     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+            /// </summary>
+            public const string AlphaNumericCharacters =
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+            /// <summary>
+            ///     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789."
+            /// </summary>
+            public const string AlphaNumericCharactersWithDots =
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.";
+
+            /// <summary>
+            ///     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 "
+            /// </summary>
+            public const string AlphaNumericCharactersWithSpaces =
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ";
+
+            /// <summary>
+            ///     ""
+            /// </summary>
+            public const string Empty = "";
+
+            /// <summary>
+            ///     "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ.0123456789:;!\"£$%^&amp;*()-_+={}[]'@#~/?\\€&lt;&gt;"
+            /// </summary>
+            public const string EverydayCharacters =
+                "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ.0123456789:;!\"£$%^&*()-_+={}[]'@#~/?\\€<>";
+
+            /// <summary>
+            ///     "abcdefghijklmnopqrstuvwxyz"
+            /// </summary>
+            public const string LowercaseAlphaCharacters = "abcdefghijklmnopqrstuvwxyz";
+
+            /// <summary>
+            ///     "abcdefghijklmnopqrstuvwxyz."
+            /// </summary>
+            public const string LowercaseAlphaCharactersWithDots = "abcdefghijklmnopqrstuvwxyz.";
+
+            /// <summary>
+            ///     "abcdefghijklmnopqrstuvwxyz "
+            /// </summary>
+            public const string LowercaseAlphaCharactersWithSpaces = "abcdefghijklmnopqrstuvwxyz ";
+
+            /// <summary>
+            ///     "abcdefghijklmnopqrstuvwxyz0123456789"
+            /// </summary>
+            public const string LowercaseAlphaNumericCharacters = "abcdefghijklmnopqrstuvwxyz0123456789";
+
+            /// <summary>
+            ///     "abcdefghijklmnopqrstuvwxyz0123456789 "
+            /// </summary>
+            public const string LowercaseAlphaNumericCharactersWithSpaces = "abcdefghijklmnopqrstuvwxyz0123456789 ";
+
+            /// <summary>
+            ///     "0123456789"
+            /// </summary>
+            public const string Numeric = "0123456789";
+
+            /// <summary>
+            ///     "0123456789."
+            /// </summary>
+            public const string NumericWithDecimal = "0123456789.";
+
+            /// <summary>
+            ///     "0123456789.+-*/^&lt;&gt;=%"
+            /// </summary>
+            public const string NumericWithSymbols = "0123456789.+-*/^<>=%";
+
+            /// <summary>
+            ///     ".:;!\"£$%^&*()-_+={}[]'@#~/?\\€<>"
+            /// </summary>
+            public const string OnlySymbols = ".:;!\"£$%^&*()-_+={}[]'@#~/?\\€<>";
+
+            /// <summary>
+            ///     "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            /// </summary>
+            public const string UppercaseAlphaCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+            /// <summary>
+            ///     "ABCDEFGHIJKLMNOPQRSTUVWXYZ "
+            /// </summary>
+            public const string UppercaseAlphaCharactersWithSpaces = "ABCDEFGHIJKLMNOPQRSTUVWXYZ ";
+
+            /// <summary>
+            ///     "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+            /// </summary>
+            public const string UppercaseAlphaNumericCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+            /// <summary>
+            ///     "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 "
+            /// </summary>
+            public const string UppercaseAlphaNumericCharactersWithSpaces = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ";
+        }
+#pragma warning restore CS1570
+        /// <summary>
         ///     Constant representing the default datetime
         /// </summary>
         private static readonly DateTime DEFAULT_DATETIME = default;
@@ -51,67 +173,9 @@ namespace Moonrise.Utils.Test.ObjectCreation
         private static readonly DateTimeOffset DEFAULT_DATETIMEOFFSET = default;
 
         /// <summary>
-        ///     A map of types and the creators that can create them.
+        ///     Gives the context of the property/field being currently created. i.e. The "breadcrumb" of the parental elements.
         /// </summary>
-        private readonly Dictionary<Type, MethodInfo> _creatorMap = new Dictionary<Type, MethodInfo>();
-
-        /// <summary>
-        ///     Maps implementation types to interfaces that carry <see cref="ObjectCreationAttribute" />s
-        /// </summary>
-        private readonly Dictionary<Type, Type> _interfaceAttributesMap = new Dictionary<Type, Type>();
-
-        /// <summary>
-        ///     Maps interfaces to implementations to be used when creating elements that are interfaces
-        /// </summary>
-        private readonly Dictionary<Type, Type> _interfaceMap = new Dictionary<Type, Type>();
-
-        private readonly List<string> _elementContext = new List<string>();
-
-        private readonly List<Type> _ignoreTypes = new List<Type>();
-
-        /// <summary>
-        ///     Backing field for MaxObjects
-        /// </summary>
-        private int _maxObjects = 100000;
-
-        /// <summary>
-        ///     Backing field for <see cref="OneShot" />
-        /// </summary>
-        private bool _oneShot;
-
-        /// <summary>
-        ///     The random that will be used by the instance to generate random stuff
-        /// </summary>
-        private Random _random;
-
-        /// <summary>
-        ///     A list of object types that have been encountered in a particular context. Used to avoid nesting certain objects.
-        /// </summary>
-        protected List<int> encounteredObjects = new List<int>();
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="Creator" /> class. Elements created via this constructor will be
-        ///     non-reliably-repeatable
-        /// </summary>
-        public Creator()
-        {
-            _random = new Random();
-            Initialise();
-        }
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="Creator" /> class. Elements created via this constructor will be
-        ///     reliably-repeatable
-        /// </summary>
-        /// <param name="seed">
-        ///     The seed to pass to the random generator. Using the same seed and calling in the same creation order
-        ///     will produce repeatable results!
-        /// </param>
-        public Creator(int seed)
-        {
-            _random = new Random(seed);
-            Initialise();
-        }
+        public string ElementContext => string.Join(".", _elementContext);
 
         /// <summary>
         ///     Determines if nulls are allowed to be inserted into enumerable types - Defaults to false
@@ -128,6 +192,11 @@ namespace Moonrise.Utils.Test.ObjectCreation
         ///     failures!
         /// </summary>
         public Action<string> CreationTracer { get; set; }
+
+        /// <summary>
+        ///     The email domain to use in creating random emails.
+        /// </summary>
+        public string EmailDomain { get; set; }
 
         /// <summary>
         ///     The action to pass the string of a problem that has been set to ignore - VERY useful for diagnosing expected
@@ -223,10 +292,9 @@ namespace Moonrise.Utils.Test.ObjectCreation
             {
                 if (value > AbsoluteMaximumObjects())
                 {
-                    throw new ArgumentException(
-                        string.Format(
-                            "The absolute maximum objects is hard set to {0}. The only way to override this value is to literally override the AbsoluteMaximumObjects() method in a descendant class, i.e. REALLY mean it!",
-                            AbsoluteMaximumObjects()));
+                    throw new
+                        ArgumentException(string.Format("The absolute maximum objects is hard set to {0}. The only way to override this value is to literally override the AbsoluteMaximumObjects() method in a descendant class, i.e. REALLY mean it!",
+                                                        AbsoluteMaximumObjects()));
                 }
 
                 _maxObjects = value;
@@ -339,11 +407,6 @@ namespace Moonrise.Utils.Test.ObjectCreation
         public ulong MinULong { get; set; }
 
         /// <summary>
-        ///     The email domain to use in creating random emails.
-        /// </summary>
-        public string EmailDomain { get; set; }
-
-        /// <summary>
         ///     The minimum ushort value to use in following creation/random calls
         /// </summary>
         public ushort MinUShort { get; set; }
@@ -357,6 +420,15 @@ namespace Moonrise.Utils.Test.ObjectCreation
         ///     The number of objects that were created by the last <see cref="CreateFilled{T}" /> call.
         /// </summary>
         public int ObjectCount { get; protected set; }
+
+        /// <summary>
+        ///     Determines if random bytes are used to create Guids, or the default GUID creation - Defaults to false
+        /// </summary>
+        /// <remarks>
+        ///     Why would you want this since GUIDS are effectively random by default? Well, if you require repeatable values
+        ///     (by using a seed value when you construct the <see cref="Creator" />) then you need your Guids to be Randomised.
+        /// </remarks>
+        public bool RandomGuids { get; set; }
 
         /// <summary>
         ///     Determines if the filling should respect any validation attributes on the elements being filled and only fill with
@@ -440,6 +512,12 @@ namespace Moonrise.Utils.Test.ObjectCreation
         ///     The current property information
         /// </summary>
         private PropertyInfo CurrentPropertyInfo { get; set; }
+
+        /// <summary>
+        ///     The email domain to use in following creation/random calls - One shot usage as determined by
+        ///     <see cref="ObjectCreationAttribute" />.
+        /// </summary>
+        private string EmailDomainOneShot { get; set; }
 
         /// <summary>
         ///     Determines if an element will be filled by the creator or ignored - One shot usage as determined by
@@ -581,12 +659,6 @@ namespace Moonrise.Utils.Test.ObjectCreation
         private DateTimeOffset MinDateTimeOffsetOneShot { get; set; }
 
         /// <summary>
-        ///     The email domain to use in following creation/random calls - One shot usage as determined by
-        ///     <see cref="ObjectCreationAttribute" />.
-        /// </summary>
-        private string EmailDomainOneShot { get; set; }
-
-        /// <summary>
         ///     The minimum date time to use in following creation/random calls - One shot usage as determined by
         ///     <see cref="ObjectCreationAttribute" />.
         /// </summary>
@@ -671,6 +743,12 @@ namespace Moonrise.Utils.Test.ObjectCreation
         private double NullThresholdOneShot { get; set; }
 
         /// <summary>
+        ///     Indicates whether random Guids are to be used in following creation/random calls - One shot usage as determined by
+        ///     <see cref="ObjectCreationAttribute" />.
+        /// </summary>
+        private bool RandomGuidsOneShot { get; set; }
+
+        /// <summary>
         ///     Determines if the filling should respect any validation attributes on the elements being filled and only fill with
         ///     data that meets the validation constraints  - One shot usage as determined by
         ///     <see cref="ObjectCreationAttribute" />.
@@ -696,9 +774,67 @@ namespace Moonrise.Utils.Test.ObjectCreation
         private List<ValidationAttribute> ValidationAttributes { get; set; }
 
         /// <summary>
-        ///     Gives the context of the property/field being currently created. i.e. The "breadcrumb" of the parental elements.
+        ///     A list of object types that have been encountered in a particular context. Used to avoid nesting certain objects.
         /// </summary>
-        public string ElementContext => string.Join(".", _elementContext);
+        protected List<int> encounteredObjects = new();
+
+        /// <summary>
+        ///     A map of types and the creators that can create them.
+        /// </summary>
+        private readonly Dictionary<Type, MethodInfo> _creatorMap = new();
+
+        private readonly List<string> _elementContext = new();
+
+        private readonly List<Type> _ignoreTypes = new();
+
+        /// <summary>
+        ///     Maps implementation types to interfaces that carry <see cref="ObjectCreationAttribute" />s
+        /// </summary>
+        private readonly Dictionary<Type, Type> _interfaceAttributesMap = new();
+
+        /// <summary>
+        ///     Maps interfaces to implementations to be used when creating elements that are interfaces
+        /// </summary>
+        private readonly Dictionary<Type, Type> _interfaceMap = new();
+
+        /// <summary>
+        ///     Backing field for MaxObjects
+        /// </summary>
+        private int _maxObjects = 100000;
+
+        /// <summary>
+        ///     Backing field for <see cref="OneShot" />
+        /// </summary>
+        private bool _oneShot;
+
+        /// <summary>
+        ///     The random that will be used by the instance to generate random stuff
+        /// </summary>
+        private Random _random;
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="Creator" /> class. Elements created via this constructor will be
+        ///     non-reliably-repeatable
+        /// </summary>
+        public Creator()
+        {
+            _random = new Random();
+            Initialise();
+        }
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="Creator" /> class. Elements created via this constructor will be
+        ///     reliably-repeatable
+        /// </summary>
+        /// <param name="seed">
+        ///     The seed to pass to the random generator. Using the same seed and calling in the same creation order
+        ///     will produce repeatable results!
+        /// </param>
+        public Creator(int seed)
+        {
+            _random = new Random(seed);
+            Initialise();
+        }
 
         /// <summary>
         ///     Creates an object of type T whose public fields and properties are filled with random(ish) values.
@@ -722,10 +858,11 @@ namespace Moonrise.Utils.Test.ObjectCreation
             InitialiseCreation();
 
             // Create a filled structure.
-            T retval = (T) CreateFilled(typeof(T), recursive);
+            T retval = (T)CreateFilled(typeof(T), recursive);
 
             // We need to reset any OneShot values in case straight GetRandomXXXX calls are made directly by anything
             InitialiseCreation();
+
             return retval;
         }
 
@@ -757,10 +894,11 @@ namespace Moonrise.Utils.Test.ObjectCreation
             InitialiseCreation();
 
             MapInterfaceAttributes(typeof(T), typeof(I));
-            T retval = (T) CreateFilled(typeof(T), recursive);
+            T retval = (T)CreateFilled(typeof(T), recursive);
 
             // We need to reset any OneShot values in case straight GetRandomXXXX calls are made directly by anything
             InitialiseCreation();
+
             return retval;
         }
 
@@ -799,7 +937,17 @@ namespace Moonrise.Utils.Test.ObjectCreation
 
             // We need to reset any OneShot values in case straight GetRandomXXXX calls are made directly by anything
             InitialiseCreation();
+
             return retval;
+        }
+
+        /// <summary>
+        ///     Instructs the creator that any type of {T} should not be created and replaced with null
+        /// </summary>
+        /// <typeparam name="T">The type not to create</typeparam>
+        public void DoNotCreate<T>()
+        {
+            _ignoreTypes.Add(typeof(T));
         }
 
         /// <summary>
@@ -809,10 +957,7 @@ namespace Moonrise.Utils.Test.ObjectCreation
         /// <returns>
         ///     true or false - guess which one!
         /// </returns>
-        public bool GetRandomBool(double threshold = 0.5)
-        {
-            return _random.NextDouble() > threshold;
-        }
+        public bool GetRandomBool(double threshold = 0.5) => _random.NextDouble() > threshold;
 
         /// <summary>
         ///     Gets a random int in a specified range.
@@ -842,8 +987,8 @@ namespace Moonrise.Utils.Test.ObjectCreation
                     {
                         if (validationAttribute.GetType() == typeof(RangeAttribute))
                         {
-                            min = Math.Max(min, (int) (((RangeAttribute) validationAttribute).Minimum ?? min));
-                            max = Math.Min(max, (int) (((RangeAttribute) validationAttribute).Maximum ?? max));
+                            min = Math.Max(min, (int)(((RangeAttribute)validationAttribute).Minimum ?? min));
+                            max = Math.Min(max, (int)(((RangeAttribute)validationAttribute).Maximum ?? max));
 
                             // As it's a byte, we can never go outside 0-255!
                             min = Math.Max(min, 0);
@@ -852,7 +997,7 @@ namespace Moonrise.Utils.Test.ObjectCreation
                     }
                 }
 
-                retVal = (byte) _random.Next(min, max);
+                retVal = (byte)_random.Next(min, max);
             }
 
             return retVal;
@@ -957,9 +1102,9 @@ namespace Moonrise.Utils.Test.ObjectCreation
         /// <param name="max">The maximum. (If default, defaults to <see cref="double.MaxValue" />)</param>
         /// <returns>A random decimal value</returns>
         [SuppressMessage("ReSharper",
-            "CompareOfFloatsByEqualityOperator",
-            Justification =
-                "Comparisons against Min/Max as 'flags' are valid!")]
+                         "CompareOfFloatsByEqualityOperator",
+                         Justification =
+                             "Comparisons against Min/Max as 'flags' are valid!")]
         public decimal GetRandomDecimal(decimal min = decimal.MinValue, decimal max = decimal.MaxValue)
         {
             decimal retVal = 0;
@@ -968,16 +1113,16 @@ namespace Moonrise.Utils.Test.ObjectCreation
             {
                 if (min == decimal.MinValue)
                 {
-                    min = OneShot ? (decimal) MinDecimalOneShot : MinDecimal;
+                    min = OneShot ? (decimal)MinDecimalOneShot : MinDecimal;
                 }
 
                 if (max == decimal.MaxValue)
                 {
-                    max = OneShot ? (decimal) MaxDecimalOneShot : MaxDecimal;
+                    max = OneShot ? (decimal)MaxDecimalOneShot : MaxDecimal;
                 }
 
-                double minDub = (double) min;
-                double maxDub = (double) max;
+                double minDub = (double)min;
+                double maxDub = (double)max;
 
                 if (OneShot ? RespectValidationOneShot : RespectValidation)
                 {
@@ -986,9 +1131,10 @@ namespace Moonrise.Utils.Test.ObjectCreation
                         if (validationAttribute.GetType() == typeof(RangeAttribute))
                         {
                             minDub = Math.Max(minDub,
-                                (double) (((RangeAttribute) validationAttribute).Minimum ?? minDub));
+                                              (double)(((RangeAttribute)validationAttribute).Minimum ?? minDub));
+
                             maxDub = Math.Min(maxDub,
-                                (double) (((RangeAttribute) validationAttribute).Maximum ?? maxDub));
+                                              (double)(((RangeAttribute)validationAttribute).Maximum ?? maxDub));
                         }
                     }
                 }
@@ -1005,8 +1151,9 @@ namespace Moonrise.Utils.Test.ObjectCreation
         /// <param name="min">The minimum. (If default, defaults to <see cref="MinDouble" />)</param>
         /// <param name="max">The maximum. (If default, defaults to <see cref="MaxDouble" />)</param>
         /// <returns>A random double value</returns>
-        [SuppressMessage("ReSharper", "CompareOfFloatsByEqualityOperator",
-            Justification = "Comparisons against Min/Max as 'flags' are valid!")]
+        [SuppressMessage("ReSharper",
+                         "CompareOfFloatsByEqualityOperator",
+                         Justification = "Comparisons against Min/Max as 'flags' are valid!")]
         public double GetRandomDouble(double min = double.MinValue, double max = double.MaxValue)
         {
             double retVal = 0;
@@ -1029,13 +1176,41 @@ namespace Moonrise.Utils.Test.ObjectCreation
                     {
                         if (validationAttribute.GetType() == typeof(RangeAttribute))
                         {
-                            min = Math.Max(min, (double) (((RangeAttribute) validationAttribute).Minimum ?? min));
-                            max = Math.Min(max, (double) (((RangeAttribute) validationAttribute).Maximum ?? max));
+                            min = Math.Max(min, (double)(((RangeAttribute)validationAttribute).Minimum ?? min));
+                            max = Math.Min(max, (double)(((RangeAttribute)validationAttribute).Maximum ?? max));
                         }
                     }
                 }
 
                 retVal = _random.NextDouble() * (max - min) + min;
+            }
+
+            return retVal;
+        }
+
+        /// <summary>
+        ///     Gets a random email address.
+        /// </summary>
+        /// <remarks>
+        ///     By default the strings used will be <see cref="Creator.StringSources.LowercaseAlphaCharactersWithDots" />@
+        ///     <see cref="Creator.StringSources.LowercaseAlphaCharacters" />.
+        ///     <see cref="Creator.StringSources.LowercaseAlphaCharacters" /> with the lengths restricted to a min/max length of
+        ///     2/20 each.
+        /// </remarks>
+        /// <param name="domain">If passed this is used as the domain, otherwise a random domain is used</param>
+        /// <returns>A random email address</returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public string GetRandomEmail(string domain = null)
+        {
+            string retVal = null;
+
+            if (!GetOneShotItemsSource(ref retVal))
+            {
+                domain = EmailDomainOneShot ?? domain;
+
+                retVal =
+                    $"{GetRandomString(StringSources.LowercaseAlphaCharactersWithDots, 2, 20, true)}@" +
+                    $"{domain ?? $"{GetRandomString(StringSources.LowercaseAlphaCharacters, 2, 20, true)}.{GetRandomString(StringSources.LowercaseAlphaCharacters, 2, 20, true)}"}";
             }
 
             return retVal;
@@ -1066,14 +1241,15 @@ namespace Moonrise.Utils.Test.ObjectCreation
         /// <param name="fileNameLength">Maximum length of the file name.</param>
         /// <param name="extensionLength">Maximum length of the extension.</param>
         /// <returns>A passable, but wierd, filepath</returns>
-        public string GetRandomFilePath(int numFolders = 5, int folderNameLength = 10, int fileNameLength = 20,
-            int extensionLength = 3)
+        public string GetRandomFilePath(int numFolders       = 5,
+                                        int folderNameLength = 10,
+                                        int fileNameLength   = 20,
+                                        int extensionLength  = 3)
         {
             string retVal = default;
 
             if (!GetOneShotItemsSource(ref retVal))
             {
-
                 // Start of with the drive letter
                 retVal = GetRandomString(StringSources.UppercaseAlphaCharacters, 1, 1, true) + ":\\";
 
@@ -1083,12 +1259,14 @@ namespace Moonrise.Utils.Test.ObjectCreation
                 for (int i = 0; i < numFolders; i++)
                 {
                     retVal += GetRandomString(StringSources.AlphaNumericCharactersWithSpaces, 1, folderNameLength, true)
-                        .Trim() + "\\";
+                                 .Trim() +
+                              "\\";
                 }
 
                 // A filename
                 retVal += GetRandomString(StringSources.AlphaNumericCharactersWithSpaces, 1, fileNameLength, true)
-                    .Trim() + ".";
+                             .Trim() +
+                          ".";
 
                 // And an extension
                 retVal += GetRandomString(StringSources.LowercaseAlphaCharacters, 1, extensionLength, true);
@@ -1103,8 +1281,9 @@ namespace Moonrise.Utils.Test.ObjectCreation
         /// <param name="min">The minimum. (If default, defaults to <see cref="MinFloat" />)</param>
         /// <param name="max">The maximum. (If default, defaults to <see cref="MaxFloat" />)</param>
         /// <returns>A random float value</returns>
-        [SuppressMessage("ReSharper", "CompareOfFloatsByEqualityOperator",
-            Justification = "Comparisons against Min/Max as 'flags' are valid!")]
+        [SuppressMessage("ReSharper",
+                         "CompareOfFloatsByEqualityOperator",
+                         Justification = "Comparisons against Min/Max as 'flags' are valid!")]
         public float GetRandomFloat(float min = float.MinValue, float max = float.MaxValue)
         {
             float retVal = 0;
@@ -1128,14 +1307,15 @@ namespace Moonrise.Utils.Test.ObjectCreation
                         if (validationAttribute.GetType() == typeof(RangeAttribute))
                         {
                             min = Math.Max(min,
-                                Convert.ToSingle(((RangeAttribute) validationAttribute).Minimum ?? min));
+                                           Convert.ToSingle(((RangeAttribute)validationAttribute).Minimum ?? min));
+
                             max = Math.Min(max,
-                                Convert.ToSingle(((RangeAttribute) validationAttribute).Maximum ?? max));
+                                           Convert.ToSingle(((RangeAttribute)validationAttribute).Maximum ?? max));
                         }
                     }
                 }
 
-                retVal = (float) (_random.NextDouble() * (max - (double) min) + min);
+                retVal = (float)(_random.NextDouble() * (max - (double)min) + min);
             }
 
             return retVal;
@@ -1154,19 +1334,26 @@ namespace Moonrise.Utils.Test.ObjectCreation
 
             if (!GetOneShotItemsSource(ref retVal))
             {
-                if (seed != int.MinValue)
+                if (OneShot ? RandomGuidsOneShot : RandomGuids)
                 {
-                    _random = new Random(seed);
+                    if (seed != int.MinValue)
+                    {
+                        _random = new Random(seed);
+                    }
+
+                    byte[] initialiser = new byte[16];
+
+                    for (int i = 0; i < 16; i++)
+                    {
+                        initialiser[i] = GetRandomByte();
+                    }
+
+                    retVal = new Guid(initialiser);
                 }
-
-                byte[] initialiser = new byte[16];
-
-                for (int i = 0; i < 16; i++)
+                else
                 {
-                    initialiser[i] = GetRandomByte();
+                    retVal = new Guid();
                 }
-
-                retVal = new Guid(initialiser);
             }
 
             return retVal;
@@ -1200,8 +1387,8 @@ namespace Moonrise.Utils.Test.ObjectCreation
                     {
                         if (validationAttribute.GetType() == typeof(RangeAttribute))
                         {
-                            min = Math.Max(min, (int) (((RangeAttribute) validationAttribute).Minimum ?? min));
-                            max = Math.Min(max, (int) (((RangeAttribute) validationAttribute).Maximum ?? max));
+                            min = Math.Max(min, (int)(((RangeAttribute)validationAttribute).Minimum ?? min));
+                            max = Math.Min(max, (int)(((RangeAttribute)validationAttribute).Maximum ?? max));
                         }
                     }
                 }
@@ -1240,18 +1427,18 @@ namespace Moonrise.Utils.Test.ObjectCreation
                     {
                         if (validationAttribute.GetType() == typeof(RangeAttribute))
                         {
-                            min = Math.Max(min, Convert.ToInt64(((RangeAttribute) validationAttribute).Minimum ?? min));
+                            min = Math.Max(min, Convert.ToInt64(((RangeAttribute)validationAttribute).Minimum ?? min));
 
                             // [Range] with a ulong.MaxInt actually uses the double version of [Range] and for some reason
                             // there is an overflow exception when assigning the double version on ulong.MaxValue to ulong
                             // so we do it in a more convoluted way!
                             // There isn't the same issue with .MinValue, go figure!
-                            object omax = ((RangeAttribute) validationAttribute).Maximum;
+                            object omax = ((RangeAttribute)validationAttribute).Maximum;
                             long lmax = max;
 
                             if (omax != null)
                             {
-                                if (omax is double && (double) omax >= long.MaxValue - 1)
+                                if (omax is double && (double)omax >= long.MaxValue - 1)
                                 {
                                     lmax = long.MaxValue;
                                 }
@@ -1266,7 +1453,7 @@ namespace Moonrise.Utils.Test.ObjectCreation
                     }
                 }
 
-                retVal = min + (long) (_random.NextDouble() * (max - min));
+                retVal = min + (long)(_random.NextDouble() * (max - min));
             }
 
             return retVal;
@@ -1300,13 +1487,13 @@ namespace Moonrise.Utils.Test.ObjectCreation
                     {
                         if (validationAttribute.GetType() == typeof(RangeAttribute))
                         {
-                            min = Math.Max(min, Convert.ToSByte(((RangeAttribute) validationAttribute).Minimum ?? min));
-                            max = Math.Min(max, Convert.ToSByte(((RangeAttribute) validationAttribute).Maximum ?? max));
+                            min = Math.Max(min, Convert.ToSByte(((RangeAttribute)validationAttribute).Minimum ?? min));
+                            max = Math.Min(max, Convert.ToSByte(((RangeAttribute)validationAttribute).Maximum ?? max));
                         }
                     }
                 }
 
-                retVal = (sbyte) _random.Next(min, max);
+                retVal = (sbyte)_random.Next(min, max);
             }
 
             return retVal;
@@ -1340,13 +1527,13 @@ namespace Moonrise.Utils.Test.ObjectCreation
                     {
                         if (validationAttribute.GetType() == typeof(RangeAttribute))
                         {
-                            min = Math.Max(min, Convert.ToInt16(((RangeAttribute) validationAttribute).Minimum ?? min));
-                            max = Math.Min(max, Convert.ToInt16(((RangeAttribute) validationAttribute).Maximum ?? max));
+                            min = Math.Max(min, Convert.ToInt16(((RangeAttribute)validationAttribute).Minimum ?? min));
+                            max = Math.Min(max, Convert.ToInt16(((RangeAttribute)validationAttribute).Maximum ?? max));
                         }
                     }
                 }
 
-                retVal = (short) _random.Next(min, max);
+                retVal = (short)_random.Next(min, max);
             }
 
             return retVal;
@@ -1363,10 +1550,7 @@ namespace Moonrise.Utils.Test.ObjectCreation
         /// <returns>
         ///     The random string
         /// </returns>
-        public string GetRandomString(string stringSource = null, int minStrLen = -1, int maxStrLen = -1)
-        {
-            return GetRandomString(stringSource, minStrLen, maxStrLen, false);
-        }
+        public string GetRandomString(string stringSource = null, int minStrLen = -1, int maxStrLen = -1) => GetRandomString(stringSource, minStrLen, maxStrLen, false);
 
         /// <summary>
         ///     Gets a random uint in a specified range.
@@ -1397,14 +1581,15 @@ namespace Moonrise.Utils.Test.ObjectCreation
                         if (validationAttribute.GetType() == typeof(RangeAttribute))
                         {
                             min = Math.Max(min,
-                                Convert.ToUInt32(((RangeAttribute) validationAttribute).Minimum ?? min));
+                                           Convert.ToUInt32(((RangeAttribute)validationAttribute).Minimum ?? min));
+
                             max = Math.Min(max,
-                                Convert.ToUInt32(((RangeAttribute) validationAttribute).Maximum ?? max));
+                                           Convert.ToUInt32(((RangeAttribute)validationAttribute).Maximum ?? max));
                         }
                     }
                 }
 
-                retVal = min + (uint) (_random.NextDouble() * (max - min));
+                retVal = min + (uint)(_random.NextDouble() * (max - min));
             }
 
             return retVal;
@@ -1439,19 +1624,19 @@ namespace Moonrise.Utils.Test.ObjectCreation
                         if (validationAttribute.GetType() == typeof(RangeAttribute))
                         {
                             min = Math.Max(min,
-                                Convert.ToUInt64(((RangeAttribute) validationAttribute).Minimum ?? min));
+                                           Convert.ToUInt64(((RangeAttribute)validationAttribute).Minimum ?? min));
 
                             // [Range] with a ulong.MaxInt actually uses the double version of [Range] and for some reason
                             // there is an overflow exception when assigning the double version on ulong.MaxValue to ulong
                             // so we do it in a more convoluted way!
                             // There isn't the same issue with .MinValue, go figure!
-                            object omax = ((RangeAttribute) validationAttribute).Maximum;
+                            object omax = ((RangeAttribute)validationAttribute).Maximum;
 
                             ulong lmax = max;
 
                             if (omax != null)
                             {
-                                if (omax is double && (double) omax >= long.MaxValue - 1)
+                                if (omax is double && (double)omax >= long.MaxValue - 1)
                                 {
                                     lmax = long.MaxValue;
                                 }
@@ -1466,7 +1651,7 @@ namespace Moonrise.Utils.Test.ObjectCreation
                     }
                 }
 
-                retVal = min + (ulong) (_random.NextDouble() * (max - min));
+                retVal = min + (ulong)(_random.NextDouble() * (max - min));
             }
 
             return retVal;
@@ -1501,14 +1686,15 @@ namespace Moonrise.Utils.Test.ObjectCreation
                         if (validationAttribute.GetType() == typeof(RangeAttribute))
                         {
                             min = Math.Max(min,
-                                Convert.ToUInt16(((RangeAttribute) validationAttribute).Minimum ?? min));
+                                           Convert.ToUInt16(((RangeAttribute)validationAttribute).Minimum ?? min));
+
                             max = Math.Min(max,
-                                Convert.ToUInt16(((RangeAttribute) validationAttribute).Maximum ?? max));
+                                           Convert.ToUInt16(((RangeAttribute)validationAttribute).Maximum ?? max));
                         }
                     }
                 }
 
-                retVal = (ushort) _random.Next(min, max);
+                retVal = (ushort)_random.Next(min, max);
             }
 
             return retVal;
@@ -1521,10 +1707,7 @@ namespace Moonrise.Utils.Test.ObjectCreation
         /// <typeparam name="T">A basic type</typeparam>
         /// <param name="recursive">Determines if nested classes will also be created</param>
         /// <returns>A random(ish) value (i.e. non default - but COULD be!)</returns>
-        public T GetRnd<T>(bool recursive = true)
-        {
-            return (T) GetRnd(typeof(T), recursive);
-        }
+        public T GetRnd<T>(bool recursive = true) => (T)GetRnd(typeof(T), recursive);
 
         /// <summary>
         ///     Gets a random value of the appropriate type. Currently supports;
@@ -1537,13 +1720,14 @@ namespace Moonrise.Utils.Test.ObjectCreation
         /// </returns>
         [
             SuppressMessage("StyleCop.CSharp.LayoutRules",
-                "SA1503:CurlyBracketsMustNotBeOmitted",
-                Justification = "I allow myself this in these circumstances!")]
+                            "SA1503:CurlyBracketsMustNotBeOmitted",
+                            Justification = "I allow myself this in these circumstances!")]
         public object GetRnd(Type fieldType, bool recursive)
         {
             if (_ignoreTypes.Contains(fieldType))
             {
                 IgnoredIssueTracer?.Invoke($"Ignoring creation of {fieldType.FullName}. Instance created as null.");
+
                 return null;
             }
 
@@ -1562,34 +1746,11 @@ namespace Moonrise.Utils.Test.ObjectCreation
                 }
             }
 
-            if (fieldType == typeof(bool))
-            {
-                return GetRandomBool();
-            }
+            // I've ordered these in most likely order. It'll make a tiny tiny difference!
 
-            if (fieldType == typeof(byte))
+            if (fieldType == typeof(string))
             {
-                return GetRandomByte();
-            }
-
-            if (fieldType == typeof(char))
-            {
-                return GetRandomChar();
-            }
-
-            if (fieldType == typeof(sbyte))
-            {
-                return GetRandomSByte();
-            }
-
-            if (fieldType == typeof(short))
-            {
-                return GetRandomShort();
-            }
-
-            if (fieldType == typeof(ushort))
-            {
-                return GetRandomUShort();
+                return GetRandomString();
             }
 
             if (fieldType == typeof(int))
@@ -1597,19 +1758,29 @@ namespace Moonrise.Utils.Test.ObjectCreation
                 return GetRandomInt();
             }
 
-            if (fieldType == typeof(uint))
+            if (fieldType.GetTypeInfo().IsEnum)
             {
-                return GetRandomUInt();
+                return GetRandomEnum(fieldType);
             }
 
-            if (fieldType == typeof(long))
+            if (fieldType == typeof(DateTime))
             {
-                return GetRandomLong();
+                return GetRandomDateTime();
             }
 
-            if (fieldType == typeof(ulong))
+            if (fieldType == typeof(Guid))
             {
-                return GetRandomULong();
+                return GetRandomGuid();
+            }
+
+            if (fieldType == typeof(bool))
+            {
+                return GetRandomBool();
+            }
+
+            if (fieldType == typeof(char))
+            {
+                return GetRandomChar();
             }
 
             if (fieldType == typeof(double))
@@ -1622,29 +1793,44 @@ namespace Moonrise.Utils.Test.ObjectCreation
                 return GetRandomDecimal();
             }
 
+            if (fieldType == typeof(byte))
+            {
+                return GetRandomByte();
+            }
+
+            if (fieldType == typeof(long))
+            {
+                return GetRandomLong();
+            }
+
+            if (fieldType == typeof(short))
+            {
+                return GetRandomShort();
+            }
+
             if (fieldType == typeof(float))
             {
                 return GetRandomFloat();
             }
 
-            if (fieldType == typeof(string))
+            if (fieldType == typeof(sbyte))
             {
-                return GetRandomString();
+                return GetRandomSByte();
             }
 
-            if (fieldType == typeof(DateTime))
+            if (fieldType == typeof(ushort))
             {
-                return GetRandomDateTime();
+                return GetRandomUShort();
             }
 
-            if (fieldType.GetTypeInfo().IsEnum)
+            if (fieldType == typeof(uint))
             {
-                return GetRandomEnum(fieldType);
+                return GetRandomUInt();
             }
 
-            if (fieldType == typeof(Guid))
+            if (fieldType == typeof(ulong))
             {
-                return GetRandomGuid();
+                return GetRandomULong();
             }
 
             object retVal = TryFallingBackOnASuppliedCreator(fieldType);
@@ -1679,8 +1865,7 @@ namespace Moonrise.Utils.Test.ObjectCreation
 
             if (creatorMethod == null)
             {
-                throw new ArgumentException(
-                    $"The Creator needs to implement ObjectCreationAttribute.SITypeCreation<{typeof(T).Name}>");
+                throw new ArgumentException($"The Creator needs to implement ObjectCreationAttribute.SITypeCreation<{typeof(T).Name}>");
             }
 
             if (!_creatorMap.ContainsKey(typeof(T)))
@@ -1701,15 +1886,6 @@ namespace Moonrise.Utils.Test.ObjectCreation
         public void MapInterface<I, T>()
         {
             MapInterface(typeof(I), typeof(T));
-        }
-
-        /// <summary>
-        ///     Instructs the creator that any type of {T} should not be created and replaced with null
-        /// </summary>
-        /// <typeparam name="T">The type not to create</typeparam>
-        public void DoNotCreate<T>()
-        {
-            _ignoreTypes.Add(typeof(T));
         }
 
         /// <summary>
@@ -1770,10 +1946,7 @@ namespace Moonrise.Utils.Test.ObjectCreation
         ///     this!
         /// </summary>
         /// <returns>10,000,000</returns>
-        protected virtual int AbsoluteMaximumObjects()
-        {
-            return 10000000;
-        }
+        protected virtual int AbsoluteMaximumObjects() => 10000000;
 
         /// <summary>
         ///     Creates an object whose public fields and properties are filled with random(ish) values.
@@ -1786,8 +1959,9 @@ namespace Moonrise.Utils.Test.ObjectCreation
         /// <exception cref="System.ArgumentException">
         ///     If the class is an enumerable and is not at least IList
         /// </exception>
-        [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1503:CurlyBracketsMustNotBeOmitted",
-            Justification = "I allow this for exceptions!")]
+        [SuppressMessage("StyleCop.CSharp.LayoutRules",
+                         "SA1503:CurlyBracketsMustNotBeOmitted",
+                         Justification = "I allow this for exceptions!")]
         protected object CreateFilled(Type instanceType, bool recursive)
         {
             if (IgnoreRecursion)
@@ -1796,8 +1970,7 @@ namespace Moonrise.Utils.Test.ObjectCreation
 
                 if (encounteredObjects.Contains(hashCode))
                 {
-                    IgnoredIssueTracer?.Invoke(
-                        $"Detected a recursive creation for {instanceType.FullName}. Instance created as null.");
+                    IgnoredIssueTracer?.Invoke($"Detected a recursive creation for {instanceType.FullName}. Instance created as null.");
 
                     return null;
                 }
@@ -1812,8 +1985,10 @@ namespace Moonrise.Utils.Test.ObjectCreation
                 if (!GetOneShotItemsSource(ref retVal))
                 {
                     bool allowNulls = OneShot ? AllowNullsOneShot : AllowNulls;
+
                     bool allowNullElementsInEnumerable =
                         OneShot ? AllowNullElementsInEnumerableOneShot : AllowNullElementsInEnumerable;
+
                     bool respectValidation = OneShot ? RespectValidationOneShot : RespectValidation;
 
                     if (respectValidation)
@@ -1826,21 +2001,21 @@ namespace Moonrise.Utils.Test.ObjectCreation
                             }
                             else if (validationAttribute.GetType() == typeof(ListContentValidationAttribute))
                             {
-                                if (!((ListContentValidationAttribute) validationAttribute).AllowNulls)
+                                if (!((ListContentValidationAttribute)validationAttribute).AllowNulls)
                                 {
                                     allowNullElementsInEnumerable = false;
                                 }
 
-                                if (((ListContentValidationAttribute) validationAttribute).MinElements < int.MaxValue)
+                                if (((ListContentValidationAttribute)validationAttribute).MinElements < int.MaxValue)
                                 {
-                                    MinItemsOneShot = ((ListContentValidationAttribute) validationAttribute)
-                                        .MinElements;
+                                    MinItemsOneShot = ((ListContentValidationAttribute)validationAttribute)
+                                       .MinElements;
                                 }
 
-                                if (((ListContentValidationAttribute) validationAttribute).MaxElements > int.MinValue)
+                                if (((ListContentValidationAttribute)validationAttribute).MaxElements > int.MinValue)
                                 {
-                                    MaxItemsOneShot = ((ListContentValidationAttribute) validationAttribute)
-                                        .MaxElements;
+                                    MaxItemsOneShot = ((ListContentValidationAttribute)validationAttribute)
+                                       .MaxElements;
                                 }
                             }
                         }
@@ -1853,7 +2028,7 @@ namespace Moonrise.Utils.Test.ObjectCreation
                             if (!typeof(IList).IsAssignableFrom(instanceType))
                             {
                                 throw new ArgumentException(string.Format("{0} needs to implement IList!",
-                                    instanceType.Name));
+                                                                          instanceType.Name));
                             }
 
                             Type listContentType;
@@ -1862,9 +2037,8 @@ namespace Moonrise.Utils.Test.ObjectCreation
                             {
                                 if (!instanceType.IsArray)
                                 {
-                                    throw new ArgumentException(string.Format(
-                                        "As {0} is non-generic, this version can only handle arrays, sorry!",
-                                        instanceType.Name));
+                                    throw new ArgumentException(string.Format("As {0} is non-generic, this version can only handle arrays, sorry!",
+                                                                              instanceType.Name));
                                 }
 
                                 listContentType = instanceType.GetElementType();
@@ -1873,16 +2047,15 @@ namespace Moonrise.Utils.Test.ObjectCreation
                             {
                                 if (instanceType.GenericTypeArguments.Length > 1)
                                 {
-                                    throw new ArgumentException(string.Format(
-                                        "{0} can only have a single generic with this version, sorry!",
-                                        instanceType.Name));
+                                    throw new ArgumentException(string.Format("{0} can only have a single generic with this version, sorry!",
+                                                                              instanceType.Name));
                                 }
 
                                 listContentType = instanceType.GenericTypeArguments[0];
                             }
 
                             int numItems = _random.Next(OneShot ? MinItemsOneShot : MinItems,
-                                OneShot ? MaxItemsOneShot : MaxItems);
+                                                        OneShot ? MaxItemsOneShot : MaxItems);
 
                             retVal = InstantiateType(instanceType, numItems);
                             ObjectCount++;
@@ -1901,11 +2074,11 @@ namespace Moonrise.Utils.Test.ObjectCreation
 
                                 if (instanceType.IsArray)
                                 {
-                                    ((Array) retVal).SetValue(item, i);
+                                    ((Array)retVal).SetValue(item, i);
                                 }
                                 else
                                 {
-                                    ((IList) retVal).Add(item);
+                                    ((IList)retVal).Add(item);
                                 }
                             }
                         }
@@ -1950,10 +2123,10 @@ namespace Moonrise.Utils.Test.ObjectCreation
         /// <param name="attributeInterface">The attribute interface.</param>
         /// <param name="memberAttributes">The member attributes.</param>
         /// <param name="isProperty">Determines if we're looking for a property or a field.</param>
-        private void AddMemberAttributesFromInterface(string memberName,
-            Type attributeInterface,
-            List<CustomAttributeData> memberAttributes,
-            bool isProperty)
+        private void AddMemberAttributesFromInterface(string                    memberName,
+                                                      Type                      attributeInterface,
+                                                      List<CustomAttributeData> memberAttributes,
+                                                      bool                      isProperty)
         {
             // Now look for a corresponding member in this interface and see if it has any custom attributes to add to the list
             MemberInfo interfaceMember;
@@ -1987,8 +2160,9 @@ namespace Moonrise.Utils.Test.ObjectCreation
         /// <exception cref="System.ArgumentException">
         ///     If there is a problem with the interface
         /// </exception>
-        [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1503:CurlyBracketsMustNotBeOmitted",
-            Justification = "I excuse throwing exceptions!")]
+        [SuppressMessage("StyleCop.CSharp.LayoutRules",
+                         "SA1503:CurlyBracketsMustNotBeOmitted",
+                         Justification = "I excuse throwing exceptions!")]
         private object CreateMappedInterface(Type fieldType, bool recursive)
         {
             object retVal = null;
@@ -1998,6 +2172,7 @@ namespace Moonrise.Utils.Test.ObjectCreation
                 if (!GetOneShotItemsSource(ref retVal))
                 {
                     bool allowNulls = OneShot ? AllowNullsOneShot : AllowNulls;
+
                     bool allowNullElementsInEnumerable =
                         OneShot ? AllowNullElementsInEnumerableOneShot : AllowNullElementsInEnumerable;
 
@@ -2009,19 +2184,19 @@ namespace Moonrise.Utils.Test.ObjectCreation
                         }
                         else if (validationAttribute.GetType() == typeof(ListContentValidationAttribute))
                         {
-                            if (!((ListContentValidationAttribute) validationAttribute).AllowNulls)
+                            if (!((ListContentValidationAttribute)validationAttribute).AllowNulls)
                             {
                                 allowNullElementsInEnumerable = false;
                             }
 
-                            if (((ListContentValidationAttribute) validationAttribute).MinElements < int.MaxValue)
+                            if (((ListContentValidationAttribute)validationAttribute).MinElements < int.MaxValue)
                             {
-                                MinItemsOneShot = ((ListContentValidationAttribute) validationAttribute).MinElements;
+                                MinItemsOneShot = ((ListContentValidationAttribute)validationAttribute).MinElements;
                             }
 
-                            if (((ListContentValidationAttribute) validationAttribute).MaxElements > int.MinValue)
+                            if (((ListContentValidationAttribute)validationAttribute).MaxElements > int.MinValue)
                             {
-                                MaxItemsOneShot = ((ListContentValidationAttribute) validationAttribute).MaxElements;
+                                MaxItemsOneShot = ((ListContentValidationAttribute)validationAttribute).MaxElements;
                             }
                         }
                     }
@@ -2047,9 +2222,8 @@ namespace Moonrise.Utils.Test.ObjectCreation
                                 {
                                     if (fieldType.GenericTypeArguments.Length > 1)
                                     {
-                                        throw new ArgumentException(string.Format(
-                                            "{0} can only have a single generic with this version, sorry!",
-                                            fieldType.Name));
+                                        throw new ArgumentException(string.Format("{0} can only have a single generic with this version, sorry!",
+                                                                                  fieldType.Name));
                                     }
 
                                     Type listContentType = fieldType.GenericTypeArguments[0];
@@ -2063,13 +2237,12 @@ namespace Moonrise.Utils.Test.ObjectCreation
                         {
                             if (IgnoreUnimplementedInterfaces)
                             {
-                                IgnoredIssueTracer?.Invoke(
-                                    $"There is no implemention defined for {fieldType.FullName}, the created instance will be null");
+                                IgnoredIssueTracer?.Invoke($"There is no implemention defined for {fieldType.FullName}, the created instance will be null");
                             }
                             else
                             {
                                 throw new ArgumentException(string.Format("There is no implementation defined for {0}!",
-                                    fieldType.FullName));
+                                                                          fieldType.FullName));
                             }
                         }
 
@@ -2084,14 +2257,13 @@ namespace Moonrise.Utils.Test.ObjectCreation
                                 if (!typeof(IList).IsAssignableFrom(implementationType))
                                 {
                                     throw new ArgumentException(string.Format("{0} needs to implement IList!",
-                                        implementationType.Name));
+                                                                              implementationType.Name));
                                 }
 
                                 if (implementationType.GenericTypeArguments.Length > 1)
                                 {
-                                    throw new ArgumentException(string.Format(
-                                        "{0} can only have a single generic with this version, sorry!",
-                                        implementationType.Name));
+                                    throw new ArgumentException(string.Format("{0} can only have a single generic with this version, sorry!",
+                                                                              implementationType.Name));
                                 }
 
                                 Type listContentType = implementationType.GenericTypeArguments[0];
@@ -2099,7 +2271,7 @@ namespace Moonrise.Utils.Test.ObjectCreation
                                 ObjectCount++;
 
                                 int numItems = _random.Next(OneShot ? MinItemsOneShot : MinItems,
-                                    OneShot ? MaxItemsOneShot : MaxItems);
+                                                            OneShot ? MaxItemsOneShot : MaxItems);
 
                                 for (int i = 0; i < numItems; i++)
                                 {
@@ -2113,7 +2285,7 @@ namespace Moonrise.Utils.Test.ObjectCreation
                                         _elementContext.RemoveAt(_elementContext.Count - 1);
                                     }
 
-                                    ((IList) retVal).Add(item);
+                                    ((IList)retVal).Add(item);
                                 }
                             }
                             else
@@ -2138,12 +2310,14 @@ namespace Moonrise.Utils.Test.ObjectCreation
         {
             bool retVal = false;
 
-            if (OneShot && ItemsSourceOneShot != null && !string.IsNullOrWhiteSpace(ItemsSourceOneShotName))
+            if (!string.IsNullOrWhiteSpace(ItemsSourceOneShotName) && OneShot && ItemsSourceOneShot != null)
             {
                 // First we collate our static property and methods
                 PropertyInfo sourceProperty =
                     ItemsSourceOneShot.GetTypeInfo().GetDeclaredProperty(ItemsSourceOneShotName);
+
                 MethodInfo itemsSourceMethod = ItemsSourceOneShot.GetTypeInfo().GetDeclaredMethod("ItemSource");
+
                 MethodInfo preferPropertyMethod =
                     ItemsSourceOneShot.GetTypeInfo().GetDeclaredMethod("PreferPropertyToItemSourceCall");
 
@@ -2157,7 +2331,8 @@ namespace Moonrise.Utils.Test.ObjectCreation
                     {
                         ItemsSourceOneShotName
                     };
-                    preferProperty = (bool) preferPropertyMethod.Invoke(null, param);
+
+                    preferProperty = (bool)preferPropertyMethod.Invoke(null, param);
                 }
 
                 if (itemsSourceMethod != null && !preferProperty)
@@ -2166,15 +2341,12 @@ namespace Moonrise.Utils.Test.ObjectCreation
                     {
                         object[] param =
                         {
-                            ItemsSourceOneShotName,
-                            CurrentPropertyInfo,
-                            CurrentFieldInfo,
-                            this
+                            ItemsSourceOneShotName, CurrentPropertyInfo, CurrentFieldInfo, this
                         };
 
                         // Just in case the ItemSource makes use of US, The Creator, makes sure we don't go to recursive hell!
                         OneShot = false;
-                        IList<T> source = (IList<T>) itemsSourceMethod.Invoke(null, param);
+                        IList<T> source = (IList<T>)itemsSourceMethod.Invoke(null, param);
                         OneShot = true;
 
                         if (source != null)
@@ -2187,16 +2359,16 @@ namespace Moonrise.Utils.Test.ObjectCreation
                     catch (Exception excep)
                     {
                         throw new ObjectCreationException(excep,
-                            ObjectCreationExceptionReason.IssueWithItemsSourceMethod,
-                            ItemsSourceOneShot.Name,
-                            ItemsSourceOneShotName);
+                                                          ObjectCreationExceptionReason.IssueWithItemsSourceMethod,
+                                                          ItemsSourceOneShot.Name,
+                                                          ItemsSourceOneShotName);
                     }
                 }
                 else if (sourceProperty != null)
                 {
                     try
                     {
-                        IList<T> source = (IList<T>) sourceProperty.GetValue(null);
+                        IList<T> source = (IList<T>)sourceProperty.GetValue(null);
 
                         if (source != null)
                         {
@@ -2208,9 +2380,9 @@ namespace Moonrise.Utils.Test.ObjectCreation
                     catch (Exception excep)
                     {
                         throw new ObjectCreationException(excep,
-                            ObjectCreationExceptionReason.IssueWithItemsSourceProperty,
-                            ItemsSourceOneShot.Name,
-                            ItemsSourceOneShotName);
+                                                          ObjectCreationExceptionReason.IssueWithItemsSourceProperty,
+                                                          ItemsSourceOneShot.Name,
+                                                          ItemsSourceOneShotName);
                     }
                 }
             }
@@ -2229,6 +2401,7 @@ namespace Moonrise.Utils.Test.ObjectCreation
             Array enumValues = Enum.GetValues(fieldType);
             int index = GetRandomInt(0, enumValues.GetUpperBound(0));
             retVal = enumValues.GetValue(index);
+
             return retVal;
         }
 
@@ -2244,7 +2417,10 @@ namespace Moonrise.Utils.Test.ObjectCreation
         /// <returns>
         ///     The random string
         /// </returns>
-        private string GetRandomString(string stringSource, int minStrLen, int maxStrLen, bool internalOnly)
+        private string GetRandomString(string stringSource,
+                                       int    minStrLen,
+                                       int    maxStrLen,
+                                       bool   internalOnly)
         {
             string retVal = null;
 
@@ -2273,7 +2449,8 @@ namespace Moonrise.Utils.Test.ObjectCreation
 
                         bool allowNulls = OneShot ? AllowNullsOneShot : AllowNulls;
 
-                        if (internalOnly || !allowNulls ||
+                        if (internalOnly ||
+                            !allowNulls ||
                             GetRandomBool(OneShot ? NullThresholdOneShot : NullThreshold))
                         {
                             if (!internalOnly && (OneShot ? RespectValidationOneShot : RespectValidation))
@@ -2319,9 +2496,10 @@ namespace Moonrise.Utils.Test.ObjectCreation
                                     else if (validationAttribute.GetType() == typeof(StringLengthAttribute))
                                     {
                                         minValidationLength =
-                                            ((StringLengthAttribute) validationAttribute).MinimumLength;
+                                            ((StringLengthAttribute)validationAttribute).MinimumLength;
+
                                         maxStrLen = Math.Min(maxStrLen,
-                                            ((StringLengthAttribute) validationAttribute).MaximumLength);
+                                                             ((StringLengthAttribute)validationAttribute).MaximumLength);
                                     }
                                 }
 
@@ -2354,34 +2532,6 @@ namespace Moonrise.Utils.Test.ObjectCreation
                         }
                     }
                 }
-            }
-
-            return retVal;
-        }
-
-        /// <summary>
-        ///     Gets a random email address.
-        /// </summary>
-        /// <remarks>
-        ///     By default the strings used will be <see cref="Creator.StringSources.LowercaseAlphaCharactersWithDots" />@
-        ///     <see cref="Creator.StringSources.LowercaseAlphaCharacters" />.
-        ///     <see cref="Creator.StringSources.LowercaseAlphaCharacters" /> with the lengths restricted to a min/max length of
-        ///     2/20 each.
-        /// </remarks>
-        /// <param name="domain">If passed this is used as the domain, otherwise a random domain is used</param>
-        /// <returns>A random email address</returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public string GetRandomEmail(string domain = null)
-        {
-            string retVal = null;
-
-            if (!GetOneShotItemsSource(ref retVal))
-            {
-                domain = EmailDomainOneShot ?? domain;
-
-                retVal =
-                    $"{GetRandomString(StringSources.LowercaseAlphaCharactersWithDots, 2, 20, true)}@" +
-                    $"{domain ?? $"{GetRandomString(StringSources.LowercaseAlphaCharacters, 2, 20, true)}.{GetRandomString(StringSources.LowercaseAlphaCharacters, 2, 20, true)}"}";
             }
 
             return retVal;
@@ -2430,6 +2580,7 @@ namespace Moonrise.Utils.Test.ObjectCreation
             MaxDateTimeOffset = DateTimeOffset.MaxValue;
             MinItems = 0;
             MaxItems = 4;
+            RandomGuids = false;
             StringSource = StringSources.EverydayCharacters;
             ValidationAttributes = new List<ValidationAttribute>();
             AllowNulls = false;
@@ -2466,8 +2617,8 @@ namespace Moonrise.Utils.Test.ObjectCreation
             MaxDateTimeOffsetOneShot = MaxDateTimeOffset;
             MinItemsOneShot = MinItems;
             MaxItemsOneShot = MaxItems;
-            MinDecimalOneShot = (double) MinDecimal;
-            MaxDecimalOneShot = (double) MaxDecimal;
+            MinDecimalOneShot = (double)MinDecimal;
+            MaxDecimalOneShot = (double)MaxDecimal;
             MinDoubleOneShot = MinDouble;
             MaxDoubleOneShot = MaxDouble;
             MinFloatOneShot = MinFloat;
@@ -2494,6 +2645,7 @@ namespace Moonrise.Utils.Test.ObjectCreation
             MaxStrLenOneShot = MaxStrLen;
             StringSourceOneShot = StringSource;
             RespectValidationOneShot = RespectValidation;
+            RandomGuidsOneShot = RandomGuids;
             NullThresholdOneShot = NullThreshold;
             TypeCreationOneShot = null;
             ItemsSourceOneShot = null;
@@ -2503,6 +2655,7 @@ namespace Moonrise.Utils.Test.ObjectCreation
         private object InstantiateType(Type instanceType, int numItems = 1)
         {
             object retVal;
+
             try
             {
                 if (_interfaceMap.ContainsKey(instanceType))
@@ -2527,15 +2680,14 @@ namespace Moonrise.Utils.Test.ObjectCreation
                 {
                     if (IgnoreNonDefaultConstructors)
                     {
-                        IgnoredIssueTracer?.Invoke(
-                            $"No default constructor for {instanceType.FullName}. Created instance is null.");
+                        IgnoredIssueTracer?.Invoke($"No default constructor for {instanceType.FullName}. Created instance is null.");
                     }
                     else
                     {
-                        throw new ArgumentException(
-                            "Creator currently only works with classes that have a default constructor",
-                            instanceType.FullName,
-                            excep);
+                        throw new
+                            ArgumentException($"Creator currently only works with classes that have a default constructor. You CAN try setting {nameof(IgnoreNonDefaultConstructors)} to true - you'll get a null instance but no exception!",
+                                              instanceType.FullName,
+                                              excep);
                     }
                 }
             }
@@ -2571,13 +2723,14 @@ namespace Moonrise.Utils.Test.ObjectCreation
                 {
                     if (IgnoreSetterExceptions)
                     {
-                        IgnoredIssueTracer?.Invoke(
-                            $"Could not call the setter for {field.DeclaringType.Name}.{field.Name}. Instance left at default value.");
+                        IgnoredIssueTracer?.Invoke($"Could not call the setter for {field.DeclaringType.Name}.{field.Name}. Instance left at default value.");
                     }
                     else
                     {
-                        throw new ObjectCreationException(e, ObjectCreationExceptionReason.CouldNotCallSetter,
-                            field.DeclaringType.Name, field.Name);
+                        throw new ObjectCreationException(e,
+                                                          ObjectCreationExceptionReason.CouldNotCallSetter,
+                                                          field.DeclaringType.Name,
+                                                          field.Name);
                     }
                 }
                 finally
@@ -2617,13 +2770,14 @@ namespace Moonrise.Utils.Test.ObjectCreation
                 {
                     if (IgnoreSetterExceptions)
                     {
-                        IgnoredIssueTracer?.Invoke(
-                            $"Could not call the setter for {prop.DeclaringType.Name}.{prop.Name}. Instance left at default value.");
+                        IgnoredIssueTracer?.Invoke($"Could not call the setter for {prop.DeclaringType.Name}.{prop.Name}. Instance left at default value.");
                     }
                     else
                     {
-                        throw new ObjectCreationException(e, ObjectCreationExceptionReason.CouldNotCallSetter,
-                            prop.DeclaringType.Name, prop.Name);
+                        throw new ObjectCreationException(e,
+                                                          ObjectCreationExceptionReason.CouldNotCallSetter,
+                                                          prop.DeclaringType.Name,
+                                                          prop.Name);
                     }
                 }
                 finally
@@ -2678,7 +2832,7 @@ namespace Moonrise.Utils.Test.ObjectCreation
                 else if (typeof(ValidationAttribute).IsAssignableFrom(customAttributeData.AttributeType))
                 {
                     // We now need to create an instance of the attribute that is on the interface and add it to the list of attributes.
-                    ValidationAttribute validAttr = (ValidationAttribute) customAttributeData.CreateAttribute();
+                    ValidationAttribute validAttr = (ValidationAttribute)customAttributeData.CreateAttribute();
 
                     if (validAttr != null)
                     {
@@ -2691,8 +2845,7 @@ namespace Moonrise.Utils.Test.ObjectCreation
             if (OneShot ? RespectValidationOneShot : RespectValidation)
             {
                 // See if there is any validation properties on the item and add that to any we found on it's mapped interface
-                ValidationAttributes.AddRange(
-                    ((ValidationAttribute[]) member.GetCustomAttributes(typeof(ValidationAttribute), true)).ToList());
+                ValidationAttributes.AddRange(((ValidationAttribute[])member.GetCustomAttributes(typeof(ValidationAttribute), true)).ToList());
 
                 // Now add any that are on its declared interfaces
                 foreach (Type implementedInterface in member.DeclaringType.GetTypeInfo().ImplementedInterfaces)
@@ -2705,8 +2858,8 @@ namespace Moonrise.Utils.Test.ObjectCreation
                     if (interfaceProperty != null)
                     {
                         interfaceAttributes =
-                            ((ValidationAttribute[]) interfaceProperty.GetCustomAttributes(typeof(ValidationAttribute),
-                                true)).ToList();
+                            ((ValidationAttribute[])interfaceProperty.GetCustomAttributes(typeof(ValidationAttribute),
+                                                                                          true)).ToList();
                     }
 
                     if (interfaceAttributes != null)
@@ -2728,8 +2881,8 @@ namespace Moonrise.Utils.Test.ObjectCreation
         /// <exception cref="System.ArgumentException">If this class and <see cref="ObjectCreationAttribute" /> get out of synch</exception>
         [
             SuppressMessage("StyleCop.CSharp.LayoutRules",
-                "SA1503:CurlyBracketsMustNotBeOmitted",
-                Justification = "I allow this for returns & exceptions!")]
+                            "SA1503:CurlyBracketsMustNotBeOmitted",
+                            Justification = "I allow this for returns & exceptions!")]
         private void SetOneShotProperties(string elementName, CustomAttributeData customAttributeData)
         {
             if (customAttributeData.NamedArguments == null)
@@ -2749,10 +2902,8 @@ namespace Moonrise.Utils.Test.ObjectCreation
 
                 if (oneShotProperty == null)
                 {
-                    throw new ArgumentException(
-                        string.Format(
-                            "Couldn't find the Creator.{0} property, the ObjectCreationAttribute must be out of synch!",
-                            oneShotPropertyName));
+                    throw new ArgumentException(string.Format("Couldn't find the Creator.{0} property, the ObjectCreationAttribute must be out of synch!",
+                                                              oneShotPropertyName));
                 }
 
                 oneShotProperty.SetValue(this, customAttributeNamedArgument.TypedValue.Value);
@@ -2792,129 +2943,6 @@ namespace Moonrise.Utils.Test.ObjectCreation
 
             return retVal;
         }
-
-        /// <summary>
-        ///     "Namespace" (actually a class) for the available string sources
-        /// </summary>
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules",
-            "SA1650:ElementDocumentationMustBeSpelledCorrectly",
-            Justification = "The intellisense will be more effective if the summaries show the string source!")]
-        [SuppressMessage("StyleCop.CSharp.OrderingRules",
-            "SA1201:ElementsMustAppearInTheCorrectOrder",
-            Justification = "I like nested types to be first!")]
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules",
-            "SA1630:DocumentationTextMustContainWhitespace",
-            Justification = "The intellisense will be more effective if the summaries show the string source!")]
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules",
-            "SA1631:DocumentationMustMeetCharacterPercentage",
-            Justification = "The intellisense will be more effective if the summaries show the string source!")]
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules",
-            "SA1603:DocumentationMustContainValidXml",
-            Justification = "The intellisense will be more effective if the summaries show the string source!")]
-#pragma warning disable CS1570
-        public class StringSources
-        {
-            /// <summary>
-            ///     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
-            /// </summary>
-            public const string AlphaCharactersWithSpaces =
-                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ";
-
-            /// <summary>
-            ///     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-            /// </summary>
-            public const string AlphaNumericCharacters =
-                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
-            /// <summary>
-            ///     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789."
-            /// </summary>
-            public const string AlphaNumericCharactersWithDots =
-                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.";
-
-            /// <summary>
-            ///     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 "
-            /// </summary>
-            public const string AlphaNumericCharactersWithSpaces =
-                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ";
-
-            /// <summary>
-            ///     ""
-            /// </summary>
-            public const string Empty = "";
-
-            /// <summary>
-            ///     "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ.0123456789:;!\"£$%^&amp;*()-_+={}[]'@#~/?\\€&lt;&gt;"
-            /// </summary>
-            public const string EverydayCharacters =
-                "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ.0123456789:;!\"£$%^&*()-_+={}[]'@#~/?\\€<>";
-
-            /// <summary>
-            ///     "abcdefghijklmnopqrstuvwxyz"
-            /// </summary>
-            public const string LowercaseAlphaCharacters = "abcdefghijklmnopqrstuvwxyz";
-
-            /// <summary>
-            ///     "abcdefghijklmnopqrstuvwxyz."
-            /// </summary>
-            public const string LowercaseAlphaCharactersWithDots = "abcdefghijklmnopqrstuvwxyz.";
-
-            /// <summary>
-            ///     "abcdefghijklmnopqrstuvwxyz "
-            /// </summary>
-            public const string LowercaseAlphaCharactersWithSpaces = "abcdefghijklmnopqrstuvwxyz ";
-
-            /// <summary>
-            ///     "abcdefghijklmnopqrstuvwxyz0123456789"
-            /// </summary>
-            public const string LowercaseAlphaNumericCharacters = "abcdefghijklmnopqrstuvwxyz0123456789";
-
-            /// <summary>
-            ///     "abcdefghijklmnopqrstuvwxyz0123456789 "
-            /// </summary>
-            public const string LowercaseAlphaNumericCharactersWithSpaces = "abcdefghijklmnopqrstuvwxyz0123456789 ";
-
-            /// <summary>
-            ///     "0123456789"
-            /// </summary>
-            public const string Numeric = "0123456789";
-
-            /// <summary>
-            ///     "0123456789."
-            /// </summary>
-            public const string NumericWithDecimal = "0123456789.";
-
-            /// <summary>
-            ///     "0123456789.+-*/^&lt;&gt;=%"
-            /// </summary>
-            public const string NumericWithSymbols = "0123456789.+-*/^<>=%";
-
-            /// <summary>
-            ///     ".:;!\"£$%^&*()-_+={}[]'@#~/?\\€<>"
-            /// </summary>
-            public const string OnlySymbols = ".:;!\"£$%^&*()-_+={}[]'@#~/?\\€<>";
-
-            /// <summary>
-            ///     "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-            /// </summary>
-            public const string UppercaseAlphaCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-            /// <summary>
-            ///     "ABCDEFGHIJKLMNOPQRSTUVWXYZ "
-            /// </summary>
-            public const string UppercaseAlphaCharactersWithSpaces = "ABCDEFGHIJKLMNOPQRSTUVWXYZ ";
-
-            /// <summary>
-            ///     "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-            /// </summary>
-            public const string UppercaseAlphaNumericCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
-            /// <summary>
-            ///     "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 "
-            /// </summary>
-            public const string UppercaseAlphaNumericCharactersWithSpaces = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ";
-        }
-#pragma warning restore CS1570
     }
 
     /// <summary>
@@ -2931,7 +2959,7 @@ namespace Moonrise.Utils.Test.ObjectCreation
         public static Attribute CreateAttribute(this CustomAttributeData data)
         {
             IEnumerable<object> arguments = from arg in data.ConstructorArguments
-                select arg.Value;
+                                            select arg.Value;
 
             Attribute attribute = data.Constructor.Invoke(arguments.ToArray()) as Attribute;
 
