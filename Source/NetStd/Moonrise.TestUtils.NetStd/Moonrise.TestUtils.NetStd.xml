@@ -16,6 +16,102 @@
             applied results in the associated [property]OneShot being set to the value of the attribute. This then controls
             whether and how that value is created.
         </member>
+        <member name="T:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources">
+            <summary>
+                "Namespace" (actually a class) for the available string sources
+            </summary>
+        </member>
+        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.AlphaCharactersWithSpaces">
+            <summary>
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
+            </summary>
+        </member>
+        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.AlphaNumericCharacters">
+            <summary>
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+            </summary>
+        </member>
+        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.AlphaNumericCharactersWithDots">
+            <summary>
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789."
+            </summary>
+        </member>
+        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.AlphaNumericCharactersWithSpaces">
+            <summary>
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 "
+            </summary>
+        </member>
+        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.Empty">
+            <summary>
+                ""
+            </summary>
+        </member>
+        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.EverydayCharacters">
+            <summary>
+                "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ.0123456789:;!\"£$%^&amp;*()-_+={}[]'@#~/?\\€&lt;&gt;"
+            </summary>
+        </member>
+        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.LowercaseAlphaCharacters">
+            <summary>
+                "abcdefghijklmnopqrstuvwxyz"
+            </summary>
+        </member>
+        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.LowercaseAlphaCharactersWithDots">
+            <summary>
+                "abcdefghijklmnopqrstuvwxyz."
+            </summary>
+        </member>
+        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.LowercaseAlphaCharactersWithSpaces">
+            <summary>
+                "abcdefghijklmnopqrstuvwxyz "
+            </summary>
+        </member>
+        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.LowercaseAlphaNumericCharacters">
+            <summary>
+                "abcdefghijklmnopqrstuvwxyz0123456789"
+            </summary>
+        </member>
+        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.LowercaseAlphaNumericCharactersWithSpaces">
+            <summary>
+                "abcdefghijklmnopqrstuvwxyz0123456789 "
+            </summary>
+        </member>
+        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.Numeric">
+            <summary>
+                "0123456789"
+            </summary>
+        </member>
+        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.NumericWithDecimal">
+            <summary>
+                "0123456789."
+            </summary>
+        </member>
+        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.NumericWithSymbols">
+            <summary>
+                "0123456789.+-*/^&lt;&gt;=%"
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.OnlySymbols" -->
+        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.UppercaseAlphaCharacters">
+            <summary>
+                "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            </summary>
+        </member>
+        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.UppercaseAlphaCharactersWithSpaces">
+            <summary>
+                "ABCDEFGHIJKLMNOPQRSTUVWXYZ "
+            </summary>
+        </member>
+        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.UppercaseAlphaNumericCharacters">
+            <summary>
+                "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+            </summary>
+        </member>
+        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.UppercaseAlphaNumericCharactersWithSpaces">
+            <summary>
+                "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 "
+            </summary>
+        </member>
         <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.DEFAULT_DATETIME">
             <summary>
                 Constant representing the default datetime
@@ -26,56 +122,10 @@
                 Constant representing the default datetime offset
             </summary>
         </member>
-        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator._creatorMap">
+        <member name="P:Moonrise.Utils.Test.ObjectCreation.Creator.ElementContext">
             <summary>
-                A map of types and the creators that can create them.
+                Gives the context of the property/field being currently created. i.e. The "breadcrumb" of the parental elements.
             </summary>
-        </member>
-        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator._interfaceAttributesMap">
-            <summary>
-                Maps implementation types to interfaces that carry <see cref="T:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute" />s
-            </summary>
-        </member>
-        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator._interfaceMap">
-            <summary>
-                Maps interfaces to implementations to be used when creating elements that are interfaces
-            </summary>
-        </member>
-        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator._maxObjects">
-            <summary>
-                Backing field for MaxObjects
-            </summary>
-        </member>
-        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator._oneShot">
-            <summary>
-                Backing field for <see cref="P:Moonrise.Utils.Test.ObjectCreation.Creator.OneShot" />
-            </summary>
-        </member>
-        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator._random">
-            <summary>
-                The random that will be used by the instance to generate random stuff
-            </summary>
-        </member>
-        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.encounteredObjects">
-            <summary>
-                A list of object types that have been encountered in a particular context. Used to avoid nesting certain objects.
-            </summary>
-        </member>
-        <member name="M:Moonrise.Utils.Test.ObjectCreation.Creator.#ctor">
-            <summary>
-                Initializes a new instance of the <see cref="T:Moonrise.Utils.Test.ObjectCreation.Creator" /> class. Elements created via this constructor will be
-                non-reliably-repeatable
-            </summary>
-        </member>
-        <member name="M:Moonrise.Utils.Test.ObjectCreation.Creator.#ctor(System.Int32)">
-            <summary>
-                Initializes a new instance of the <see cref="T:Moonrise.Utils.Test.ObjectCreation.Creator" /> class. Elements created via this constructor will be
-                reliably-repeatable
-            </summary>
-            <param name="seed">
-                The seed to pass to the random generator. Using the same seed and calling in the same creation order
-                will produce repeatable results!
-            </param>
         </member>
         <member name="P:Moonrise.Utils.Test.ObjectCreation.Creator.AllowNullElementsInEnumerable">
             <summary>
@@ -91,6 +141,11 @@
             <summary>
                 The action to pass the name of the property or field being created - VERY useful for diagnosing recursive creation
                 failures!
+            </summary>
+        </member>
+        <member name="P:Moonrise.Utils.Test.ObjectCreation.Creator.EmailDomain">
+            <summary>
+                The email domain to use in creating random emails.
             </summary>
         </member>
         <member name="P:Moonrise.Utils.Test.ObjectCreation.Creator.IgnoredIssueTracer">
@@ -112,7 +167,7 @@
         <member name="P:Moonrise.Utils.Test.ObjectCreation.Creator.IgnoreSetterExceptions">
             <summary>
                 Ignores exceptions that occur when a value is assigned to a property or field, leaving it as null - defaults to
-                true.
+                false.
             </summary>
         </member>
         <member name="P:Moonrise.Utils.Test.ObjectCreation.Creator.IgnoreUnimplementedInterfaces">
@@ -301,6 +356,15 @@
                 The number of objects that were created by the last <see cref="M:Moonrise.Utils.Test.ObjectCreation.Creator.CreateFilled``1(System.Int32,System.Boolean)" /> call.
             </summary>
         </member>
+        <member name="P:Moonrise.Utils.Test.ObjectCreation.Creator.RandomGuids">
+            <summary>
+                Determines if random bytes are used to create Guids, or the default GUID creation - Defaults to false
+            </summary>
+            <remarks>
+                Why would you want this since GUIDS are effectively random by default? Well, if you require repeatable values
+                (by using a seed value when you construct the <see cref="T:Moonrise.Utils.Test.ObjectCreation.Creator" />) then you need your Guids to be Randomised.
+            </remarks>
+        </member>
         <member name="P:Moonrise.Utils.Test.ObjectCreation.Creator.RespectValidation">
             <summary>
                 Determines if the filling should respect any validation attributes on the elements being filled and only fill with
@@ -369,6 +433,12 @@
         <member name="P:Moonrise.Utils.Test.ObjectCreation.Creator.CurrentPropertyInfo">
             <summary>
                 The current property information
+            </summary>
+        </member>
+        <member name="P:Moonrise.Utils.Test.ObjectCreation.Creator.EmailDomainOneShot">
+            <summary>
+                The email domain to use in following creation/random calls - One shot usage as determined by
+                <see cref="T:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute" />.
             </summary>
         </member>
         <member name="P:Moonrise.Utils.Test.ObjectCreation.Creator.IgnoreOneShot">
@@ -594,6 +664,12 @@
                 <see cref="T:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute" />.
             </summary>
         </member>
+        <member name="P:Moonrise.Utils.Test.ObjectCreation.Creator.RandomGuidsOneShot">
+            <summary>
+                Indicates whether random Guids are to be used in following creation/random calls - One shot usage as determined by
+                <see cref="T:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute" />.
+            </summary>
+        </member>
         <member name="P:Moonrise.Utils.Test.ObjectCreation.Creator.RespectValidationOneShot">
             <summary>
                 Determines if the filling should respect any validation attributes on the elements being filled and only fill with
@@ -619,10 +695,56 @@
                 The validation attributes to respect - only ever filled if we need to respect the validation attributes
             </summary>
         </member>
-        <member name="P:Moonrise.Utils.Test.ObjectCreation.Creator.ElementContext">
+        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.encounteredObjects">
             <summary>
-                Gives the context of the property/field being currently created. i.e. The "breadcrumb" of the parental elements.
+                A list of object types that have been encountered in a particular context. Used to avoid nesting certain objects.
             </summary>
+        </member>
+        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator._creatorMap">
+            <summary>
+                A map of types and the creators that can create them.
+            </summary>
+        </member>
+        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator._interfaceAttributesMap">
+            <summary>
+                Maps implementation types to interfaces that carry <see cref="T:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute" />s
+            </summary>
+        </member>
+        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator._interfaceMap">
+            <summary>
+                Maps interfaces to implementations to be used when creating elements that are interfaces
+            </summary>
+        </member>
+        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator._maxObjects">
+            <summary>
+                Backing field for MaxObjects
+            </summary>
+        </member>
+        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator._oneShot">
+            <summary>
+                Backing field for <see cref="P:Moonrise.Utils.Test.ObjectCreation.Creator.OneShot" />
+            </summary>
+        </member>
+        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator._random">
+            <summary>
+                The random that will be used by the instance to generate random stuff
+            </summary>
+        </member>
+        <member name="M:Moonrise.Utils.Test.ObjectCreation.Creator.#ctor">
+            <summary>
+                Initializes a new instance of the <see cref="T:Moonrise.Utils.Test.ObjectCreation.Creator" /> class. Elements created via this constructor will be
+                non-reliably-repeatable
+            </summary>
+        </member>
+        <member name="M:Moonrise.Utils.Test.ObjectCreation.Creator.#ctor(System.Int32)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Moonrise.Utils.Test.ObjectCreation.Creator" /> class. Elements created via this constructor will be
+                reliably-repeatable
+            </summary>
+            <param name="seed">
+                The seed to pass to the random generator. Using the same seed and calling in the same creation order
+                will produce repeatable results!
+            </param>
         </member>
         <member name="M:Moonrise.Utils.Test.ObjectCreation.Creator.CreateFilled``1(System.Int32,System.Boolean)">
             <summary>
@@ -676,6 +798,12 @@
             <returns>
                 An object populated with guff
             </returns>
+        </member>
+        <member name="M:Moonrise.Utils.Test.ObjectCreation.Creator.DoNotCreate``1">
+            <summary>
+                Instructs the creator that any type of {T} should not be created and replaced with null
+            </summary>
+            <typeparam name="T">The type not to create</typeparam>
         </member>
         <member name="M:Moonrise.Utils.Test.ObjectCreation.Creator.GetRandomBool(System.Double)">
             <summary>
@@ -733,6 +861,20 @@
             <param name="min">The minimum. (If default, defaults to <see cref="P:Moonrise.Utils.Test.ObjectCreation.Creator.MinDouble" />)</param>
             <param name="max">The maximum. (If default, defaults to <see cref="P:Moonrise.Utils.Test.ObjectCreation.Creator.MaxDouble" />)</param>
             <returns>A random double value</returns>
+        </member>
+        <member name="M:Moonrise.Utils.Test.ObjectCreation.Creator.GetRandomEmail(System.String)">
+            <summary>
+                Gets a random email address.
+            </summary>
+            <remarks>
+                By default the strings used will be <see cref="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.LowercaseAlphaCharactersWithDots" />@
+                <see cref="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.LowercaseAlphaCharacters" />.
+                <see cref="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.LowercaseAlphaCharacters" /> with the lengths restricted to a min/max length of
+                2/20 each.
+            </remarks>
+            <param name="domain">If passed this is used as the domain, otherwise a random domain is used</param>
+            <returns>A random email address</returns>
+            <exception cref="T:System.NotImplementedException"></exception>
         </member>
         <member name="M:Moonrise.Utils.Test.ObjectCreation.Creator.GetRandomEnum``1">
             <summary>
@@ -872,12 +1014,6 @@
             <typeparam name="I">Interface type to map</typeparam>
             <typeparam name="T">Type to map the interface to</typeparam>
         </member>
-        <member name="M:Moonrise.Utils.Test.ObjectCreation.Creator.DoNotCreate``1">
-            <summary>
-                Instructs the creator that any type of {T} should not be created and replaced with null
-            </summary>
-            <typeparam name="T">The type not to create</typeparam>
-        </member>
         <member name="M:Moonrise.Utils.Test.ObjectCreation.Creator.MapInterface(System.Type,System.Type)">
             <summary>
                 Maps an interface to an implementation to use when creating members that are interfaces
@@ -974,14 +1110,6 @@
                 The random string
             </returns>
         </member>
-        <member name="M:Moonrise.Utils.Test.ObjectCreation.Creator.GetRandomEmail">
-            <summary>
-            Gets a random email address.
-            </summary>
-            <remarks>By default the strings used will be <see cref="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.LowercaseAlphaCharactersWithDots"/>@<see cref="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.LowercaseAlphaCharacters"/>.<see cref="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.LowercaseAlphaCharacters"/> with the lengths restricted to a min/max length of 2/20 each.</remarks>
-            <returns>A random email address</returns>
-            <exception cref="T:System.NotImplementedException"></exception>
-        </member>
         <member name="M:Moonrise.Utils.Test.ObjectCreation.Creator.Initialise">
             <summary>
                 Initialises the properties of this instance.
@@ -1038,102 +1166,6 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="T:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources">
-            <summary>
-                "Namespace" (actually a class) for the available string sources
-            </summary>
-        </member>
-        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.AlphaCharactersWithSpaces">
-            <summary>
-                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
-            </summary>
-        </member>
-        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.AlphaNumericCharacters">
-            <summary>
-                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-            </summary>
-        </member>
-        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.AlphaNumericCharactersWithDots">
-            <summary>
-                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789."
-            </summary>
-        </member>
-        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.AlphaNumericCharactersWithSpaces">
-            <summary>
-                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 "
-            </summary>
-        </member>
-        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.Empty">
-            <summary>
-                ""
-            </summary>
-        </member>
-        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.EverydayCharacters">
-            <summary>
-                "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ.0123456789:;!\"£$%^&amp;*()-_+={}[]'@#~/?\\€&lt;&gt;"
-            </summary>
-        </member>
-        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.LowercaseAlphaCharacters">
-            <summary>
-                "abcdefghijklmnopqrstuvwxyz"
-            </summary>
-        </member>
-        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.LowercaseAlphaCharactersWithDots">
-            <summary>
-                "abcdefghijklmnopqrstuvwxyz."
-            </summary>
-        </member>
-        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.LowercaseAlphaCharactersWithSpaces">
-            <summary>
-                "abcdefghijklmnopqrstuvwxyz "
-            </summary>
-        </member>
-        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.LowercaseAlphaNumericCharacters">
-            <summary>
-                "abcdefghijklmnopqrstuvwxyz0123456789"
-            </summary>
-        </member>
-        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.LowercaseAlphaNumericCharactersWithSpaces">
-            <summary>
-                "abcdefghijklmnopqrstuvwxyz0123456789 "
-            </summary>
-        </member>
-        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.Numeric">
-            <summary>
-                "0123456789"
-            </summary>
-        </member>
-        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.NumericWithDecimal">
-            <summary>
-                "0123456789."
-            </summary>
-        </member>
-        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.NumericWithSymbols">
-            <summary>
-                "0123456789.+-*/^&lt;&gt;=%"
-            </summary>
-        </member>
-        <!-- Badly formed XML comment ignored for member "F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.OnlySymbols" -->
-        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.UppercaseAlphaCharacters">
-            <summary>
-                "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-            </summary>
-        </member>
-        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.UppercaseAlphaCharactersWithSpaces">
-            <summary>
-                "ABCDEFGHIJKLMNOPQRSTUVWXYZ "
-            </summary>
-        </member>
-        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.UppercaseAlphaNumericCharacters">
-            <summary>
-                "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-            </summary>
-        </member>
-        <member name="F:Moonrise.Utils.Test.ObjectCreation.Creator.StringSources.UppercaseAlphaNumericCharactersWithSpaces">
-            <summary>
-                "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 "
-            </summary>
-        </member>
         <member name="T:Moonrise.Utils.Test.ObjectCreation.CustomAttributeDataExtension">
             <summary>
                 An extension class that extends <see cref="T:System.Reflection.CustomAttributeData" />. Modified from
@@ -1152,6 +1184,71 @@
                 Creation attributes to apply to the attributed property that override the <see cref="T:Moonrise.Utils.Test.ObjectCreation.Creator" /> properties.
             </summary>
             <seealso cref="T:System.Attribute" />
+        </member>
+        <member name="T:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute.SIItemSource`1">
+            <summary>
+                This "static" interface (which you can't have) is to illustrate the expected static method your ItemSource static
+                class should expose in order to act as in ItemSource OR it must expose the element name as a property !
+            </summary>
+            <typeparam name="T">
+                Just to illustrate that each of the <see cref="P:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute.SIItemSource`1.ElementName" /> properties need to return the
+                appropriate type for that element.
+            </typeparam>
+        </member>
+        <member name="P:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute.SIItemSource`1.ElementName">
+            <summary>
+                Gets the list of objects to be used as the item source for <see cref="P:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute.SIItemSource`1.ElementName" />. IF the ItemsSource attribute
+                DOES supply a static <see cref="M:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute.SIItemSource`1.ItemSource(System.String,System.Reflection.PropertyInfo,System.Reflection.FieldInfo,Moonrise.Utils.Test.ObjectCreation.Creator)" /> method then
+                it will be called in preference to the property, unless your <see cref="T:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute.SIItemSource`1" /> implements the static
+                property <see cref="M:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute.SIItemSource`1.PreferPropertyToItemSourceCall(System.String)" />, in which case
+                it will use that to decide whether to use the property OR the static <see cref="M:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute.SIItemSource`1.ItemSource(System.String,System.Reflection.PropertyInfo,System.Reflection.FieldInfo,Moonrise.Utils.Test.ObjectCreation.Creator)" /> method to supply
+                the source list.
+            </summary>
+        </member>
+        <member name="M:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute.SIItemSource`1.ItemSource(System.String,System.Reflection.PropertyInfo,System.Reflection.FieldInfo,Moonrise.Utils.Test.ObjectCreation.Creator)">
+            <summary>
+                Returns the list of objects to be used as the item source for elementName
+            </summary>
+            <param name="elementName">Name of the element.</param>
+            <param name="propInfo">The property information - Only if it's a property, null otherwise.</param>
+            <param name="fieldInfo">The field information - Only if it's a field, null otherwise.</param>
+            <param name="creator">The instance to use to help you create a random instance, if you need to.</param>
+            <returns>
+                List of objects, to be used to randomly choose from to fill the property or field that the attribute has been
+                applied
+                to
+            </returns>
+        </member>
+        <member name="M:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute.SIItemSource`1.PreferPropertyToItemSourceCall(System.String)">
+            <summary>
+                Determines if the <see cref="P:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute.SIItemSource`1.ElementName" /> or the <see cref="M:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute.SIItemSource`1.ItemSource(System.String,System.Reflection.PropertyInfo,System.Reflection.FieldInfo,Moonrise.Utils.Test.ObjectCreation.Creator)" /> is to be used as the source for
+                elements for the elementName />.
+            </summary>
+            <remarks>
+                The default is true so if you want to use properties in preference (I find it slightly easier) then you do not
+                need to implement this static interface method!
+            </remarks>
+            <param name="elementName">Name of the element.</param>
+            <returns>
+                True means use the static <see cref="P:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute.SIItemSource`1.ElementName" /> property where it exists, False means use the static
+                <see cref="M:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute.SIItemSource`1.ItemSource(System.String,System.Reflection.PropertyInfo,System.Reflection.FieldInfo,Moonrise.Utils.Test.ObjectCreation.Creator)" /> method.
+            </returns>
+        </member>
+        <member name="T:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute.SITypeCreation`1">
+            <summary>
+                This "static" interface (which you can't have) is to illustrate the expected static method your TypeCreation static
+                class should expose in order to act as a TypeCreation OR it must expose the element name as a property !
+            </summary>
+            <typeparam name="T">
+                The type of the random instance this class will create.
+            </typeparam>
+        </member>
+        <member name="M:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute.SITypeCreation`1.CreateInstance(Moonrise.Utils.Test.ObjectCreation.Creator)">
+            <summary>
+                Creates an instance of the generic type using the supplied <see cref="T:System.Random" />.
+            </summary>
+            <param name="creator">The instance to use to help you create a random instance.</param>
+            <returns>A "random" instance</returns>
         </member>
         <member name="P:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute.AllowNullElementsInEnumerable">
             <summary>
@@ -1352,67 +1449,6 @@
                 needs to "implement",
                 i.e. respect, <see cref="T:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute.SITypeCreation`1" />
             </summary>
-        </member>
-        <member name="T:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute.SIItemSource`1">
-            <summary>
-                This "static" interface (which you can't have) is to illustrate the expected static method your ItemSource static
-                class should expose in order to act as in ItemSource OR it must expose the element name as a property !
-            </summary>
-            <typeparam name="T">
-                Just to illustrate that each of the <see cref="P:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute.SIItemSource`1.ElementName" /> properties need to return the
-                appropriate type for that element.
-            </typeparam>
-        </member>
-        <member name="P:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute.SIItemSource`1.ElementName">
-            <summary>
-                Gets the list of objects to be used as the item source for <see cref="P:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute.SIItemSource`1.ElementName" />. IF the ItemsSource attribute
-                DOES supply a static <see cref="M:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute.SIItemSource`1.ItemSource(System.String,System.Reflection.PropertyInfo,System.Reflection.FieldInfo,Moonrise.Utils.Test.ObjectCreation.Creator)" /> method then
-                it will be called in preference to the property, unless your <see cref="T:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute.SIItemSource`1" /> implements the static
-                property <see cref="M:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute.SIItemSource`1.PreferPropertyToItemSourceCall(System.String)" />, in which case
-                it will use that to decide whether to use the property OR the static <see cref="M:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute.SIItemSource`1.ItemSource(System.String,System.Reflection.PropertyInfo,System.Reflection.FieldInfo,Moonrise.Utils.Test.ObjectCreation.Creator)" /> method to supply
-                the source list.
-            </summary>
-        </member>
-        <member name="M:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute.SIItemSource`1.ItemSource(System.String,System.Reflection.PropertyInfo,System.Reflection.FieldInfo,Moonrise.Utils.Test.ObjectCreation.Creator)">
-            <summary>
-                Returns the list of objects to be used as the item source for elementName
-            </summary>
-            <param name="elementName">Name of the element.</param>
-            <param name="propInfo">The property information - Only if it's a property, null otherwise.</param>
-            <param name="fieldInfo">The field information - Only if it's a field, null otherwise.</param>
-            <param name="creator">The instance to use to help you create a random instance, if you need to.</param>
-            <returns>
-                List of objects, to be used to randomly choose from to fill the property or field that the attribute has been
-                applied
-                to
-            </returns>
-        </member>
-        <member name="M:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute.SIItemSource`1.PreferPropertyToItemSourceCall(System.String)">
-            <summary>
-                Determines if the <see cref="P:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute.SIItemSource`1.ElementName" /> or the <see cref="M:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute.SIItemSource`1.ItemSource(System.String,System.Reflection.PropertyInfo,System.Reflection.FieldInfo,Moonrise.Utils.Test.ObjectCreation.Creator)" /> is to be used as the source for
-                elements for the elementName />.
-            </summary>
-            <param name="elementName">Name of the element.</param>
-            <returns>
-                True means use the static <see cref="P:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute.SIItemSource`1.ElementName" /> property where it exists, False means use the static
-                <see cref="M:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute.SIItemSource`1.ItemSource(System.String,System.Reflection.PropertyInfo,System.Reflection.FieldInfo,Moonrise.Utils.Test.ObjectCreation.Creator)" /> method.
-            </returns>
-        </member>
-        <member name="T:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute.SITypeCreation`1">
-            <summary>
-                This "static" interface (which you can't have) is to illustrate the expected static method your TypeCreation static
-                class should expose in order to act as a TypeCreation OR it must expose the element name as a property !
-            </summary>
-            <typeparam name="T">
-                The type of the random instance this class will create.
-            </typeparam>
-        </member>
-        <member name="M:Moonrise.Utils.Test.ObjectCreation.ObjectCreationAttribute.SITypeCreation`1.CreateInstance(Moonrise.Utils.Test.ObjectCreation.Creator)">
-            <summary>
-                Creates an instance of the generic type using the supplied <see cref="T:System.Random" />.
-            </summary>
-            <param name="creator">The instance to use to help you create a random instance.</param>
-            <returns>A "random" instance</returns>
         </member>
         <member name="T:Moonrise.Utils.Test.ObjectCreation.ObjectCreationExceptionReason">
             <summary>

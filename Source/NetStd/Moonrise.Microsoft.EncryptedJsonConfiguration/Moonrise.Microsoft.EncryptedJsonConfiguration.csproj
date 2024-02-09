@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\..\Shared\Moonrise.Version\Properties\AutoVersion.cs" Link="Properties\AutoVersion.cs" />
@@ -42,7 +42,7 @@
     <DefineConstants>TRACE;DotNetCore;RELEASE;NETSTANDARD2_1</DefineConstants>
     <DocumentationFile>Moonrise.Microsoft.EncryptedJsonConfiguration.xml</DocumentationFile>
   </PropertyGroup>
-  <Target Name="PostcompileScript" AfterTargets="Build">
+  <!--<Target Name="PostcompileScript" AfterTargets="Build">
     <Exec Command="makeNuget.cmd $(Configuration) &quot;$(MSBuildProjectDirectory)&quot; $(AssemblyName)" />
-  </Target>
+  </Target>-->
 </Project>

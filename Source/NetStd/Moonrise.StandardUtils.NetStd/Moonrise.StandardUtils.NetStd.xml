@@ -1916,6 +1916,114 @@
                 True or False
             </returns>
         </member>
+        <member name="T:Moonrise.Utils.Standard.Threading.ScopedNestableAsyncGlobalSingleton`1">
+            <summary>
+                Provides scoped, nestable, async global values.
+                <para>
+                    Scoped because any call to get the value (via a static) that occurs somewhere INSIDE the using scope will get
+                    that value.
+                </para>
+                <para>
+                    Nestable because if you open another scope (through an interior/nested using) then THAT becomes the value
+                    anything inside of THAT scope will receive whereas once outside of THAT using scope the value for the PREVIOUS
+                    scope is the static value.
+                </para>
+                <para>
+                    Async because a <see cref="T:System.Threading.AsyncLocal`1" /> is used as the backing store and so each scopes within different
+                    async flows are just for that async flow.
+                </para>
+                <para>
+                    Global because it's sort of acting like a global variable!
+                </para>
+                <para>
+                    Another way of thinking about this class is that it is a smuggler. It can smuggle values way down into call
+                    heirarchies without you needing to retrofit paramters to pass to each call. You know the way you can use class
+                    variables for temporary working purposes without them being true properties/attributes of that class (from the
+                    design rather than language persepective here)? Well, a <see cref="T:Moonrise.Utils.Standard.Threading.ScopedNestableAsyncGlobalSingleton`1" />
+                    is really the same thing, but for a thread. Kinda!
+                </para>
+                <remarks>
+                    <para>
+                        Usage:
+                        <para>
+                            public class SUT : NestableAsyncGlobalSingleton&lt;string&gt;{public SUT(string value) :
+                            base(value){}
+                        </para>
+                    </para>
+                </remarks>
+                <example>
+                    Wrap any significant "outer code" with
+                    <para>
+                        using (new SUT("value")) { YOUR CODE }
+                    </para>
+                    Then anywhere, even deep, within YOUR CODE you can get the current nested, threaded global value via
+                    SUT.CurrentValue().
+                    <para>
+                        NOTE: IF you create an instance of the derived class via a function - perhaps because you need to do some
+                        common thing (like grab some info from the HttpContext etc) then IF you do any async calls within that
+                        function the wrong async context will be used. You must instead call the await in the arguments to your
+                        constructor and do that async work BEFORE constructing the derived class.
+                    </para>
+                </example>
+            </summary>
+            <typeparam name="T">The type of the singelton</typeparam>
+            <seealso cref="T:System.IDisposable" />
+        </member>
+        <member name="F:Moonrise.Utils.Standard.Threading.ScopedNestableAsyncGlobalSingleton`1.AsyncedCurrentGlobal">
+            <summary>
+                The current "thing". This is stored on a per async flow basis.
+            </summary>
+        </member>
+        <member name="P:Moonrise.Utils.Standard.Threading.ScopedNestableAsyncGlobalSingleton`1.CurrentValue">
+            <summary>
+                Gets the current Nestable Thread Global Singleton value. If not already set this will be the default for generic
+                type.
+            </summary>
+        </member>
+        <member name="P:Moonrise.Utils.Standard.Threading.ScopedNestableAsyncGlobalSingleton`1.Previous">
+            <summary>
+                The previous NestableThreadGlobalSingleton. This allows us to nest scopes, should we so desire.
+            </summary>
+        </member>
+        <member name="P:Moonrise.Utils.Standard.Threading.ScopedNestableAsyncGlobalSingleton`1.Current">
+            <summary>
+                Gets the current <see cref="T:Moonrise.Utils.Standard.Threading.ScopedNestableAsyncGlobalSingleton`1" />
+            </summary>
+        </member>
+        <member name="P:Moonrise.Utils.Standard.Threading.ScopedNestableAsyncGlobalSingleton`1.Value">
+            <summary>
+                The nested global threaded value
+            </summary>
+        </member>
+        <member name="M:Moonrise.Utils.Standard.Threading.ScopedNestableAsyncGlobalSingleton`1.#cctor">
+            <summary>
+                Static initialisation for the <see cref="T:Moonrise.Utils.Standard.Threading.ScopedNestableAsyncGlobalSingleton`1" /> class.
+            </summary>
+        </member>
+        <member name="M:Moonrise.Utils.Standard.Threading.ScopedNestableAsyncGlobalSingleton`1.#ctor">
+            <summary>
+                Prevents a default instance of the <see cref="T:Moonrise.Utils.Standard.Threading.ScopedNestableAsyncGlobalSingleton`1" /> class from being created.
+                However we do need to be create one to initially populate the <see cref="T:System.Threading.ThreadLocal`1" />
+            </summary>
+        </member>
+        <member name="M:Moonrise.Utils.Standard.Threading.ScopedNestableAsyncGlobalSingleton`1.#ctor(`0)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Moonrise.Utils.Standard.Threading.ScopedNestableAsyncGlobalSingleton`1" /> class.
+            </summary>
+            <param name="value">The value which will be the current NestedAsyncGlobal value.</param>
+        </member>
+        <member name="M:Moonrise.Utils.Standard.Threading.ScopedNestableAsyncGlobalSingleton`1.Dispose">
+            <summary>
+                Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:Moonrise.Utils.Standard.Threading.ScopedNestableAsyncGlobalSingleton`1.Disposing">
+            <summary>
+                Indicates that the current <see cref="T:Moonrise.Utils.Standard.Threading.ScopedNestableAsyncGlobalSingleton`1" /> is being disposed. Override this
+                to take
+                additional actions.
+            </summary>
+        </member>
         <member name="T:Moonrise.Utils.Standard.Threading.ScopedNestableThreadGlobalSingleton`1">
             <summary>
                 Provides scoped, nestable, thread global values.
@@ -1968,6 +2076,32 @@
                 The current "thing". This is stored on a per thread basis.
             </summary>
         </member>
+        <member name="P:Moonrise.Utils.Standard.Threading.ScopedNestableThreadGlobalSingleton`1.CurrentValue">
+            <summary>
+                Gets the current Nestable Thread Global Singleton value. If not already set this will be the default for generic
+                type.
+            </summary>
+        </member>
+        <member name="P:Moonrise.Utils.Standard.Threading.ScopedNestableThreadGlobalSingleton`1.Previous">
+            <summary>
+                The previous NestableThreadGlobalSingleton. This allows us to nest scopes, should we so desire.
+            </summary>
+        </member>
+        <member name="P:Moonrise.Utils.Standard.Threading.ScopedNestableThreadGlobalSingleton`1.Current">
+            <summary>
+                Gets the current <see cref="T:Moonrise.Utils.Standard.Threading.ScopedNestableThreadGlobalSingleton`1" />
+            </summary>
+        </member>
+        <member name="P:Moonrise.Utils.Standard.Threading.ScopedNestableThreadGlobalSingleton`1.Value">
+            <summary>
+                The nested global threaded value
+            </summary>
+        </member>
+        <member name="M:Moonrise.Utils.Standard.Threading.ScopedNestableThreadGlobalSingleton`1.#cctor">
+            <summary>
+                Static initialisation for the <see cref="T:Moonrise.Utils.Standard.Threading.ScopedNestableThreadGlobalSingleton`1" /> class.
+            </summary>
+        </member>
         <member name="M:Moonrise.Utils.Standard.Threading.ScopedNestableThreadGlobalSingleton`1.#ctor">
             <summary>
                 Prevents a default instance of the <see cref="T:Moonrise.Utils.Standard.Threading.ScopedNestableThreadGlobalSingleton`1" /> class from being created.
@@ -1979,27 +2113,6 @@
                 Initializes a new instance of the <see cref="T:Moonrise.Utils.Standard.Threading.ScopedNestableThreadGlobalSingleton`1" /> class.
             </summary>
             <param name="value">The value which will be the current NestedThreadGlobal value.</param>
-        </member>
-        <member name="P:Moonrise.Utils.Standard.Threading.ScopedNestableThreadGlobalSingleton`1.CurrentValue">
-            <summary>
-                Gets the current Nestable Thread Global Singleton value. If not already set this will be the default for generic
-                type.
-            </summary>
-        </member>
-        <member name="P:Moonrise.Utils.Standard.Threading.ScopedNestableThreadGlobalSingleton`1.Current">
-            <summary>
-                Gets the current <see cref="T:Moonrise.Utils.Standard.Threading.ScopedNestableThreadGlobalSingleton`1" />
-            </summary>
-        </member>
-        <member name="P:Moonrise.Utils.Standard.Threading.ScopedNestableThreadGlobalSingleton`1.Previous">
-            <summary>
-                The previous NestableThreadGlobalSingleton. This allows us to nest scopes, should we so desire.
-            </summary>
-        </member>
-        <member name="P:Moonrise.Utils.Standard.Threading.ScopedNestableThreadGlobalSingleton`1.Value">
-            <summary>
-                The nested global threaded value
-            </summary>
         </member>
         <member name="M:Moonrise.Utils.Standard.Threading.ScopedNestableThreadGlobalSingleton`1.Dispose">
             <summary>

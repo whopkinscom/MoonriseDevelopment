@@ -3,7 +3,7 @@
 	<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
 		<metadata>
 			<id>Moonrise.Logging.DncLoggingProvider</id>
-			<version>5.2024.202.13312</version>
+			<version>5.2024.209.8452</version>
 			<copyright>Moonrise Media Ltd.</copyright>
 			<authors>Will Hopkins</authors>
 			<requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -15,7 +15,7 @@
 			<language>en-GB</language>
 			<!--<group targetFramework=".NETStandard2.1">-->
 			<dependencies>
-				<dependency id="Moonrise.LoggingUtils.NetStd" version="5.2024.202.13312"/>
+				<dependency id="Moonrise.LoggingUtils.NetStd" version="5.2024.209.8452"/>
 				<dependency id="Microsoft.Extensions.Logging.Abstractions" version="1.1.2" />
 			</dependencies>
 			<!--</group>-->

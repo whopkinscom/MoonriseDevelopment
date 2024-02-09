@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Extensions\MoqExtensions.cs" />
@@ -27,6 +27,10 @@
       <LastGenOutput>Moonrise.TestUtils.NetStd.nuspec</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
+    <None Update="Properties\Mm Button.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
@@ -34,7 +38,6 @@
   <ItemGroup>
     <Folder Include="Extensions\" />
     <Folder Include="Logging\" />
-    <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Moonrise.StandardUtils.NetStd\Moonrise.StandardUtils.NetStd.csproj" />
@@ -48,7 +51,28 @@
     <DefineConstants>TRACE;DotNetCore;RELEASE;NETSTANDARD2_1</DefineConstants>
     <DocumentationFile>Moonrise.TestUtils.NetStd.xml</DocumentationFile>
   </PropertyGroup>
-  <Target Name="PostcompileScript" AfterTargets="Build">
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DefineConstants>TRACE;DotNetCore;DEBUG;NETSTANDARD2_1</DefineConstants>
+		<DocumentationFile>Moonrise.TestUtils.NetStd.xml</DocumentationFile>
+	</PropertyGroup>
+	<!--<Target Name="PostcompileScript" AfterTargets="Build">
     <Exec Command="makeNuget.cmd $(Configuration) &quot;$(MSBuildProjectDirectory)&quot; $(AssemblyName)" />
-  </Target>
+  </Target>-->
+	<PropertyGroup>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<Authors>Will Hopkins</Authors>
+		<RootNamespace>Moonrise.TestUtils.NetStd</RootNamespace>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Title>Moonrise Test Utils</Title>
+		<summary>Utility classes I find useful with writing tests.</summary>
+		<Description>Particular favourites are;
+PrivateWrapper - to allow access to the private methods of a "wrapped" object - via dynamic.
+Creator - To create repeatable but random data for "filled" classes to test - various properties available to control the range of filling. This one's the dog's!	</Description>
+		<Copyright>Moonrise Media Ltd.</Copyright>
+		<PackageIcon>Properties\Mm Button.png</PackageIcon>
+		<PackageProjectUrl>https://github.com/whopkinscom/Development/tree/master/Source/NetStd/Moonrise.TestUtils.NetStd</PackageProjectUrl>
+		<PackageReleaseNotes>Update to .Net 6. Fixed a Creator bug where if the last member of a class had a CreationAttribute it would fail. Added basic random email.</PackageReleaseNotes>
+		<AssemblyVersion>5.2024.209.8452</AssemblyVersion>
+		<Version>5.2024.209.8452</Version>
+	</PropertyGroup>
 </Project>

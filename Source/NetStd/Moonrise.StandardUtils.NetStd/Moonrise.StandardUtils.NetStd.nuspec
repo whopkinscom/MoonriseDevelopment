@@ -3,7 +3,7 @@
 	<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
 		<metadata>
 			<id>Moonrise.StandardUtils.NetStd</id>
-			<version>5.2024.202.13312</version>
+			<version>5.2024.209.8452</version>
 			<copyright>Moonrise Media Ltd.</copyright>
 			<authors>Will Hopkins</authors>
 			<requireLicenseAcceptance>false</requireLicenseAcceptance>

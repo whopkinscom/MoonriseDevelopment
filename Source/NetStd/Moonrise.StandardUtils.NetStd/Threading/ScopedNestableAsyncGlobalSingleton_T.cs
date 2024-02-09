@@ -24,7 +24,7 @@ using System.Threading;
 namespace Moonrise.Utils.Standard.Threading
 {
     /// <summary>
-    ///     Provides scoped, nestable, thread global values.
+    ///     Provides scoped, nestable, async global values.
     ///     <para>
     ///         Scoped because any call to get the value (via a static) that occurs somewhere INSIDE the using scope will get
     ///         that value.
@@ -35,8 +35,8 @@ namespace Moonrise.Utils.Standard.Threading
     ///         scope is the static value.
     ///     </para>
     ///     <para>
-    ///         Thread because a <see cref="ThreadLocal{T}" /> is used as the backing store and so each scopes within different
-    ///         threads are just for that thread.
+    ///         Async because a <see cref="AsyncLocal{T}" /> is used as the backing store and so each scopes within different
+    ///         async flows are just for that async flow.
     ///     </para>
     ///     <para>
     ///         Global because it's sort of acting like a global variable!
@@ -45,14 +45,14 @@ namespace Moonrise.Utils.Standard.Threading
     ///         Another way of thinking about this class is that it is a smuggler. It can smuggle values way down into call
     ///         heirarchies without you needing to retrofit paramters to pass to each call. You know the way you can use class
     ///         variables for temporary working purposes without them being true properties/attributes of that class (from the
-    ///         design rather than language persepective here)? Well, a <see cref="ScopedNestableThreadGlobalSingleton{T}" />
+    ///         design rather than language persepective here)? Well, a <see cref="ScopedNestableAsyncGlobalSingleton{T}" />
     ///         is really the same thing, but for a thread. Kinda!
     ///     </para>
     ///     <remarks>
     ///         <para>
     ///             Usage:
     ///             <para>
-    ///                 public class SUT : NestableThreadGlobalSingleton&lt;string&gt;{public SUT(string value) :
+    ///                 public class SUT : NestableAsyncGlobalSingleton&lt;string&gt;{public SUT(string value) :
     ///                 base(value){}
     ///             </para>
     ///         </para>
@@ -63,17 +63,23 @@ namespace Moonrise.Utils.Standard.Threading
     ///             using (new SUT("value")) { YOUR CODE }
     ///         </para>
     ///         Then anywhere, even deep, within YOUR CODE you can get the current nested, threaded global value via
-    ///         SUT.CurrentValue()
+    ///         SUT.CurrentValue().
+    ///         <para>
+    ///             NOTE: IF you create an instance of the derived class via a function - perhaps because you need to do some
+    ///             common thing (like grab some info from the HttpContext etc) then IF you do any async calls within that
+    ///             function the wrong async context will be used. You must instead call the await in the arguments to your
+    ///             constructor and do that async work BEFORE constructing the derived class.
+    ///         </para>
     ///     </example>
     /// </summary>
     /// <typeparam name="T">The type of the singelton</typeparam>
     /// <seealso cref="System.IDisposable" />
-    public abstract class ScopedNestableThreadGlobalSingleton<T> : IDisposable
+    public abstract class ScopedNestableAsyncGlobalSingleton<T> : IDisposable
     {
         /// <summary>
-        ///     The current "thing". This is stored on a per thread basis.
+        ///     The current "thing". This is stored on a per async flow basis.
         /// </summary>
-        private static readonly ThreadLocal<ScopedNestableThreadGlobalSingleton<T>> ThreadedCurrentGlobal;
+        private static readonly AsyncLocal<ScopedNestableAsyncGlobalSingleton<T>> AsyncedCurrentGlobal = new();
 
         /// <summary>
         ///     Gets the current Nestable Thread Global Singleton value. If not already set this will be the default for generic
@@ -84,16 +90,16 @@ namespace Moonrise.Utils.Standard.Threading
         /// <summary>
         ///     The previous NestableThreadGlobalSingleton. This allows us to nest scopes, should we so desire.
         /// </summary>
-        protected ScopedNestableThreadGlobalSingleton<T> Previous { get; }
+        protected ScopedNestableAsyncGlobalSingleton<T> Previous { get; }
 
         /// <summary>
-        ///     Gets the current <see cref="ScopedNestableThreadGlobalSingleton{T}" />
+        ///     Gets the current <see cref="ScopedNestableAsyncGlobalSingleton{T}" />
         /// </summary>
-        protected static ScopedNestableThreadGlobalSingleton<T> Current
+        protected static ScopedNestableAsyncGlobalSingleton<T> Current
         {
-            get => ThreadedCurrentGlobal.Value;
+            get => AsyncedCurrentGlobal.Value;
 
-            set => ThreadedCurrentGlobal.Value = value;
+            set => AsyncedCurrentGlobal.Value = value;
         }
 
         /// <summary>
@@ -102,26 +108,26 @@ namespace Moonrise.Utils.Standard.Threading
         protected T Value { get; set; }
 
         /// <summary>
-        ///     Static initialisation for the <see cref="ScopedNestableThreadGlobalSingleton{T}" /> class.
+        ///     Static initialisation for the <see cref="ScopedNestableAsyncGlobalSingleton{T}" /> class.
         /// </summary>
-        static ScopedNestableThreadGlobalSingleton()
+        static ScopedNestableAsyncGlobalSingleton()
         {
-            ThreadedCurrentGlobal = new ThreadLocal<ScopedNestableThreadGlobalSingleton<T>>(null);
+            AsyncedCurrentGlobal = new AsyncLocal<ScopedNestableAsyncGlobalSingleton<T>>(null);
         }
 
         /// <summary>
-        ///     Prevents a default instance of the <see cref="ScopedNestableThreadGlobalSingleton{T}" /> class from being created.
+        ///     Prevents a default instance of the <see cref="ScopedNestableAsyncGlobalSingleton{T}" /> class from being created.
         ///     However we do need to be create one to initially populate the <see cref="ThreadLocal{T}" />
         /// </summary>
-        private ScopedNestableThreadGlobalSingleton()
+        private ScopedNestableAsyncGlobalSingleton()
         {
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="ScopedNestableThreadGlobalSingleton{T}" /> class.
+        ///     Initializes a new instance of the <see cref="ScopedNestableAsyncGlobalSingleton{T}" /> class.
         /// </summary>
-        /// <param name="value">The value which will be the current NestedThreadGlobal value.</param>
-        protected ScopedNestableThreadGlobalSingleton(T value)
+        /// <param name="value">The value which will be the current NestedAsyncGlobal value.</param>
+        protected ScopedNestableAsyncGlobalSingleton(T value)
         {
             Previous = Current;
             Current = this;
@@ -136,27 +142,21 @@ namespace Moonrise.Utils.Standard.Threading
             // Inform any child implementations that we are disposing
             Disposing();
 
-            if (ThreadedCurrentGlobal.Value != this)
+            if (AsyncedCurrentGlobal.Value != this)
             {
-                throw new AmbiguousMatchException("The NestableThreadGlobalSingleton<T> being disposed SHOULD be the current thread static one, but for some reason isn't!");
+                throw new AmbiguousMatchException("The NestableAsyncGlobalSingleton<T> being disposed SHOULD be the current async flow static one, but for some reason isn't!");
             }
 
-            ThreadedCurrentGlobal.Value = Previous;
+            AsyncedCurrentGlobal.Value = Previous;
         }
 
         /// <summary>
-        ///     Indicates that the current <see cref="ScopedNestableThreadGlobalSingleton{T}" /> is being disposed. Override this
+        ///     Indicates that the current <see cref="ScopedNestableAsyncGlobalSingleton{T}" /> is being disposed. Override this
         ///     to take
         ///     additional actions.
         /// </summary>
         protected virtual void Disposing()
         {
         }
-
-        // <summary>
-        //     Here to remind you you need to implement a public new static T Value() method to make it globally available.
-        // </summary>
-        // <returns></returns>
-//        protected abstract T ImplementStaticCurrentValue();
     }
 }
