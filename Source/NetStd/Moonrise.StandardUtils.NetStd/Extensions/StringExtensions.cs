@@ -246,7 +246,7 @@ namespace Moonrise.Utils.Standard.Extensions
 
             if (endMarker != null)
             {
-                end = AssertFound(inWhat.IndexOf(endMarker, start));
+                end = AssertFound(inWhat.IndexOf(endMarker, start), endMarker);
             }
             else
             {
@@ -280,7 +280,7 @@ namespace Moonrise.Utils.Standard.Extensions
         {
             for (int i = 0; i < howMany; i++)
             {
-                start = AssertFound(inWhat.IndexOf(startMarker, start));
+                start = AssertFound(inWhat.IndexOf(startMarker, start), startMarker);
                 start += startMarker.Length;
             }
         }
@@ -841,13 +841,14 @@ namespace Moonrise.Utils.Standard.Extensions
         /// <param name="indexOfResult">If text wasn't found (-1), throws an exception.</param>
         /// <returns>Otherwise returns the result.</returns>
         /// <exception cref="DataMisalignedException">Marker was not found</exception>
-        [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1503:CurlyBracketsMustNotBeOmitted",
-            Justification = "I excuse exceptions and returns!")]
-        private static int AssertFound(int indexOfResult)
+        [SuppressMessage("StyleCop.CSharp.LayoutRules",
+                         "SA1503:CurlyBracketsMustNotBeOmitted",
+                         Justification = "I excuse exceptions and returns!")]
+        private static int AssertFound(int indexOfResult, string marker)
         {
             if (indexOfResult == -1)
             {
-                throw new DataMisalignedException("Marker was not found");
+                throw new DataMisalignedException($"Marker \"{marker}\" was not found");
             }
 
             return indexOfResult;
