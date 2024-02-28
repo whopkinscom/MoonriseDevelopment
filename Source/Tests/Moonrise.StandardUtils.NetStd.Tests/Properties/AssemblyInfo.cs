@@ -24,9 +24,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("MoonriseStandardUtilsTests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Allpay Ltd")]
+[assembly: AssemblyCompany("Moonrise Media Ltd")]
 [assembly: AssemblyProduct("MoonriseStandardUtilsTests")]
-[assembly: AssemblyCopyright("Copyright © Allpay Ltd 2016")]
+[assembly: AssemblyCopyright("Copyright © Moonrise Media Ltd 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
