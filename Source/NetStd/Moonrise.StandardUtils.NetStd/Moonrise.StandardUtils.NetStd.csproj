@@ -24,6 +24,10 @@
       <LastGenOutput>Moonrise.StandardUtils.NetStd.nuspec</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
+    <None Update="readme.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
@@ -32,6 +36,10 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Moonrise.TestUtils.NetStd\License.txt">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
     <None Include="..\Moonrise.TestUtils.NetStd\Properties\Mm Button.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
@@ -60,9 +68,17 @@
     <Copyright>Moonrise Media Ltd.</Copyright>
     <PackageIcon>Mm Button.png</PackageIcon>
     <PackageProjectUrl>https://github.com/whopkinscom/Development/tree/master/Source/NetStd/Moonrise.StandardUtils.NetStd</PackageProjectUrl>
-    <PackageReleaseNotes>Update to .Net 6. Added ScopedNestableAsyncGlobalSingleton to use within async scenarios.</PackageReleaseNotes>
+    <PackageReleaseNotes>I can no longer afford a code signing certificate and once a package is signed it must stay signed. I originally signed my packages because I was trying to get them used by an organisation I worked for but which subsequently declined due to their dumbass copyright issues. Anyway, that means you will likely get a warning when you upgrade! Sorry.
+Update to .Net 6. Added ScopedNestableAsyncGlobalSingleton to use within async scenarios.</PackageReleaseNotes>
     <AssemblyVersion>5.2024.209.8452</AssemblyVersion>
     <Version>5.2024.209.8452</Version>
+    <PackageLicenseFile>License.txt</PackageLicenseFile>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/whopkinscom/MoonriseDevelopment/tree/master/Source/NetStd/Moonrise.StandardUtils.NetStd</RepositoryUrl>
+    <SignAssembly>False</SignAssembly>
+    <AssemblyOriginatorKeyFile>C:\Users\Will\Documents\MMCS.pfx</AssemblyOriginatorKeyFile>
+    <PackageOutputPath>$(MSBuildProjectDirectory)\..\packages\$(AssemblyName)</PackageOutputPath>
+    <PackageId>$(AssemblyName)</PackageId>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DefineConstants>TRACE;DotNetCore;RELEASE;NETSTANDARD2_1</DefineConstants>
