@@ -1844,6 +1844,29 @@
                 </para>
             </summary>
         </member>
+        <!-- Badly formed XML comment ignored for member "T:Moonrise.Utils.Standard.Misc.Bictionary`2" -->
+        <member name="P:Moonrise.Utils.Standard.Misc.Bictionary`2.Item(`1)">
+            <summary>
+            Allows for the "reverse" index of a dictionary.
+            </summary>
+            <value>
+            The <see cref="!:T1" />.
+            </value>
+            <param name="index">The index.</param>
+            <returns></returns>
+            <exception cref="T:System.Collections.Generic.KeyNotFoundException"></exception>
+        </member>
+        <member name="M:Moonrise.Utils.Standard.Misc.FullName.Of(System.String,System.String)">
+            <summary>
+            Gets the full ClassName.MemberName.
+            </summary>
+            <remarks>
+            Usage: Assert.AreEqual("Object.Equals", FullName.Of(nameof(Object.Equals)));
+            </remarks>
+            <param name="_">The </param>
+            <param name="fullTypeName">Full name of the type.</param>
+            <returns></returns>
+        </member>
         <member name="T:Moonrise.Utils.Standard.Misc.Recursion">
             <summary>
                 Allows for guarded recursion
