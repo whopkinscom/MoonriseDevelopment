@@ -46,6 +46,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8120C71B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moonrise.StandardUtils.NetStd.Tests", "Source\Tests\Moonrise.StandardUtils.NetStd.Tests\Moonrise.StandardUtils.NetStd.Tests.csproj", "{BD9967CA-B408-48B2-836F-D8A590763EA7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moonrise.TestUtils.NetStdTests", "Source\NetStd\Moonrise.TestUtils.NetStdTests\Moonrise.TestUtils.NetStdTests.csproj", "{3C564B27-43DF-437F-AE16-0E70F4DFA952}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		.Net Core - Debug|Any CPU = .Net Core - Debug|Any CPU
@@ -141,6 +143,14 @@ Global
 		{BD9967CA-B408-48B2-836F-D8A590763EA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD9967CA-B408-48B2-836F-D8A590763EA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD9967CA-B408-48B2-836F-D8A590763EA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C564B27-43DF-437F-AE16-0E70F4DFA952}..Net Core - Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C564B27-43DF-437F-AE16-0E70F4DFA952}..Net Core - Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C564B27-43DF-437F-AE16-0E70F4DFA952}..Net Core - Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C564B27-43DF-437F-AE16-0E70F4DFA952}..Net Core - Release|Any CPU.Build.0 = Release|Any CPU
+		{3C564B27-43DF-437F-AE16-0E70F4DFA952}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C564B27-43DF-437F-AE16-0E70F4DFA952}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C564B27-43DF-437F-AE16-0E70F4DFA952}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C564B27-43DF-437F-AE16-0E70F4DFA952}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

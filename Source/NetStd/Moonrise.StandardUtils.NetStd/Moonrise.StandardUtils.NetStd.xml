@@ -1706,7 +1706,7 @@
             <param name="what">What to trim off the start</param>
             <returns>The trimmed string</returns>
         </member>
-        <member name="M:Moonrise.Utils.Standard.Extensions.StringExtensions.AssertFound(System.Int32)">
+        <member name="M:Moonrise.Utils.Standard.Extensions.StringExtensions.AssertFound(System.Int32,System.String)">
             <summary>
                 Determines if the IndexOf operation found the required text or not. Saves multiple in-line found checking after
                 each IndexOf.

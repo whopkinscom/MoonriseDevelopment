@@ -44,6 +44,9 @@
     <Folder Include="Logging\" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Fare" Version="2.2.1" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Moonrise.StandardUtils.NetStd\Moonrise.StandardUtils.NetStd.csproj" />
   </ItemGroup>
   <PropertyGroup>
@@ -75,10 +78,9 @@ Creator - To create repeatable but random data for "filled" classes to test - va
 		<Copyright>Moonrise Media Ltd.</Copyright>
 		<PackageIcon>Properties\Mm Button.png</PackageIcon>
 		<PackageProjectUrl>https://github.com/whopkinscom/Development/tree/master/Source/NetStd/Moonrise.TestUtils.NetStd</PackageProjectUrl>
-		<PackageReleaseNotes>I can no longer afford a code signing certificate and once a package is signed it must stay signed. I originally signed my packages because I was trying to get them used by an organisation I worked for but which subsequently declined due to their dumbass copyright issues. Anyway, that means you will likely get a warning when you upgrade! Sorry.
-Update to .Net 6. Fixed a Creator bug where if the last member of a class had a CreationAttribute it would fail. Added basic random email.</PackageReleaseNotes>
-		<AssemblyVersion>5.2024.209.8452</AssemblyVersion>
-		<Version>5.2024.209.8452</Version>
+		<PackageReleaseNotes>Added generating to a RegEx for properties - in the class or attached interface - with RegularExpressionValidationAttribute.</PackageReleaseNotes>
+		<AssemblyVersion>5.2024.1231.11231</AssemblyVersion>
+		<Version>5.2024.1231.11231</Version>
 		<PackageId>$(AssemblyName)</PackageId>
 		<RepositoryUrl>https://github.com/whopkinscom/MoonriseDevelopment/tree/master/Source/NetStd/Moonrise.TestUtils.NetStd</RepositoryUrl>
 		<PackageOutputPath>$(MSBuildProjectDirectory)\..\packages\$(AssemblyName)</PackageOutputPath>

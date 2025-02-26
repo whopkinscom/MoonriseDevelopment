@@ -1,6 +1,6 @@
 ﻿#region MIT
 
-//     Copyright 2015-2021 Will Hopkins - Moonrise Media Ltd.
+// Copyright 2015-2021 Will Hopkins - Moonrise Media Ltd.
 //     will@moonrise.media - Happy to have a conversation
 // 
 //     Licenced under MIT licencing terms
@@ -24,6 +24,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
+using Fare;
 using Moonrise.Utils.Standard.Validation;
 
 namespace Moonrise.Utils.Test.ObjectCreation
@@ -44,20 +45,20 @@ namespace Moonrise.Utils.Test.ObjectCreation
         ///     "Namespace" (actually a class) for the available string sources
         /// </summary>
         [SuppressMessage("StyleCop.CSharp.DocumentationRules",
-                         "SA1650:ElementDocumentationMustBeSpelledCorrectly",
-                         Justification = "The intellisense will be more effective if the summaries show the string source!")]
+            "SA1650:ElementDocumentationMustBeSpelledCorrectly",
+            Justification = "The intellisense will be more effective if the summaries show the string source!")]
         [SuppressMessage("StyleCop.CSharp.OrderingRules",
-                         "SA1201:ElementsMustAppearInTheCorrectOrder",
-                         Justification = "I like nested types to be first!")]
+            "SA1201:ElementsMustAppearInTheCorrectOrder",
+            Justification = "I like nested types to be first!")]
         [SuppressMessage("StyleCop.CSharp.DocumentationRules",
-                         "SA1630:DocumentationTextMustContainWhitespace",
-                         Justification = "The intellisense will be more effective if the summaries show the string source!")]
+            "SA1630:DocumentationTextMustContainWhitespace",
+            Justification = "The intellisense will be more effective if the summaries show the string source!")]
         [SuppressMessage("StyleCop.CSharp.DocumentationRules",
-                         "SA1631:DocumentationMustMeetCharacterPercentage",
-                         Justification = "The intellisense will be more effective if the summaries show the string source!")]
+            "SA1631:DocumentationMustMeetCharacterPercentage",
+            Justification = "The intellisense will be more effective if the summaries show the string source!")]
         [SuppressMessage("StyleCop.CSharp.DocumentationRules",
-                         "SA1603:DocumentationMustContainValidXml",
-                         Justification = "The intellisense will be more effective if the summaries show the string source!")]
+            "SA1603:DocumentationMustContainValidXml",
+            Justification = "The intellisense will be more effective if the summaries show the string source!")]
 #pragma warning disable CS1570
         public class StringSources
         {
@@ -173,9 +174,67 @@ namespace Moonrise.Utils.Test.ObjectCreation
         private static readonly DateTimeOffset DEFAULT_DATETIMEOFFSET = default;
 
         /// <summary>
-        ///     Gives the context of the property/field being currently created. i.e. The "breadcrumb" of the parental elements.
+        ///     A map of types and the creators that can create them.
         /// </summary>
-        public string ElementContext => string.Join(".", _elementContext);
+        private readonly Dictionary<Type, MethodInfo> _creatorMap = new();
+
+        private readonly List<string> _elementContext = new();
+
+        private readonly List<Type> _ignoreTypes = new();
+
+        /// <summary>
+        ///     Maps implementation types to interfaces that carry <see cref="ObjectCreationAttribute" />s
+        /// </summary>
+        private readonly Dictionary<Type, Type> _interfaceAttributesMap = new();
+
+        /// <summary>
+        ///     Maps interfaces to implementations to be used when creating elements that are interfaces
+        /// </summary>
+        private readonly Dictionary<Type, Type> _interfaceMap = new();
+
+        /// <summary>
+        ///     Backing field for MaxObjects
+        /// </summary>
+        private int _maxObjects = 100000;
+
+        /// <summary>
+        ///     Backing field for <see cref="OneShot" />
+        /// </summary>
+        private bool _oneShot;
+
+        /// <summary>
+        ///     The random that will be used by the instance to generate random stuff
+        /// </summary>
+        private Random _random;
+
+        /// <summary>
+        ///     A list of object types that have been encountered in a particular context. Used to avoid nesting certain objects.
+        /// </summary>
+        protected List<int> encounteredObjects = new();
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="Creator" /> class. Elements created via this constructor will be
+        ///     non-reliably-repeatable
+        /// </summary>
+        public Creator()
+        {
+            _random = new Random();
+            Initialise();
+        }
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="Creator" /> class. Elements created via this constructor will be
+        ///     reliably-repeatable
+        /// </summary>
+        /// <param name="seed">
+        ///     The seed to pass to the random generator. Using the same seed and calling in the same creation order
+        ///     will produce repeatable results!
+        /// </param>
+        public Creator(int seed)
+        {
+            _random = new Random(seed);
+            Initialise();
+        }
 
         /// <summary>
         ///     Determines if nulls are allowed to be inserted into enumerable types - Defaults to false
@@ -192,6 +251,11 @@ namespace Moonrise.Utils.Test.ObjectCreation
         ///     failures!
         /// </summary>
         public Action<string> CreationTracer { get; set; }
+
+        /// <summary>
+        ///     Gives the context of the property/field being currently created. i.e. The "breadcrumb" of the parental elements.
+        /// </summary>
+        public string ElementContext => string.Join(".", _elementContext);
 
         /// <summary>
         ///     The email domain to use in creating random emails.
@@ -293,8 +357,9 @@ namespace Moonrise.Utils.Test.ObjectCreation
                 if (value > AbsoluteMaximumObjects())
                 {
                     throw new
-                        ArgumentException(string.Format("The absolute maximum objects is hard set to {0}. The only way to override this value is to literally override the AbsoluteMaximumObjects() method in a descendant class, i.e. REALLY mean it!",
-                                                        AbsoluteMaximumObjects()));
+                        ArgumentException(string.Format(
+                            "The absolute maximum objects is hard set to {0}. The only way to override this value is to literally override the AbsoluteMaximumObjects() method in a descendant class, i.e. REALLY mean it!",
+                            AbsoluteMaximumObjects()));
                 }
 
                 _maxObjects = value;
@@ -432,7 +497,7 @@ namespace Moonrise.Utils.Test.ObjectCreation
 
         /// <summary>
         ///     Determines if the filling should respect any validation attributes on the elements being filled and only fill with
-        ///     data that meets the validation constraints. At the moment, only the following are respected;
+        ///     data that meets the validation constraints (Defaults to false). At the moment, only the following are respected;
         ///     <para>
         ///         <see cref="RequiredAttribute" />
         ///     </para>
@@ -457,10 +522,13 @@ namespace Moonrise.Utils.Test.ObjectCreation
         ///     <para>
         ///         <see cref="FileValidationAttribute" />
         ///     </para>
+        ///     <para>
+        ///         <see cref="RegularExpressionAttribute"/>
+        ///     </para>
         ///     NOTE: Validation requirements will overule any <see cref="ObjectCreationAttribute" />s that cover the same
         ///     territory!
         /// </summary>
-        public bool RespectValidation { get; set; }
+        public bool RespectValidation { get; set; } = false;
 
         /// <summary>
         ///     The source to use for characters with which to create random strings. See also
@@ -774,66 +842,46 @@ namespace Moonrise.Utils.Test.ObjectCreation
         private List<ValidationAttribute> ValidationAttributes { get; set; }
 
         /// <summary>
-        ///     A list of object types that have been encountered in a particular context. Used to avoid nesting certain objects.
+        ///     Absolute maximum number of created objects. Override this if you REALLY want the capability to create more than
+        ///     this!
         /// </summary>
-        protected List<int> encounteredObjects = new();
-
-        /// <summary>
-        ///     A map of types and the creators that can create them.
-        /// </summary>
-        private readonly Dictionary<Type, MethodInfo> _creatorMap = new();
-
-        private readonly List<string> _elementContext = new();
-
-        private readonly List<Type> _ignoreTypes = new();
-
-        /// <summary>
-        ///     Maps implementation types to interfaces that carry <see cref="ObjectCreationAttribute" />s
-        /// </summary>
-        private readonly Dictionary<Type, Type> _interfaceAttributesMap = new();
-
-        /// <summary>
-        ///     Maps interfaces to implementations to be used when creating elements that are interfaces
-        /// </summary>
-        private readonly Dictionary<Type, Type> _interfaceMap = new();
-
-        /// <summary>
-        ///     Backing field for MaxObjects
-        /// </summary>
-        private int _maxObjects = 100000;
-
-        /// <summary>
-        ///     Backing field for <see cref="OneShot" />
-        /// </summary>
-        private bool _oneShot;
-
-        /// <summary>
-        ///     The random that will be used by the instance to generate random stuff
-        /// </summary>
-        private Random _random;
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="Creator" /> class. Elements created via this constructor will be
-        ///     non-reliably-repeatable
-        /// </summary>
-        public Creator()
+        /// <returns>10,000,000</returns>
+        protected virtual int AbsoluteMaximumObjects()
         {
-            _random = new Random();
-            Initialise();
+            return 10000000;
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="Creator" /> class. Elements created via this constructor will be
-        ///     reliably-repeatable
+        ///     Adds the field attributes from the associated interface.
         /// </summary>
-        /// <param name="seed">
-        ///     The seed to pass to the random generator. Using the same seed and calling in the same creation order
-        ///     will produce repeatable results!
-        /// </param>
-        public Creator(int seed)
+        /// <param name="memberName">Name of the member.</param>
+        /// <param name="attributeInterface">The attribute interface.</param>
+        /// <param name="memberAttributes">The member attributes.</param>
+        /// <param name="isProperty">Determines if we're looking for a property or a field.</param>
+        private void AddMemberAttributesFromInterface(string memberName,
+            Type attributeInterface,
+            List<CustomAttributeData> memberAttributes,
+            bool isProperty)
         {
-            _random = new Random(seed);
-            Initialise();
+            // Now look for a corresponding member in this interface and see if it has any custom attributes to add to the list
+            MemberInfo interfaceMember;
+
+            if (isProperty)
+            {
+                interfaceMember = attributeInterface.GetTypeInfo().GetDeclaredProperty(memberName);
+            }
+            else
+            {
+                interfaceMember = attributeInterface.GetTypeInfo().GetDeclaredField(memberName);
+            }
+
+            if (interfaceMember != null)
+            {
+                List<CustomAttributeData> interfaceMemberAttributes = interfaceMember.CustomAttributes.ToList();
+
+                // We use Insert range so that parent interface field attributes will appear (and be treated) first, allowing children to override parents
+                memberAttributes.InsertRange(0, interfaceMemberAttributes);
+            }
         }
 
         /// <summary>
@@ -942,6 +990,331 @@ namespace Moonrise.Utils.Test.ObjectCreation
         }
 
         /// <summary>
+        ///     Creates an object whose public fields and properties are filled with random(ish) values.
+        /// </summary>
+        /// <param name="instanceType">The type of the instance being created.</param>
+        /// <param name="recursive">Determines if nested classes will be filled as well. Usually want this.</param>
+        /// <returns>
+        ///     An object populated with guff
+        /// </returns>
+        /// <exception cref="System.ArgumentException">
+        ///     If the class is an enumerable and is not at least IList
+        /// </exception>
+        [SuppressMessage("StyleCop.CSharp.LayoutRules",
+            "SA1503:CurlyBracketsMustNotBeOmitted",
+            Justification = "I allow this for exceptions!")]
+        protected object CreateFilled(Type instanceType, bool recursive)
+        {
+            if (IgnoreRecursion)
+            {
+                int hashCode = instanceType.GetHashCode();
+
+                if (encounteredObjects.Contains(hashCode))
+                {
+                    IgnoredIssueTracer?.Invoke(
+                        $"Detected a recursive creation for {instanceType.FullName}. Instance created as null.");
+
+                    return null;
+                }
+
+                encounteredObjects.Add(hashCode);
+            }
+
+            object retVal = null;
+
+            if (ObjectCount < MaxObjects)
+            {
+                if (!GetOneShotItemsSource(ref retVal))
+                {
+                    bool allowNulls = OneShot ? AllowNullsOneShot : AllowNulls;
+
+                    bool allowNullElementsInEnumerable =
+                        OneShot ? AllowNullElementsInEnumerableOneShot : AllowNullElementsInEnumerable;
+
+                    bool respectValidation = OneShot ? RespectValidationOneShot : RespectValidation;
+
+                    if (respectValidation)
+                    {
+                        foreach (ValidationAttribute validationAttribute in ValidationAttributes)
+                        {
+                            if (validationAttribute.GetType() == typeof(RequiredAttribute))
+                            {
+                                allowNulls = false;
+                            }
+                            else if (validationAttribute.GetType() == typeof(ListContentValidationAttribute))
+                            {
+                                if (!((ListContentValidationAttribute)validationAttribute).AllowNulls)
+                                {
+                                    allowNullElementsInEnumerable = false;
+                                }
+
+                                if (((ListContentValidationAttribute)validationAttribute).MinElements < int.MaxValue)
+                                {
+                                    MinItemsOneShot = ((ListContentValidationAttribute)validationAttribute)
+                                        .MinElements;
+                                }
+
+                                if (((ListContentValidationAttribute)validationAttribute).MaxElements > int.MinValue)
+                                {
+                                    MaxItemsOneShot = ((ListContentValidationAttribute)validationAttribute)
+                                        .MaxElements;
+                                }
+                            }
+                        }
+                    }
+
+                    if (!allowNulls || GetRandomBool(OneShot ? NullThresholdOneShot : NullThreshold))
+                    {
+                        if (typeof(IEnumerable).IsAssignableFrom(instanceType))
+                        {
+                            if (!typeof(IList).IsAssignableFrom(instanceType))
+                            {
+                                throw new ArgumentException(string.Format("{0} needs to implement IList!",
+                                    instanceType.Name));
+                            }
+
+                            Type listContentType;
+
+                            if (instanceType.GenericTypeArguments.Length == 0)
+                            {
+                                if (!instanceType.IsArray)
+                                {
+                                    throw new ArgumentException(string.Format(
+                                        "As {0} is non-generic, this version can only handle arrays, sorry!",
+                                        instanceType.Name));
+                                }
+
+                                listContentType = instanceType.GetElementType();
+                            }
+                            else
+                            {
+                                if (instanceType.GenericTypeArguments.Length > 1)
+                                {
+                                    throw new ArgumentException(string.Format(
+                                        "{0} can only have a single generic with this version, sorry!",
+                                        instanceType.Name));
+                                }
+
+                                listContentType = instanceType.GenericTypeArguments[0];
+                            }
+
+                            int numItems = _random.Next(OneShot ? MinItemsOneShot : MinItems,
+                                OneShot ? MaxItemsOneShot : MaxItems);
+
+                            retVal = InstantiateType(instanceType, numItems);
+                            ObjectCount++;
+
+                            for (int i = 0; i < numItems; i++)
+                            {
+                                object item = null;
+
+                                if (!allowNullElementsInEnumerable ||
+                                    GetRandomBool(OneShot ? NullThresholdOneShot : NullThreshold))
+                                {
+                                    _elementContext.Add($"[{i}]");
+                                    item = GetRnd(listContentType, recursive);
+                                    _elementContext.RemoveAt(_elementContext.Count - 1);
+                                }
+
+                                if (instanceType.IsArray)
+                                {
+                                    ((Array)retVal).SetValue(item, i);
+                                }
+                                else
+                                {
+                                    ((IList)retVal).Add(item);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            retVal = InstantiateType(instanceType);
+                            FieldInfo[] fields = instanceType.GetFields();
+
+                            foreach (FieldInfo field in fields)
+                            {
+                                if (!field.IsLiteral)
+                                {
+                                    PopulateField(retVal, field, recursive);
+                                }
+                            }
+
+                            PropertyInfo[] props = instanceType.GetProperties();
+
+                            foreach (PropertyInfo prop in props)
+                            {
+                                PopulateProperty(retVal, prop, recursive);
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (IgnoreRecursion)
+            {
+                encounteredObjects.RemoveAt(encounteredObjects.Count - 1);
+            }
+
+            ItemsSourceOneShotName = string.Empty;
+
+            return retVal;
+        }
+
+        /// <summary>
+        ///     Creates an interface member using the mapped implementation type
+        /// </summary>
+        /// <param name="fieldType">Type of the interface field.</param>
+        /// <param name="recursive">Determines if nested classes will also be created</param>
+        /// <returns>
+        ///     A filled implementation
+        /// </returns>
+        /// <exception cref="System.ArgumentException">
+        ///     If there is a problem with the interface
+        /// </exception>
+        [SuppressMessage("StyleCop.CSharp.LayoutRules",
+            "SA1503:CurlyBracketsMustNotBeOmitted",
+            Justification = "I excuse throwing exceptions!")]
+        private object CreateMappedInterface(Type fieldType, bool recursive)
+        {
+            object retVal = null;
+
+            if (ObjectCount < MaxObjects)
+            {
+                if (!GetOneShotItemsSource(ref retVal))
+                {
+                    bool allowNulls = OneShot ? AllowNullsOneShot : AllowNulls;
+
+                    bool allowNullElementsInEnumerable =
+                        OneShot ? AllowNullElementsInEnumerableOneShot : AllowNullElementsInEnumerable;
+
+                    foreach (ValidationAttribute validationAttribute in ValidationAttributes)
+                    {
+                        if (validationAttribute.GetType() == typeof(RequiredAttribute))
+                        {
+                            allowNulls = false;
+                        }
+                        else if (validationAttribute.GetType() == typeof(ListContentValidationAttribute))
+                        {
+                            if (!((ListContentValidationAttribute)validationAttribute).AllowNulls)
+                            {
+                                allowNullElementsInEnumerable = false;
+                            }
+
+                            if (((ListContentValidationAttribute)validationAttribute).MinElements < int.MaxValue)
+                            {
+                                MinItemsOneShot = ((ListContentValidationAttribute)validationAttribute).MinElements;
+                            }
+
+                            if (((ListContentValidationAttribute)validationAttribute).MaxElements > int.MinValue)
+                            {
+                                MaxItemsOneShot = ((ListContentValidationAttribute)validationAttribute).MaxElements;
+                            }
+                        }
+                    }
+
+                    if (!allowNulls || GetRandomBool(OneShot ? NullThresholdOneShot : NullThreshold))
+                    {
+                        Type implementationType = null;
+
+                        if (OneShot && ImplementationOneShot != null)
+                        {
+                            implementationType = ImplementationOneShot;
+                        }
+                        else if (_interfaceMap.ContainsKey(fieldType))
+                        {
+                            implementationType = _interfaceMap[fieldType];
+                        }
+
+                        if (implementationType == null)
+                        {
+                            if (typeof(IEnumerable).GetTypeInfo().IsAssignableFrom(fieldType))
+                            {
+                                if (fieldType.GetTypeInfo().IsGenericType)
+                                {
+                                    if (fieldType.GenericTypeArguments.Length > 1)
+                                    {
+                                        throw new ArgumentException(string.Format(
+                                            "{0} can only have a single generic with this version, sorry!",
+                                            fieldType.Name));
+                                    }
+
+                                    Type listContentType = fieldType.GenericTypeArguments[0];
+
+                                    implementationType = typeof(List<>).GetTypeInfo().MakeGenericType(listContentType);
+                                }
+                            }
+                        }
+
+                        if (implementationType == null)
+                        {
+                            if (IgnoreUnimplementedInterfaces)
+                            {
+                                IgnoredIssueTracer?.Invoke(
+                                    $"There is no implemention defined for {fieldType.FullName}, the created instance will be null");
+                            }
+                            else
+                            {
+                                throw new ArgumentException(string.Format("There is no implementation defined for {0}!",
+                                    fieldType.FullName));
+                            }
+                        }
+
+                        if (implementationType == null)
+                        {
+                            retVal = null;
+                        }
+                        else
+                        {
+                            if (typeof(IEnumerable).IsAssignableFrom(fieldType))
+                            {
+                                if (!typeof(IList).IsAssignableFrom(implementationType))
+                                {
+                                    throw new ArgumentException(string.Format("{0} needs to implement IList!",
+                                        implementationType.Name));
+                                }
+
+                                if (implementationType.GenericTypeArguments.Length > 1)
+                                {
+                                    throw new ArgumentException(string.Format(
+                                        "{0} can only have a single generic with this version, sorry!",
+                                        implementationType.Name));
+                                }
+
+                                Type listContentType = implementationType.GenericTypeArguments[0];
+                                retVal = InstantiateType(implementationType);
+                                ObjectCount++;
+
+                                int numItems = _random.Next(OneShot ? MinItemsOneShot : MinItems,
+                                    OneShot ? MaxItemsOneShot : MaxItems);
+
+                                for (int i = 0; i < numItems; i++)
+                                {
+                                    object item = null;
+
+                                    if (!allowNullElementsInEnumerable ||
+                                        GetRandomBool(OneShot ? NullThresholdOneShot : NullThreshold))
+                                    {
+                                        _elementContext.Add($"[{i}]");
+                                        item = GetRnd(listContentType, recursive);
+                                        _elementContext.RemoveAt(_elementContext.Count - 1);
+                                    }
+
+                                    ((IList)retVal).Add(item);
+                                }
+                            }
+                            else
+                            {
+                                retVal = CreateFilled(implementationType, recursive);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return retVal;
+        }
+
+        /// <summary>
         ///     Instructs the creator that any type of {T} should not be created and replaced with null
         /// </summary>
         /// <typeparam name="T">The type not to create</typeparam>
@@ -951,13 +1324,109 @@ namespace Moonrise.Utils.Test.ObjectCreation
         }
 
         /// <summary>
+        ///     Gets the one shot items source. If there is one.
+        /// </summary>
+        /// <typeparam name="T">The type of the element to fetch</typeparam>
+        /// <param name="value">The value retrieved from the ItemsSource.</param>
+        /// <returns>
+        ///     True if there was an ItemsSource for the element, otherwise the calling method will go and actually create the
+        ///     random value as opposed to having selected it from the ItemsSource "list".
+        /// </returns>
+        private bool GetOneShotItemsSource<T>(ref T value)
+        {
+            bool retVal = false;
+
+            if (!string.IsNullOrWhiteSpace(ItemsSourceOneShotName) && OneShot && ItemsSourceOneShot != null)
+            {
+                // First we collate our static property and methods
+                PropertyInfo sourceProperty =
+                    ItemsSourceOneShot.GetTypeInfo().GetDeclaredProperty(ItemsSourceOneShotName);
+
+                MethodInfo itemsSourceMethod = ItemsSourceOneShot.GetTypeInfo().GetDeclaredMethod("ItemSource");
+
+                MethodInfo preferPropertyMethod =
+                    ItemsSourceOneShot.GetTypeInfo().GetDeclaredMethod("PreferPropertyToItemSourceCall");
+
+                bool preferProperty = true;
+
+                // If we have a property we COULD call AND we have an alternative items source method AND we have a method to determine if the property SHOULD still be used
+                if (sourceProperty != null && itemsSourceMethod != null && preferPropertyMethod != null)
+                {
+                    // Then we'll ask to see if we should prefer the property
+                    object[] param =
+                    {
+                        ItemsSourceOneShotName
+                    };
+
+                    preferProperty = (bool)preferPropertyMethod.Invoke(null, param);
+                }
+
+                if (itemsSourceMethod != null && !preferProperty)
+                {
+                    try
+                    {
+                        object[] param =
+                        {
+                            ItemsSourceOneShotName, CurrentPropertyInfo, CurrentFieldInfo, this
+                        };
+
+                        // Just in case the ItemSource makes use of US, The Creator, makes sure we don't go to recursive hell!
+                        OneShot = false;
+                        IList<T> source = (IList<T>)itemsSourceMethod.Invoke(null, param);
+                        OneShot = true;
+
+                        if (source != null)
+                        {
+                            int rndIndex = _random.Next(0, source.Count);
+                            value = source[rndIndex];
+                            retVal = true;
+                        }
+                    }
+                    catch (Exception excep)
+                    {
+                        throw new ObjectCreationException(excep,
+                            ObjectCreationExceptionReason.IssueWithItemsSourceMethod,
+                            ItemsSourceOneShot.Name,
+                            ItemsSourceOneShotName);
+                    }
+                }
+                else if (sourceProperty != null)
+                {
+                    try
+                    {
+                        IList<T> source = (IList<T>)sourceProperty.GetValue(null);
+
+                        if (source != null)
+                        {
+                            int rndIndex = _random.Next(0, source.Count);
+                            value = source[rndIndex];
+                            retVal = true;
+                        }
+                    }
+                    catch (Exception excep)
+                    {
+                        throw new ObjectCreationException(excep,
+                            ObjectCreationExceptionReason.IssueWithItemsSourceProperty,
+                            ItemsSourceOneShot.Name,
+                            ItemsSourceOneShotName);
+                    }
+                }
+            }
+
+            return retVal;
+        }
+
+        /// <summary>
         ///     Gets a random boolean.
         /// </summary>
         /// <param name="threshold">The threshold above which to return true - set lower for more trues.</param>
         /// <returns>
         ///     true or false - guess which one!
         /// </returns>
-        public bool GetRandomBool(double threshold = 0.5) => _random.NextDouble() > threshold;
+        public bool GetRandomBool(double threshold = 0.5)
+        {
+            return _random.NextDouble() > threshold;
+        }
 
         /// <summary>
         ///     Gets a random int in a specified range.
@@ -1102,9 +1571,9 @@ namespace Moonrise.Utils.Test.ObjectCreation
         /// <param name="max">The maximum. (If default, defaults to <see cref="double.MaxValue" />)</param>
         /// <returns>A random decimal value</returns>
         [SuppressMessage("ReSharper",
-                         "CompareOfFloatsByEqualityOperator",
-                         Justification =
-                             "Comparisons against Min/Max as 'flags' are valid!")]
+            "CompareOfFloatsByEqualityOperator",
+            Justification =
+                "Comparisons against Min/Max as 'flags' are valid!")]
         public decimal GetRandomDecimal(decimal min = decimal.MinValue, decimal max = decimal.MaxValue)
         {
             decimal retVal = 0;
@@ -1131,10 +1600,10 @@ namespace Moonrise.Utils.Test.ObjectCreation
                         if (validationAttribute.GetType() == typeof(RangeAttribute))
                         {
                             minDub = Math.Max(minDub,
-                                              (double)(((RangeAttribute)validationAttribute).Minimum ?? minDub));
+                                (double)(((RangeAttribute)validationAttribute).Minimum ?? minDub));
 
                             maxDub = Math.Min(maxDub,
-                                              (double)(((RangeAttribute)validationAttribute).Maximum ?? maxDub));
+                                (double)(((RangeAttribute)validationAttribute).Maximum ?? maxDub));
                         }
                     }
                 }
@@ -1152,8 +1621,8 @@ namespace Moonrise.Utils.Test.ObjectCreation
         /// <param name="max">The maximum. (If default, defaults to <see cref="MaxDouble" />)</param>
         /// <returns>A random double value</returns>
         [SuppressMessage("ReSharper",
-                         "CompareOfFloatsByEqualityOperator",
-                         Justification = "Comparisons against Min/Max as 'flags' are valid!")]
+            "CompareOfFloatsByEqualityOperator",
+            Justification = "Comparisons against Min/Max as 'flags' are valid!")]
         public double GetRandomDouble(double min = double.MinValue, double max = double.MaxValue)
         {
             double retVal = 0;
@@ -1234,6 +1703,21 @@ namespace Moonrise.Utils.Test.ObjectCreation
         }
 
         /// <summary>
+        ///     Gets a random enum.
+        /// </summary>
+        /// <param name="fieldType">Type of the enum.</param>
+        /// <returns>A random value for the specified enum type</returns>
+        private object GetRandomEnum(Type fieldType)
+        {
+            object retVal;
+            Array enumValues = Enum.GetValues(fieldType);
+            int index = GetRandomInt(0, enumValues.GetUpperBound(0));
+            retVal = enumValues.GetValue(index);
+
+            return retVal;
+        }
+
+        /// <summary>
         ///     Gets a random file path. The file will not exist, this is JUST a string that looks like a folder path!
         /// </summary>
         /// <param name="numFolders">The maximum number of folders.</param>
@@ -1241,10 +1725,10 @@ namespace Moonrise.Utils.Test.ObjectCreation
         /// <param name="fileNameLength">Maximum length of the file name.</param>
         /// <param name="extensionLength">Maximum length of the extension.</param>
         /// <returns>A passable, but wierd, filepath</returns>
-        public string GetRandomFilePath(int numFolders       = 5,
-                                        int folderNameLength = 10,
-                                        int fileNameLength   = 20,
-                                        int extensionLength  = 3)
+        public string GetRandomFilePath(int numFolders = 5,
+            int folderNameLength = 10,
+            int fileNameLength = 20,
+            int extensionLength = 3)
         {
             string retVal = default;
 
@@ -1259,13 +1743,13 @@ namespace Moonrise.Utils.Test.ObjectCreation
                 for (int i = 0; i < numFolders; i++)
                 {
                     retVal += GetRandomString(StringSources.AlphaNumericCharactersWithSpaces, 1, folderNameLength, true)
-                                 .Trim() +
+                                  .Trim() +
                               "\\";
                 }
 
                 // A filename
                 retVal += GetRandomString(StringSources.AlphaNumericCharactersWithSpaces, 1, fileNameLength, true)
-                             .Trim() +
+                              .Trim() +
                           ".";
 
                 // And an extension
@@ -1282,8 +1766,8 @@ namespace Moonrise.Utils.Test.ObjectCreation
         /// <param name="max">The maximum. (If default, defaults to <see cref="MaxFloat" />)</param>
         /// <returns>A random float value</returns>
         [SuppressMessage("ReSharper",
-                         "CompareOfFloatsByEqualityOperator",
-                         Justification = "Comparisons against Min/Max as 'flags' are valid!")]
+            "CompareOfFloatsByEqualityOperator",
+            Justification = "Comparisons against Min/Max as 'flags' are valid!")]
         public float GetRandomFloat(float min = float.MinValue, float max = float.MaxValue)
         {
             float retVal = 0;
@@ -1307,10 +1791,10 @@ namespace Moonrise.Utils.Test.ObjectCreation
                         if (validationAttribute.GetType() == typeof(RangeAttribute))
                         {
                             min = Math.Max(min,
-                                           Convert.ToSingle(((RangeAttribute)validationAttribute).Minimum ?? min));
+                                Convert.ToSingle(((RangeAttribute)validationAttribute).Minimum ?? min));
 
                             max = Math.Min(max,
-                                           Convert.ToSingle(((RangeAttribute)validationAttribute).Maximum ?? max));
+                                Convert.ToSingle(((RangeAttribute)validationAttribute).Maximum ?? max));
                         }
                     }
                 }
@@ -1550,7 +2034,153 @@ namespace Moonrise.Utils.Test.ObjectCreation
         /// <returns>
         ///     The random string
         /// </returns>
-        public string GetRandomString(string stringSource = null, int minStrLen = -1, int maxStrLen = -1) => GetRandomString(stringSource, minStrLen, maxStrLen, false);
+        public string GetRandomString(string stringSource = null, int minStrLen = -1, int maxStrLen = -1)
+        {
+            return GetRandomString(stringSource, minStrLen, maxStrLen, false);
+        }
+
+        /// <summary>
+        ///     Gets a random string of whatever length using the current <paramref name="stringSource" /> as the source for
+        ///     characters.
+        ///     <seealso cref="StringSources" />
+        /// </summary>
+        /// <param name="stringSource">The string source to fetch chars from.</param>
+        /// <param name="minStrLen">Minimum length of the string.</param>
+        /// <param name="maxStrLen">Maximum length of the string.</param>
+        /// <param name="internalOnly">Only true when called, possibly recursively, from within some other GetRandomXXX method.</param>
+        /// <returns>
+        ///     The random string
+        /// </returns>
+        private string GetRandomString(string stringSource,
+            int minStrLen,
+            int maxStrLen,
+            bool internalOnly)
+        {
+            string retVal = null;
+
+            if (ObjectCount < MaxObjects || internalOnly)
+            {
+                // Try to get a string from the appropriate items source if possible
+                if (internalOnly || !GetOneShotItemsSource(ref retVal))
+                {
+                    // That wasn't possible so we need to generate a string
+                    if (stringSource == null)
+                    {
+                        stringSource = OneShot ? StringSourceOneShot : StringSource;
+                    }
+
+                    if (!string.IsNullOrEmpty(stringSource)) // Just a sanity check.
+                    {
+                        if (minStrLen == -1)
+                        {
+                            minStrLen = OneShot ? MinStrLenOneShot : MinStrLen;
+                        }
+
+                        if (maxStrLen == -1)
+                        {
+                            maxStrLen = OneShot ? MaxStrLenOneShot : MaxStrLen;
+                        }
+
+                        bool allowNulls = OneShot ? AllowNullsOneShot : AllowNulls;
+
+                        if (internalOnly ||
+                            !allowNulls ||
+                            GetRandomBool(OneShot ? NullThresholdOneShot : NullThreshold))
+                        {
+                            if (!internalOnly && (OneShot ? RespectValidationOneShot : RespectValidation))
+                            {
+                                int minValidationLength = minStrLen;
+
+                                foreach (ValidationAttribute validationAttribute in ValidationAttributes)
+                                {
+                                    // First deal with the special attributes
+                                    if (validationAttribute.GetType() == typeof(GuidValidationAttribute))
+                                    {
+                                        // The string needs to be a valid, random, REPEATABLE Guid!
+                                        retVal = GetRandomGuid().ToString();
+
+                                        // That's it, nothing more. A RARE early exit return!
+                                        return retVal;
+                                    }
+
+                                    if (validationAttribute.GetType() == typeof(FileValidationAttribute))
+                                    {
+                                        // The string needs to represent a filepath - we won't check the file exists!
+                                        retVal = GetRandomFilePath(5, 10, 10);
+
+                                        // That's it, nothing more. A RARE early exit return!
+                                        return retVal;
+                                    }
+
+                                    if (validationAttribute.GetType() == typeof(EmailValidationAttribute))
+                                    {
+                                        // The string needs to represent an email
+                                        retVal = GetRandomEmail();
+
+                                        // That's it, nothing more. Another early exit return!
+                                        return retVal;
+                                    }
+
+                                    if (validationAttribute.GetType() == typeof(RegularExpressionAttribute))
+                                    {
+                                        // The string needs to be within the RegEx requirements
+                                        // Now this is somewhat tricky so I'm using another NuGet package to do the heavy lifting on this one!
+                                        string regex = ((RegularExpressionAttribute)validationAttribute).Pattern;
+                                        Xeger xger = new(regex, _random);
+                                        retVal = xger.Generate();
+
+                                        // All done. Another early exit return!
+                                        return retVal;
+                                    }
+
+                                    // Now the less than special attributes - sorry guys, that's just how it is!
+                                    if (validationAttribute.GetType() == typeof(RequiredAttribute))
+                                    {
+                                        minStrLen = Math.Max(minStrLen, 1);
+                                    }
+                                    else if (validationAttribute.GetType() == typeof(StringLengthAttribute))
+                                    {
+                                        minValidationLength =
+                                            ((StringLengthAttribute)validationAttribute).MinimumLength;
+
+                                        maxStrLen = Math.Min(maxStrLen,
+                                            ((StringLengthAttribute)validationAttribute).MaximumLength);
+                                    }
+                                }
+
+                                minStrLen = Math.Max(minStrLen, minValidationLength);
+                            }
+
+                            // Get the string length we're going to use
+                            int strLen = _random.Next(minStrLen, maxStrLen);
+
+                            if (strLen == 0)
+                            {
+                                retVal = string.Empty;
+                            }
+                            else
+                            {
+                                char[] randomChars = new char[strLen];
+
+                                for (int i = 0; i < strLen; i++)
+                                {
+                                    randomChars[i] = stringSource[_random.Next(stringSource.Length)];
+                                }
+
+                                retVal = new string(randomChars);
+
+                                if (!internalOnly)
+                                {
+                                    ObjectCount++;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return retVal;
+        }
 
         /// <summary>
         ///     Gets a random uint in a specified range.
@@ -1581,10 +2211,10 @@ namespace Moonrise.Utils.Test.ObjectCreation
                         if (validationAttribute.GetType() == typeof(RangeAttribute))
                         {
                             min = Math.Max(min,
-                                           Convert.ToUInt32(((RangeAttribute)validationAttribute).Minimum ?? min));
+                                Convert.ToUInt32(((RangeAttribute)validationAttribute).Minimum ?? min));
 
                             max = Math.Min(max,
-                                           Convert.ToUInt32(((RangeAttribute)validationAttribute).Maximum ?? max));
+                                Convert.ToUInt32(((RangeAttribute)validationAttribute).Maximum ?? max));
                         }
                     }
                 }
@@ -1624,7 +2254,7 @@ namespace Moonrise.Utils.Test.ObjectCreation
                         if (validationAttribute.GetType() == typeof(RangeAttribute))
                         {
                             min = Math.Max(min,
-                                           Convert.ToUInt64(((RangeAttribute)validationAttribute).Minimum ?? min));
+                                Convert.ToUInt64(((RangeAttribute)validationAttribute).Minimum ?? min));
 
                             // [Range] with a ulong.MaxInt actually uses the double version of [Range] and for some reason
                             // there is an overflow exception when assigning the double version on ulong.MaxValue to ulong
@@ -1686,10 +2316,10 @@ namespace Moonrise.Utils.Test.ObjectCreation
                         if (validationAttribute.GetType() == typeof(RangeAttribute))
                         {
                             min = Math.Max(min,
-                                           Convert.ToUInt16(((RangeAttribute)validationAttribute).Minimum ?? min));
+                                Convert.ToUInt16(((RangeAttribute)validationAttribute).Minimum ?? min));
 
                             max = Math.Min(max,
-                                           Convert.ToUInt16(((RangeAttribute)validationAttribute).Maximum ?? max));
+                                Convert.ToUInt16(((RangeAttribute)validationAttribute).Maximum ?? max));
                         }
                     }
                 }
@@ -1707,7 +2337,10 @@ namespace Moonrise.Utils.Test.ObjectCreation
         /// <typeparam name="T">A basic type</typeparam>
         /// <param name="recursive">Determines if nested classes will also be created</param>
         /// <returns>A random(ish) value (i.e. non default - but COULD be!)</returns>
-        public T GetRnd<T>(bool recursive = true) => (T)GetRnd(typeof(T), recursive);
+        public T GetRnd<T>(bool recursive = true)
+        {
+            return (T)GetRnd(typeof(T), recursive);
+        }
 
         /// <summary>
         ///     Gets a random value of the appropriate type. Currently supports;
@@ -1720,8 +2353,8 @@ namespace Moonrise.Utils.Test.ObjectCreation
         /// </returns>
         [
             SuppressMessage("StyleCop.CSharp.LayoutRules",
-                            "SA1503:CurlyBracketsMustNotBeOmitted",
-                            Justification = "I allow myself this in these circumstances!")]
+                "SA1503:CurlyBracketsMustNotBeOmitted",
+                Justification = "I allow myself this in these circumstances!")]
         public object GetRnd(Type fieldType, bool recursive)
         {
             if (_ignoreTypes.Contains(fieldType))
@@ -1851,690 +2484,6 @@ namespace Moonrise.Utils.Test.ObjectCreation
             }
 
             return null;
-        }
-
-        /// <summary>
-        ///     Maps a type to its creator. If you need a non-normal type, essentially one that needs a non-default constructor,
-        ///     then map a creator that must implement <see cref="ObjectCreationAttribute.SITypeCreation{T}" /> as a static!
-        /// </summary>
-        /// <typeparam name="T">The type to create</typeparam>
-        /// <typeparam name="TCreator">The type of the creator.</typeparam>
-        public void MapCreator<T, TCreator>()
-        {
-            MethodInfo creatorMethod = typeof(TCreator).GetTypeInfo().GetDeclaredMethod("CreateInstance");
-
-            if (creatorMethod == null)
-            {
-                throw new ArgumentException($"The Creator needs to implement ObjectCreationAttribute.SITypeCreation<{typeof(T).Name}>");
-            }
-
-            if (!_creatorMap.ContainsKey(typeof(T)))
-            {
-                _creatorMap.Add(typeof(T), creatorMethod);
-            }
-            else
-            {
-                _creatorMap[typeof(T)] = creatorMethod;
-            }
-        }
-
-        /// <summary>
-        ///     Maps an interface to an implementation to use when creating members that are interfaces
-        /// </summary>
-        /// <typeparam name="I">Interface type to map</typeparam>
-        /// <typeparam name="T">Type to map the interface to</typeparam>
-        public void MapInterface<I, T>()
-        {
-            MapInterface(typeof(I), typeof(T));
-        }
-
-        /// <summary>
-        ///     Maps an interface to an implementation to use when creating members that are interfaces
-        /// </summary>
-        /// <param name="I">Interface type to map</param>
-        /// <param name="T">Type to map the interface to</param>
-        public void MapInterface(Type I, Type T)
-        {
-            if (!I.IsAssignableFrom(T))
-            {
-                throw new ArgumentException(string.Format("{0} does not implement {1}!", T.Name, I.Name));
-            }
-
-            if (!_interfaceMap.ContainsKey(I))
-            {
-                _interfaceMap.Add(I, T);
-            }
-            else
-            {
-                _interfaceMap[I] = T;
-            }
-        }
-
-        /// <summary>
-        ///     Maps a type that might be created to an interface that carries same named elements that have creation attributes -
-        ///     NOT all members are required in the interface, ONLY those you wish to have specific
-        ///     <see cref="ObjectCreationAttribute" />s.
-        /// </summary>
-        /// <typeparam name="T">Type to map the interface to</typeparam>
-        /// <typeparam name="I">Interface type to map</typeparam>
-        public void MapInterfaceAttributes<T, I>()
-        {
-            MapInterfaceAttributes(typeof(T), typeof(I));
-        }
-
-        /// <summary>
-        ///     Maps a type that might be created to an interface that carries same named elements that have creation attributes -
-        ///     NOT all members are required in the interface, ONLY those you wish to have specific
-        ///     <see cref="ObjectCreationAttribute" />s.
-        /// </summary>
-        /// <param name="T">Type to map the interface to</param>
-        /// <param name="I">Interface type to map</param>
-        public void MapInterfaceAttributes(Type T, Type I)
-        {
-            if (!_interfaceAttributesMap.ContainsKey(T))
-            {
-                _interfaceAttributesMap.Add(T, I);
-            }
-            else
-            {
-                _interfaceAttributesMap[T] = I;
-            }
-        }
-
-        /// <summary>
-        ///     Absolute maximum number of created objects. Override this if you REALLY want the capability to create more than
-        ///     this!
-        /// </summary>
-        /// <returns>10,000,000</returns>
-        protected virtual int AbsoluteMaximumObjects() => 10000000;
-
-        /// <summary>
-        ///     Creates an object whose public fields and properties are filled with random(ish) values.
-        /// </summary>
-        /// <param name="instanceType">The type of the instance being created.</param>
-        /// <param name="recursive">Determines if nested classes will be filled as well. Usually want this.</param>
-        /// <returns>
-        ///     An object populated with guff
-        /// </returns>
-        /// <exception cref="System.ArgumentException">
-        ///     If the class is an enumerable and is not at least IList
-        /// </exception>
-        [SuppressMessage("StyleCop.CSharp.LayoutRules",
-                         "SA1503:CurlyBracketsMustNotBeOmitted",
-                         Justification = "I allow this for exceptions!")]
-        protected object CreateFilled(Type instanceType, bool recursive)
-        {
-            if (IgnoreRecursion)
-            {
-                int hashCode = instanceType.GetHashCode();
-
-                if (encounteredObjects.Contains(hashCode))
-                {
-                    IgnoredIssueTracer?.Invoke($"Detected a recursive creation for {instanceType.FullName}. Instance created as null.");
-
-                    return null;
-                }
-
-                encounteredObjects.Add(hashCode);
-            }
-
-            object retVal = null;
-
-            if (ObjectCount < MaxObjects)
-            {
-                if (!GetOneShotItemsSource(ref retVal))
-                {
-                    bool allowNulls = OneShot ? AllowNullsOneShot : AllowNulls;
-
-                    bool allowNullElementsInEnumerable =
-                        OneShot ? AllowNullElementsInEnumerableOneShot : AllowNullElementsInEnumerable;
-
-                    bool respectValidation = OneShot ? RespectValidationOneShot : RespectValidation;
-
-                    if (respectValidation)
-                    {
-                        foreach (ValidationAttribute validationAttribute in ValidationAttributes)
-                        {
-                            if (validationAttribute.GetType() == typeof(RequiredAttribute))
-                            {
-                                allowNulls = false;
-                            }
-                            else if (validationAttribute.GetType() == typeof(ListContentValidationAttribute))
-                            {
-                                if (!((ListContentValidationAttribute)validationAttribute).AllowNulls)
-                                {
-                                    allowNullElementsInEnumerable = false;
-                                }
-
-                                if (((ListContentValidationAttribute)validationAttribute).MinElements < int.MaxValue)
-                                {
-                                    MinItemsOneShot = ((ListContentValidationAttribute)validationAttribute)
-                                       .MinElements;
-                                }
-
-                                if (((ListContentValidationAttribute)validationAttribute).MaxElements > int.MinValue)
-                                {
-                                    MaxItemsOneShot = ((ListContentValidationAttribute)validationAttribute)
-                                       .MaxElements;
-                                }
-                            }
-                        }
-                    }
-
-                    if (!allowNulls || GetRandomBool(OneShot ? NullThresholdOneShot : NullThreshold))
-                    {
-                        if (typeof(IEnumerable).IsAssignableFrom(instanceType))
-                        {
-                            if (!typeof(IList).IsAssignableFrom(instanceType))
-                            {
-                                throw new ArgumentException(string.Format("{0} needs to implement IList!",
-                                                                          instanceType.Name));
-                            }
-
-                            Type listContentType;
-
-                            if (instanceType.GenericTypeArguments.Length == 0)
-                            {
-                                if (!instanceType.IsArray)
-                                {
-                                    throw new ArgumentException(string.Format("As {0} is non-generic, this version can only handle arrays, sorry!",
-                                                                              instanceType.Name));
-                                }
-
-                                listContentType = instanceType.GetElementType();
-                            }
-                            else
-                            {
-                                if (instanceType.GenericTypeArguments.Length > 1)
-                                {
-                                    throw new ArgumentException(string.Format("{0} can only have a single generic with this version, sorry!",
-                                                                              instanceType.Name));
-                                }
-
-                                listContentType = instanceType.GenericTypeArguments[0];
-                            }
-
-                            int numItems = _random.Next(OneShot ? MinItemsOneShot : MinItems,
-                                                        OneShot ? MaxItemsOneShot : MaxItems);
-
-                            retVal = InstantiateType(instanceType, numItems);
-                            ObjectCount++;
-
-                            for (int i = 0; i < numItems; i++)
-                            {
-                                object item = null;
-
-                                if (!allowNullElementsInEnumerable ||
-                                    GetRandomBool(OneShot ? NullThresholdOneShot : NullThreshold))
-                                {
-                                    _elementContext.Add($"[{i}]");
-                                    item = GetRnd(listContentType, recursive);
-                                    _elementContext.RemoveAt(_elementContext.Count - 1);
-                                }
-
-                                if (instanceType.IsArray)
-                                {
-                                    ((Array)retVal).SetValue(item, i);
-                                }
-                                else
-                                {
-                                    ((IList)retVal).Add(item);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            retVal = InstantiateType(instanceType);
-                            FieldInfo[] fields = instanceType.GetFields();
-
-                            foreach (FieldInfo field in fields)
-                            {
-                                if (!field.IsLiteral)
-                                {
-                                    PopulateField(retVal, field, recursive);
-                                }
-                            }
-
-                            PropertyInfo[] props = instanceType.GetProperties();
-
-                            foreach (PropertyInfo prop in props)
-                            {
-                                PopulateProperty(retVal, prop, recursive);
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (IgnoreRecursion)
-            {
-                encounteredObjects.RemoveAt(encounteredObjects.Count - 1);
-            }
-
-            ItemsSourceOneShotName = string.Empty;
-
-            return retVal;
-        }
-
-        /// <summary>
-        ///     Adds the field attributes from the associated interface.
-        /// </summary>
-        /// <param name="memberName">Name of the member.</param>
-        /// <param name="attributeInterface">The attribute interface.</param>
-        /// <param name="memberAttributes">The member attributes.</param>
-        /// <param name="isProperty">Determines if we're looking for a property or a field.</param>
-        private void AddMemberAttributesFromInterface(string                    memberName,
-                                                      Type                      attributeInterface,
-                                                      List<CustomAttributeData> memberAttributes,
-                                                      bool                      isProperty)
-        {
-            // Now look for a corresponding member in this interface and see if it has any custom attributes to add to the list
-            MemberInfo interfaceMember;
-
-            if (isProperty)
-            {
-                interfaceMember = attributeInterface.GetTypeInfo().GetDeclaredProperty(memberName);
-            }
-            else
-            {
-                interfaceMember = attributeInterface.GetTypeInfo().GetDeclaredField(memberName);
-            }
-
-            if (interfaceMember != null)
-            {
-                List<CustomAttributeData> interfaceMemberAttributes = interfaceMember.CustomAttributes.ToList();
-
-                // We use Insert range so that parent interface field attributes will appear (and be treated) first, allowing children to override parents
-                memberAttributes.InsertRange(0, interfaceMemberAttributes);
-            }
-        }
-
-        /// <summary>
-        ///     Creates an interface member using the mapped implementation type
-        /// </summary>
-        /// <param name="fieldType">Type of the interface field.</param>
-        /// <param name="recursive">Determines if nested classes will also be created</param>
-        /// <returns>
-        ///     A filled implementation
-        /// </returns>
-        /// <exception cref="System.ArgumentException">
-        ///     If there is a problem with the interface
-        /// </exception>
-        [SuppressMessage("StyleCop.CSharp.LayoutRules",
-                         "SA1503:CurlyBracketsMustNotBeOmitted",
-                         Justification = "I excuse throwing exceptions!")]
-        private object CreateMappedInterface(Type fieldType, bool recursive)
-        {
-            object retVal = null;
-
-            if (ObjectCount < MaxObjects)
-            {
-                if (!GetOneShotItemsSource(ref retVal))
-                {
-                    bool allowNulls = OneShot ? AllowNullsOneShot : AllowNulls;
-
-                    bool allowNullElementsInEnumerable =
-                        OneShot ? AllowNullElementsInEnumerableOneShot : AllowNullElementsInEnumerable;
-
-                    foreach (ValidationAttribute validationAttribute in ValidationAttributes)
-                    {
-                        if (validationAttribute.GetType() == typeof(RequiredAttribute))
-                        {
-                            allowNulls = false;
-                        }
-                        else if (validationAttribute.GetType() == typeof(ListContentValidationAttribute))
-                        {
-                            if (!((ListContentValidationAttribute)validationAttribute).AllowNulls)
-                            {
-                                allowNullElementsInEnumerable = false;
-                            }
-
-                            if (((ListContentValidationAttribute)validationAttribute).MinElements < int.MaxValue)
-                            {
-                                MinItemsOneShot = ((ListContentValidationAttribute)validationAttribute).MinElements;
-                            }
-
-                            if (((ListContentValidationAttribute)validationAttribute).MaxElements > int.MinValue)
-                            {
-                                MaxItemsOneShot = ((ListContentValidationAttribute)validationAttribute).MaxElements;
-                            }
-                        }
-                    }
-
-                    if (!allowNulls || GetRandomBool(OneShot ? NullThresholdOneShot : NullThreshold))
-                    {
-                        Type implementationType = null;
-
-                        if (OneShot && ImplementationOneShot != null)
-                        {
-                            implementationType = ImplementationOneShot;
-                        }
-                        else if (_interfaceMap.ContainsKey(fieldType))
-                        {
-                            implementationType = _interfaceMap[fieldType];
-                        }
-
-                        if (implementationType == null)
-                        {
-                            if (typeof(IEnumerable).GetTypeInfo().IsAssignableFrom(fieldType))
-                            {
-                                if (fieldType.GetTypeInfo().IsGenericType)
-                                {
-                                    if (fieldType.GenericTypeArguments.Length > 1)
-                                    {
-                                        throw new ArgumentException(string.Format("{0} can only have a single generic with this version, sorry!",
-                                                                                  fieldType.Name));
-                                    }
-
-                                    Type listContentType = fieldType.GenericTypeArguments[0];
-
-                                    implementationType = typeof(List<>).GetTypeInfo().MakeGenericType(listContentType);
-                                }
-                            }
-                        }
-
-                        if (implementationType == null)
-                        {
-                            if (IgnoreUnimplementedInterfaces)
-                            {
-                                IgnoredIssueTracer?.Invoke($"There is no implemention defined for {fieldType.FullName}, the created instance will be null");
-                            }
-                            else
-                            {
-                                throw new ArgumentException(string.Format("There is no implementation defined for {0}!",
-                                                                          fieldType.FullName));
-                            }
-                        }
-
-                        if (implementationType == null)
-                        {
-                            retVal = null;
-                        }
-                        else
-                        {
-                            if (typeof(IEnumerable).IsAssignableFrom(fieldType))
-                            {
-                                if (!typeof(IList).IsAssignableFrom(implementationType))
-                                {
-                                    throw new ArgumentException(string.Format("{0} needs to implement IList!",
-                                                                              implementationType.Name));
-                                }
-
-                                if (implementationType.GenericTypeArguments.Length > 1)
-                                {
-                                    throw new ArgumentException(string.Format("{0} can only have a single generic with this version, sorry!",
-                                                                              implementationType.Name));
-                                }
-
-                                Type listContentType = implementationType.GenericTypeArguments[0];
-                                retVal = InstantiateType(implementationType);
-                                ObjectCount++;
-
-                                int numItems = _random.Next(OneShot ? MinItemsOneShot : MinItems,
-                                                            OneShot ? MaxItemsOneShot : MaxItems);
-
-                                for (int i = 0; i < numItems; i++)
-                                {
-                                    object item = null;
-
-                                    if (!allowNullElementsInEnumerable ||
-                                        GetRandomBool(OneShot ? NullThresholdOneShot : NullThreshold))
-                                    {
-                                        _elementContext.Add($"[{i}]");
-                                        item = GetRnd(listContentType, recursive);
-                                        _elementContext.RemoveAt(_elementContext.Count - 1);
-                                    }
-
-                                    ((IList)retVal).Add(item);
-                                }
-                            }
-                            else
-                            {
-                                retVal = CreateFilled(implementationType, recursive);
-                            }
-                        }
-                    }
-                }
-            }
-
-            return retVal;
-        }
-
-        /// <summary>
-        ///     Gets the one shot items source. If there is one.
-        /// </summary>
-        /// <typeparam name="T">The type of the element to fetch</typeparam>
-        /// <param name="value">The value retrieved from the ItemsSource.</param>
-        /// <returns>True if there was an ItemsSource for the element.</returns>
-        private bool GetOneShotItemsSource<T>(ref T value)
-        {
-            bool retVal = false;
-
-            if (!string.IsNullOrWhiteSpace(ItemsSourceOneShotName) && OneShot && ItemsSourceOneShot != null)
-            {
-                // First we collate our static property and methods
-                PropertyInfo sourceProperty =
-                    ItemsSourceOneShot.GetTypeInfo().GetDeclaredProperty(ItemsSourceOneShotName);
-
-                MethodInfo itemsSourceMethod = ItemsSourceOneShot.GetTypeInfo().GetDeclaredMethod("ItemSource");
-
-                MethodInfo preferPropertyMethod =
-                    ItemsSourceOneShot.GetTypeInfo().GetDeclaredMethod("PreferPropertyToItemSourceCall");
-
-                bool preferProperty = true;
-
-                // If we have a property we COULD call AND we have an alternative items source method AND we have a method to determine if the property SHOULD still be used
-                if (sourceProperty != null && itemsSourceMethod != null && preferPropertyMethod != null)
-                {
-                    // Then we'll ask to see if we should prefer the property
-                    object[] param =
-                    {
-                        ItemsSourceOneShotName
-                    };
-
-                    preferProperty = (bool)preferPropertyMethod.Invoke(null, param);
-                }
-
-                if (itemsSourceMethod != null && !preferProperty)
-                {
-                    try
-                    {
-                        object[] param =
-                        {
-                            ItemsSourceOneShotName, CurrentPropertyInfo, CurrentFieldInfo, this
-                        };
-
-                        // Just in case the ItemSource makes use of US, The Creator, makes sure we don't go to recursive hell!
-                        OneShot = false;
-                        IList<T> source = (IList<T>)itemsSourceMethod.Invoke(null, param);
-                        OneShot = true;
-
-                        if (source != null)
-                        {
-                            int rndIndex = _random.Next(0, source.Count);
-                            value = source[rndIndex];
-                            retVal = true;
-                        }
-                    }
-                    catch (Exception excep)
-                    {
-                        throw new ObjectCreationException(excep,
-                                                          ObjectCreationExceptionReason.IssueWithItemsSourceMethod,
-                                                          ItemsSourceOneShot.Name,
-                                                          ItemsSourceOneShotName);
-                    }
-                }
-                else if (sourceProperty != null)
-                {
-                    try
-                    {
-                        IList<T> source = (IList<T>)sourceProperty.GetValue(null);
-
-                        if (source != null)
-                        {
-                            int rndIndex = _random.Next(0, source.Count);
-                            value = source[rndIndex];
-                            retVal = true;
-                        }
-                    }
-                    catch (Exception excep)
-                    {
-                        throw new ObjectCreationException(excep,
-                                                          ObjectCreationExceptionReason.IssueWithItemsSourceProperty,
-                                                          ItemsSourceOneShot.Name,
-                                                          ItemsSourceOneShotName);
-                    }
-                }
-            }
-
-            return retVal;
-        }
-
-        /// <summary>
-        ///     Gets a random enum.
-        /// </summary>
-        /// <param name="fieldType">Type of the enum.</param>
-        /// <returns>A random value for the specified enum type</returns>
-        private object GetRandomEnum(Type fieldType)
-        {
-            object retVal;
-            Array enumValues = Enum.GetValues(fieldType);
-            int index = GetRandomInt(0, enumValues.GetUpperBound(0));
-            retVal = enumValues.GetValue(index);
-
-            return retVal;
-        }
-
-        /// <summary>
-        ///     Gets a random string of whatever length using the current <paramref name="stringSource" /> as the source for
-        ///     characters.
-        ///     <seealso cref="StringSources" />
-        /// </summary>
-        /// <param name="stringSource">The string source to fetch chars from.</param>
-        /// <param name="minStrLen">Minimum length of the string.</param>
-        /// <param name="maxStrLen">Maximum length of the string.</param>
-        /// <param name="internalOnly">Only true when called, possibly recursively, from within some other GetRandomXXX method.</param>
-        /// <returns>
-        ///     The random string
-        /// </returns>
-        private string GetRandomString(string stringSource,
-                                       int    minStrLen,
-                                       int    maxStrLen,
-                                       bool   internalOnly)
-        {
-            string retVal = null;
-
-            if (ObjectCount < MaxObjects || internalOnly)
-            {
-                // Try to get a string from the appropriate items source if possible
-                if (internalOnly || !GetOneShotItemsSource(ref retVal))
-                {
-                    // That wasn't possible so we need to generate a string
-                    if (stringSource == null)
-                    {
-                        stringSource = OneShot ? StringSourceOneShot : StringSource;
-                    }
-
-                    if (!string.IsNullOrEmpty(stringSource)) // Just a sanity check.
-                    {
-                        if (minStrLen == -1)
-                        {
-                            minStrLen = OneShot ? MinStrLenOneShot : MinStrLen;
-                        }
-
-                        if (maxStrLen == -1)
-                        {
-                            maxStrLen = OneShot ? MaxStrLenOneShot : MaxStrLen;
-                        }
-
-                        bool allowNulls = OneShot ? AllowNullsOneShot : AllowNulls;
-
-                        if (internalOnly ||
-                            !allowNulls ||
-                            GetRandomBool(OneShot ? NullThresholdOneShot : NullThreshold))
-                        {
-                            if (!internalOnly && (OneShot ? RespectValidationOneShot : RespectValidation))
-                            {
-                                int minValidationLength = minStrLen;
-
-                                foreach (ValidationAttribute validationAttribute in ValidationAttributes)
-                                {
-                                    // First deal with the special attributes
-                                    if (validationAttribute.GetType() == typeof(GuidValidationAttribute))
-                                    {
-                                        // The string needs to be a valid, random, REPEATABLE Guid!
-                                        retVal = GetRandomGuid().ToString();
-
-                                        // That's it, nothing more. A RARE early exit return!
-                                        return retVal;
-                                    }
-
-                                    if (validationAttribute.GetType() == typeof(FileValidationAttribute))
-                                    {
-                                        // The string needs to represent a filepath - we won't check the file exists!
-                                        retVal = GetRandomFilePath(5, 10, 10);
-
-                                        // That's it, nothing more. A RARE early exit return!
-                                        return retVal;
-                                    }
-
-                                    if (validationAttribute.GetType() == typeof(EmailValidationAttribute))
-                                    {
-                                        // The string needs to represent an email
-                                        retVal = GetRandomEmail();
-
-                                        // That's it, nothing more. Another early exit return!
-                                        return retVal;
-                                    }
-
-                                    // Now the less than special attributes - sorry guys, that's just how it is!
-                                    if (validationAttribute.GetType() == typeof(RequiredAttribute))
-                                    {
-                                        minStrLen = Math.Max(minStrLen, 1);
-                                        allowNulls = false;
-                                    }
-                                    else if (validationAttribute.GetType() == typeof(StringLengthAttribute))
-                                    {
-                                        minValidationLength =
-                                            ((StringLengthAttribute)validationAttribute).MinimumLength;
-
-                                        maxStrLen = Math.Min(maxStrLen,
-                                                             ((StringLengthAttribute)validationAttribute).MaximumLength);
-                                    }
-                                }
-
-                                minStrLen = Math.Max(minStrLen, minValidationLength);
-                            }
-
-                            // Get the string length we're going to use
-                            int strLen = _random.Next(minStrLen, maxStrLen);
-
-                            if (strLen == 0)
-                            {
-                                retVal = string.Empty;
-                            }
-                            else
-                            {
-                                char[] randomChars = new char[strLen];
-
-                                for (int i = 0; i < strLen; i++)
-                                {
-                                    randomChars[i] = stringSource[_random.Next(stringSource.Length)];
-                                }
-
-                                retVal = new string(randomChars);
-
-                                if (!internalOnly)
-                                {
-                                    ObjectCount++;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            return retVal;
         }
 
         /// <summary>
@@ -2680,19 +2629,110 @@ namespace Moonrise.Utils.Test.ObjectCreation
                 {
                     if (IgnoreNonDefaultConstructors)
                     {
-                        IgnoredIssueTracer?.Invoke($"No default constructor for {instanceType.FullName}. Created instance is null.");
+                        IgnoredIssueTracer?.Invoke(
+                            $"No default constructor for {instanceType.FullName}. Created instance is null.");
                     }
                     else
                     {
                         throw new
-                            ArgumentException($"Creator currently only works with classes that have a default constructor. You CAN try setting {nameof(IgnoreNonDefaultConstructors)} to true - you'll get a null instance but no exception!",
-                                              instanceType.FullName,
-                                              excep);
+                            ArgumentException(
+                                $"Creator currently only works with classes that have a default constructor. You CAN try setting {nameof(IgnoreNonDefaultConstructors)} to true - you'll get a null instance but no exception!",
+                                instanceType.FullName,
+                                excep);
                     }
                 }
             }
 
             return retVal;
+        }
+
+        /// <summary>
+        ///     Maps a type to its creator. If you need a non-normal type, essentially one that needs a non-default constructor,
+        ///     then map a creator that must implement <see cref="ObjectCreationAttribute.SITypeCreation{T}" /> as a static!
+        /// </summary>
+        /// <typeparam name="T">The type to create</typeparam>
+        /// <typeparam name="TCreator">The type of the creator.</typeparam>
+        public void MapCreator<T, TCreator>()
+        {
+            MethodInfo creatorMethod = typeof(TCreator).GetTypeInfo().GetDeclaredMethod("CreateInstance");
+
+            if (creatorMethod == null)
+            {
+                throw new ArgumentException(
+                    $"The Creator needs to implement ObjectCreationAttribute.SITypeCreation<{typeof(T).Name}>");
+            }
+
+            if (!_creatorMap.ContainsKey(typeof(T)))
+            {
+                _creatorMap.Add(typeof(T), creatorMethod);
+            }
+            else
+            {
+                _creatorMap[typeof(T)] = creatorMethod;
+            }
+        }
+
+        /// <summary>
+        ///     Maps an interface to an implementation to use when creating members that are interfaces
+        /// </summary>
+        /// <typeparam name="I">Interface type to map</typeparam>
+        /// <typeparam name="T">Type to map the interface to</typeparam>
+        public void MapInterface<I, T>()
+        {
+            MapInterface(typeof(I), typeof(T));
+        }
+
+        /// <summary>
+        ///     Maps an interface to an implementation to use when creating members that are interfaces
+        /// </summary>
+        /// <param name="I">Interface type to map</param>
+        /// <param name="T">Type to map the interface to</param>
+        public void MapInterface(Type I, Type T)
+        {
+            if (!I.IsAssignableFrom(T))
+            {
+                throw new ArgumentException(string.Format("{0} does not implement {1}!", T.Name, I.Name));
+            }
+
+            if (!_interfaceMap.ContainsKey(I))
+            {
+                _interfaceMap.Add(I, T);
+            }
+            else
+            {
+                _interfaceMap[I] = T;
+            }
+        }
+
+        /// <summary>
+        ///     Maps a type that might be created to an interface that carries same named elements that have creation attributes -
+        ///     NOT all members are required in the interface, ONLY those you wish to have specific
+        ///     <see cref="ObjectCreationAttribute" />s.
+        /// </summary>
+        /// <typeparam name="T">Type to map the interface to</typeparam>
+        /// <typeparam name="I">Interface type to map</typeparam>
+        public void MapInterfaceAttributes<T, I>()
+        {
+            MapInterfaceAttributes(typeof(T), typeof(I));
+        }
+
+        /// <summary>
+        ///     Maps a type that might be created to an interface that carries same named elements that have creation attributes -
+        ///     NOT all members are required in the interface, ONLY those you wish to have specific
+        ///     <see cref="ObjectCreationAttribute" />s.
+        /// </summary>
+        /// <param name="T">Type to map the interface to</param>
+        /// <param name="I">Interface type to map</param>
+        public void MapInterfaceAttributes(Type T, Type I)
+        {
+            if (!_interfaceAttributesMap.ContainsKey(T))
+            {
+                _interfaceAttributesMap.Add(T, I);
+            }
+            else
+            {
+                _interfaceAttributesMap[T] = I;
+            }
         }
 
         /// <summary>
@@ -2723,14 +2763,15 @@ namespace Moonrise.Utils.Test.ObjectCreation
                 {
                     if (IgnoreSetterExceptions)
                     {
-                        IgnoredIssueTracer?.Invoke($"Could not call the setter for {field.DeclaringType.Name}.{field.Name}. Instance left at default value.");
+                        IgnoredIssueTracer?.Invoke(
+                            $"Could not call the setter for {field.DeclaringType.Name}.{field.Name}. Instance left at default value.");
                     }
                     else
                     {
                         throw new ObjectCreationException(e,
-                                                          ObjectCreationExceptionReason.CouldNotCallSetter,
-                                                          field.DeclaringType.Name,
-                                                          field.Name);
+                            ObjectCreationExceptionReason.CouldNotCallSetter,
+                            field.DeclaringType.Name,
+                            field.Name);
                     }
                 }
                 finally
@@ -2770,14 +2811,15 @@ namespace Moonrise.Utils.Test.ObjectCreation
                 {
                     if (IgnoreSetterExceptions)
                     {
-                        IgnoredIssueTracer?.Invoke($"Could not call the setter for {prop.DeclaringType.Name}.{prop.Name}. Instance left at default value.");
+                        IgnoredIssueTracer?.Invoke(
+                            $"Could not call the setter for {prop.DeclaringType.Name}.{prop.Name}. Instance left at default value.");
                     }
                     else
                     {
                         throw new ObjectCreationException(e,
-                                                          ObjectCreationExceptionReason.CouldNotCallSetter,
-                                                          prop.DeclaringType.Name,
-                                                          prop.Name);
+                            ObjectCreationExceptionReason.CouldNotCallSetter,
+                            prop.DeclaringType.Name,
+                            prop.Name);
                     }
                 }
                 finally
@@ -2845,7 +2887,8 @@ namespace Moonrise.Utils.Test.ObjectCreation
             if (OneShot ? RespectValidationOneShot : RespectValidation)
             {
                 // See if there is any validation properties on the item and add that to any we found on it's mapped interface
-                ValidationAttributes.AddRange(((ValidationAttribute[])member.GetCustomAttributes(typeof(ValidationAttribute), true)).ToList());
+                ValidationAttributes.AddRange(
+                    ((ValidationAttribute[])member.GetCustomAttributes(typeof(ValidationAttribute), true)).ToList());
 
                 // Now add any that are on its declared interfaces
                 foreach (Type implementedInterface in member.DeclaringType.GetTypeInfo().ImplementedInterfaces)
@@ -2859,7 +2902,7 @@ namespace Moonrise.Utils.Test.ObjectCreation
                     {
                         interfaceAttributes =
                             ((ValidationAttribute[])interfaceProperty.GetCustomAttributes(typeof(ValidationAttribute),
-                                                                                          true)).ToList();
+                                true)).ToList();
                     }
 
                     if (interfaceAttributes != null)
@@ -2881,8 +2924,8 @@ namespace Moonrise.Utils.Test.ObjectCreation
         /// <exception cref="System.ArgumentException">If this class and <see cref="ObjectCreationAttribute" /> get out of synch</exception>
         [
             SuppressMessage("StyleCop.CSharp.LayoutRules",
-                            "SA1503:CurlyBracketsMustNotBeOmitted",
-                            Justification = "I allow this for returns & exceptions!")]
+                "SA1503:CurlyBracketsMustNotBeOmitted",
+                Justification = "I allow this for returns & exceptions!")]
         private void SetOneShotProperties(string elementName, CustomAttributeData customAttributeData)
         {
             if (customAttributeData.NamedArguments == null)
@@ -2902,8 +2945,9 @@ namespace Moonrise.Utils.Test.ObjectCreation
 
                 if (oneShotProperty == null)
                 {
-                    throw new ArgumentException(string.Format("Couldn't find the Creator.{0} property, the ObjectCreationAttribute must be out of synch!",
-                                                              oneShotPropertyName));
+                    throw new ArgumentException(string.Format(
+                        "Couldn't find the Creator.{0} property, the ObjectCreationAttribute must be out of synch!",
+                        oneShotPropertyName));
                 }
 
                 oneShotProperty.SetValue(this, customAttributeNamedArgument.TypedValue.Value);
@@ -2959,7 +3003,7 @@ namespace Moonrise.Utils.Test.ObjectCreation
         public static Attribute CreateAttribute(this CustomAttributeData data)
         {
             IEnumerable<object> arguments = from arg in data.ConstructorArguments
-                                            select arg.Value;
+                select arg.Value;
 
             Attribute attribute = data.Constructor.Invoke(arguments.ToArray()) as Attribute;
 

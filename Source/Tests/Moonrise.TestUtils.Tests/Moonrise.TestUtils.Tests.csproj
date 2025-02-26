@@ -82,24 +82,24 @@
     <Compile Include="CreatorTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Moonrise.LoggingUtils\Moonrise.LoggingUtils.csproj">
-      <Project>{83797704-5bf5-403b-b14d-a7dd6885aed7}</Project>
-      <Name>Moonrise.LoggingUtils</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Moonrise.StandardUtils\Moonrise.StandardUtils.csproj">
-      <Project>{70017d40-a780-4e2f-8f51-c456d38ce000}</Project>
-      <Name>Moonrise.StandardUtils</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Moonrise.TestUtils\Moonrise.TestUtils.csproj">
-      <Project>{3ec74587-8fb8-4654-832c-4428a09c5821}</Project>
-      <Name>Moonrise.TestUtils</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENCE.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\NetStd\Moonrise.LoggingUtils.NetStd\Moonrise.LoggingUtils.NetStd.csproj">
+      <Project>{077bcab3-4696-4d5b-a486-4c415249f258}</Project>
+      <Name>Moonrise.LoggingUtils.NetStd</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\NetStd\Moonrise.StandardUtils.NetStd\Moonrise.StandardUtils.NetStd.csproj">
+      <Project>{a209d751-e0a7-4bda-b770-a527a717f455}</Project>
+      <Name>Moonrise.StandardUtils.NetStd</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Moonrise.StandardUtils.NetStd.Tests\Moonrise.StandardUtils.NetStd.Tests.csproj">
+      <Project>{bd9967ca-b408-48b2-836f-d8a590763ea7}</Project>
+      <Name>Moonrise.StandardUtils.NetStd.Tests</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
